@@ -1,10 +1,14 @@
 ﻿using Caliburn.Micro;
 using Dicom;
+using DicomGrep.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,62 +19,37 @@ namespace DicomGrep.Models
     /// </summary>
     public class SearchResultCollection : ObservableCollection<FileResult>
     {
-        public void AddResult(string filename, DicomTag dicomTag, string valueString)
-        {
-            ResultItem resultItem = new ResultItem() { Tag = dicomTag, ValueString = valueString };
-            var fileResult = this.FirstOrDefault(s => s.Filename == filename);
-            if (fileResult != null)
-            {
-                fileResult.resultItemCollection.Add(resultItem);
-            }
-            else
-            {
-                var resultItemColl = new ObservableCollection<ResultItem>();
-                resultItemColl.Add(resultItem);
-
-                this.Add(new FileResult { Filename = filename, resultItemCollection = resultItemColl });
-            }
-
-        }
+        
     }
 
-    public class FileResult : PropertyChangedBase
+    public class FileResult
     {
-        public string Filename { get; set; }
-        public ObservableCollection<ResultItem> resultItemCollection { get; set; }
+        public string FileFullPath { get; set; }
+
+        public string FileName => System.IO.Path.GetFileName(FileFullPath);
+
+        public string Path => System.IO.Path.GetDirectoryName(FileFullPath);
+        public string SOPClassUID { get; set; }
+
+        public string SOPClassName { get; set; }
+        public string PatientName { get; set; }
+
+        public ResultItemCollection ResultItemCollection { get; set; }
     }
 
-    public class ResultItem : PropertyChangedBase
+    public class ResultItemCollection : ObservableCollection<ResultItem>
     {
-        private DicomTag _tag;
 
-        public DicomTag Tag
-        {
-            get { return _tag; }
-            set
-            {
-                if (!Equals(_tag, value))
-                {
-                    _tag = value;
-                    NotifyOfPropertyChange(() => this.Tag);
-                }
-            }
-        }
+    }
 
-        private string _valueString;
+    public class ResultItem
+    {
+        public DicomTag Tag { get; set; }
 
-        public string ValueString
-        {
-            get { return _valueString; }
-            set
-            {
-                if (!Equals(_valueString, value))
-                {
-                    _valueString = value;
-                    NotifyOfPropertyChange(() => this.ValueString);
-                }
-            }
-        }
+        public string TagString => Tag.ToString();
 
+        public string ValueString { get; set; }
+
+        public ResultType ResultType { get; set; }
     }
 }

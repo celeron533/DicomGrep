@@ -50,8 +50,15 @@
     <Reference Include="Dicom.Core, Version=4.0.4.0, Culture=neutral, PublicKeyToken=3a13f649e28eb09a, processorArchitecture=MSIL">
       <HintPath>..\packages\fo-dicom.Desktop.4.0.4\lib\net45\Dicom.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -75,12 +82,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Enums\ResultType.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\SearchCriteria.cs" />
     <Compile Include="Models\SearchResultCollection.cs" />
     <Compile Include="Services\DatasetWalker.cs" />
+    <Compile Include="Services\DicomSearchService.cs" />
     <Compile Include="Services\EventArgs\FileListCompletedEventArgs.cs" />
+    <Compile Include="Services\EventArgs\SearchFileCompletedEventArgs.cs" />
     <Compile Include="Services\EventArgs\SearchFileMatchEventArgs.cs" />
     <Compile Include="Services\EventArgs\SearchFileStatusEventArgs.cs" />
+    <Compile Include="Services\FolderSelectionService.cs" />
+    <Compile Include="Services\Interfaces\IDicomSearchService.cs" />
+    <Compile Include="Services\Interfaces\IFolderSelectionService.cs" />
     <Compile Include="Services\Interfaces\INotifyIconService.cs" />
     <Compile Include="Services\Interfaces\ISearchService.cs" />
     <Compile Include="Services\NotifyIconService.cs" />

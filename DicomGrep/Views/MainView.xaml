@@ -20,9 +20,16 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel>
+            <StackPanel Grid.Column="0">
                 <Label>Search Path</Label>
-                <TextBox Text="{Binding SearchCriteria.SearchPath}" TextWrapping="Wrap"></TextBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="24"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text="{Binding SearchCriteria.SearchPath}" TextWrapping="Wrap"></TextBox>
+                    <Button Grid.Column="1" Content="..." IsEnabled="{Binding CanSearch}" cal:Message.Attach="[Event Click] = [Action BrowseFolder]"/>
+                </Grid>
                 <Label>File Extension</Label>
                 <TextBox Text="{Binding SearchCriteria.FileExtension}" TextWrapping="Wrap"></TextBox>
                 <Label>Keyword</Label>
@@ -41,8 +48,21 @@
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBox Text="{Binding ResultText}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"></TextBox>
+                <DataGrid Grid.Row="0" ItemsSource="{Binding SearchResult}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File Name" Binding="{Binding FileName}"/>
+                        <DataGridTextColumn Header="Folder" Binding="{Binding Path}" Width="120"/>
+                        <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName}"/>
+                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID}"/>
+                        <DataGridTextColumn Header="Count" Binding="{Binding ResultItemCollection.Count}"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <TextBox Grid.Row="2" Text="{Binding ResultText}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"></TextBox>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">

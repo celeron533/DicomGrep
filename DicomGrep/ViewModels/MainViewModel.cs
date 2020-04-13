@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Action = System.Action;
 
@@ -19,7 +20,7 @@ namespace DicomGrep.ViewModels
 
         public string WindowTitle
         {
-            get { return _windowTitle = "Dicom Grep"; }
+            get { return _windowTitle; }
             set
             {
                 if (!Equals(_windowTitle, value))
@@ -146,13 +147,28 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        public Action BrowseFolderAction => this.BrowseFolder;
 
         public Action SearchAction => this.Search;
         public Action CancelAction => this.Cancel;
 
         ISearchService searchService = IoC.Get<ISearchService>();
+        IDicomSearchService dicomSearchService = IoC.Get<IDicomSearchService>();
 
         private StringBuilder builder = new StringBuilder();
+
+        public void BrowseFolder()
+        {
+            IFolderSelectionService folderSelectionService = IoC.Get<IFolderSelectionService>();
+            string searchPath = this.SearchCriteria.SearchPath;
+
+            if (folderSelectionService.SelectFolder(ref searchPath))
+            {
+                this.SearchCriteria.SearchPath = searchPath;
+            }
+        }
 
         public void Search()
         {
@@ -162,13 +178,16 @@ namespace DicomGrep.ViewModels
             searchService.SearchStarted += SearchService_SearchStarted;
             searchService.FileListCompleted += SearchService_FileListCompleted;
             searchService.SearchFileStatus += SearchService_SearchFileStatus;
-            searchService.SearchFileMatch += SearchService_SearchFileMatch;
             searchService.SearchCompleted += SearchService_SearchCompleted;
 
-            searchService.Search(_searchCriteria);
+            dicomSearchService.SearchFileCompleted += DicomSearchService_SearchFileCompleted;
 
-            
+            cancellationTokenSource = new CancellationTokenSource();
+
+            searchService.Search(_searchCriteria, dicomSearchService);
         }
+
+
 
         private void SearchService_SearchStarted(object sender, EventArgs e)
         {
@@ -181,29 +200,34 @@ namespace DicomGrep.ViewModels
             this.CanSearch = true;
             this.CanCancel = false;
 
-            ISearchService searchService = sender as ISearchService;
-
             searchService.FileListCompleted -= SearchService_FileListCompleted;
             searchService.SearchFileStatus -= SearchService_SearchFileStatus;
-            searchService.SearchFileMatch -= SearchService_SearchFileMatch;
             searchService.SearchStarted -= SearchService_SearchStarted;
             searchService.SearchCompleted -= SearchService_SearchCompleted;
+
+            dicomSearchService.SearchFileCompleted -= DicomSearchService_SearchFileCompleted;
 
             ResultText = builder.ToString();
         }
 
-        private void SearchService_SearchFileMatch(object sender, SearchFileMatchEventArgs e)
-        {
-            builder.AppendLine(e.Filename);
-            builder.AppendLine($"  {e.DicomTag} {e.ValueString}");
-        }
 
         private void SearchService_SearchFileStatus(object sender, SearchFileStatusEventArgs e)
         {
             ProcessingFileIndex = e.Index + 1;
             ProcessingFilename = e.Filename;
 
-            ResultText = builder.ToString();
+            //ResultText = builder.ToString();
+        }
+
+        private void DicomSearchService_SearchFileCompleted(object sender, SearchFileCompletedEventArgs e)
+        {
+            if (e.FileResult.ResultItemCollection != null && e.FileResult.ResultItemCollection.Any())
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(
+                () => SearchResult.Add(e.FileResult));
+                builder.AppendLine($"{e.FileResult.FileName}, {e.FileResult.Path}, {e.FileResult.PatientName}, {e.FileResult.ResultItemCollection.Count}");
+            }
+            //throw new NotImplementedException();
         }
 
         private void SearchService_FileListCompleted(object sender, FileListCompletedEventArgs e)

@@ -21,7 +21,9 @@ namespace DicomGrep {
             container.Singleton<IEventAggregator, EventAggregator>();
 
             // service
-            container.Singleton<ISearchService, SearchService>();
+            container.PerRequest<ISearchService, SearchService>();
+            container.PerRequest<IDicomSearchService, DicomSearchService>();
+            container.Singleton<IFolderSelectionService, FolderSelectionService>();
 
             // shell
             container.Singleton<IShell, ShellViewModel>();

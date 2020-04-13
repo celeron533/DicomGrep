@@ -12,12 +12,8 @@ namespace DicomGrep.Services.Interfaces
 
     public delegate void SearchFileStatusDelegate(object sender, SearchFileStatusEventArgs e);
 
-    public delegate void SearchFileMatchDelegate(object sender, SearchFileMatchEventArgs e);
-
-
     public interface ISearchService
     {
-
         event EventHandler SearchStarted;
 
         event EventHandler SearchCompleted;
@@ -26,11 +22,7 @@ namespace DicomGrep.Services.Interfaces
 
         event SearchFileStatusDelegate SearchFileStatus;
 
-        event SearchFileMatchDelegate SearchFileMatch;
-
-        //event EventHandler SearchMatchChanged;
-
-        void Search(SearchCriteria searchCriteria);
+        void Search(SearchCriteria searchCriteria, IDicomSearchService dicomSearchService);
 
         void Cancel();
     }

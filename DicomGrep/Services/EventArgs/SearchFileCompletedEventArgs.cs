@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace DicomGrep.Services.EventArgs
 {
-    public class SearchFileMatchEventArgs : System.EventArgs
+    public class SearchFileCompletedEventArgs : System.EventArgs
     {
-        public string Filename { get; set; }
-        public DicomTag DicomTag { get; set; }
-        public string ValueString { get; set; }
+        public FileResult FileResult { get; set; }
     }
 }
