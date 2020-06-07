@@ -103,19 +103,6 @@ namespace DicomGrep.ViewModels
         }
 
 
-        private string _resultText;
-        public string ResultText
-        {
-            get { return _resultText; }
-            set
-            {
-                if (!Equals(_resultText, value))
-                {
-                    _resultText = value;
-                    NotifyOfPropertyChange(() => this.ResultText);
-                }
-            }
-        }
 
         private bool _canSearch = true;
 
@@ -157,8 +144,6 @@ namespace DicomGrep.ViewModels
         ISearchService searchService = IoC.Get<ISearchService>();
         IDicomSearchService dicomSearchService = IoC.Get<IDicomSearchService>();
 
-        private StringBuilder builder = new StringBuilder();
-
         public void BrowseFolder()
         {
             IFolderSelectionService folderSelectionService = IoC.Get<IFolderSelectionService>();
@@ -172,8 +157,7 @@ namespace DicomGrep.ViewModels
 
         public void Search()
         {
-            ResultText = String.Empty;
-            builder.Clear();
+            SearchResult.Clear();
 
             searchService.SearchStarted += SearchService_SearchStarted;
             searchService.FileListCompleted += SearchService_FileListCompleted;
@@ -206,8 +190,6 @@ namespace DicomGrep.ViewModels
             searchService.SearchCompleted -= SearchService_SearchCompleted;
 
             dicomSearchService.SearchFileCompleted -= DicomSearchService_SearchFileCompleted;
-
-            ResultText = builder.ToString();
         }
 
 
@@ -215,8 +197,6 @@ namespace DicomGrep.ViewModels
         {
             ProcessingFileIndex = e.Index + 1;
             ProcessingFilename = e.Filename;
-
-            //ResultText = builder.ToString();
         }
 
         private void DicomSearchService_SearchFileCompleted(object sender, SearchFileCompletedEventArgs e)
@@ -224,8 +204,8 @@ namespace DicomGrep.ViewModels
             if (e.FileResult.ResultItemCollection != null && e.FileResult.ResultItemCollection.Any())
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(
-                () => SearchResult.Add(e.FileResult));
-                builder.AppendLine($"{e.FileResult.FileName}, {e.FileResult.Path}, {e.FileResult.PatientName}, {e.FileResult.ResultItemCollection.Count}");
+                    () => SearchResult.Add(e.FileResult)
+                );
             }
             //throw new NotImplementedException();
         }

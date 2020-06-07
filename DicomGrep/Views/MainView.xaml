@@ -51,7 +51,7 @@
                     <RowDefinition Height="5"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0" ItemsSource="{Binding SearchResult}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid Grid.Row="0" x:Name="SearchResult" ItemsSource="{Binding SearchResult}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="File Name" Binding="{Binding FileName}"/>
                         <DataGridTextColumn Header="Folder" Binding="{Binding Path}" Width="120"/>
@@ -62,7 +62,14 @@
 
                 </DataGrid>
                 <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                <TextBox Grid.Row="2" Text="{Binding ResultText}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"></TextBox>
+                <DataGrid Grid.Row="2" ItemsSource="{Binding SelectedItem.ResultItemCollection, ElementName=SearchResult}" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectionUnit="FullRow">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tag" Binding="{Binding TagString}"/>
+                        <DataGridTextColumn Header="Tag Name" Binding="{Binding TagName}"/>
+                        <DataGridTextColumn Header="Value" Binding="{Binding ValueString}"/>
+                        <DataGridTextColumn Header="Match Type" Binding="{Binding ResultType}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">

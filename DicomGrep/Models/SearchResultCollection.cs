@@ -48,6 +48,8 @@ namespace DicomGrep.Models
 
         public string TagString => Tag.ToString();
 
+        public string TagName => Tag.DictionaryEntry.Name;
+
         public string ValueString { get; set; }
 
         public ResultType ResultType { get; set; }
