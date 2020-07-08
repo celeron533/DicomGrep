@@ -42,10 +42,10 @@ namespace DicomGrep.Services
                 dicomFile.Dataset.TryGetString(DicomTag.PatientName, out patientName);
                 if (dicomFile.Dataset.TryGetSingleValue<DicomUID>(DicomTag.SOPClassUID, out sopClassUID))
                 {
-                    sopClassName = sopClassUID.Name;
+                    sopClassName = sopClassUID?.Name;
                 }
 
-                fileResult = new FileResult { FileFullPath = path, SOPClassName = sopClassName, SOPClassUID = sopClassUID.UID, PatientName = patientName, ResultItemCollection = null };
+                fileResult = new FileResult { FileFullPath = path, SOPClassName = sopClassName, SOPClassUID = sopClassUID?.UID, PatientName = patientName, ResultItemCollection = null };
 
                 CompareDicomTagAndValue(dicomFile.FileMetaInfo, fileResult, path, sopClassName, patientName);
                 CompareDicomTagAndValue(dicomFile.Dataset, fileResult, path, sopClassName, patientName);
