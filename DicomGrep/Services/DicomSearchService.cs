@@ -63,78 +63,82 @@ namespace DicomGrep.Services
         {
             foreach (DicomItem dicomItem in dataset)
             {
-                if (_criteria.SearchDicomTag)
+                // contains sub sequence
+                if (dicomItem.ValueRepresentation == DicomVR.SQ)
                 {
-                    if (CompareString(dicomItem.Tag.ToString(), _criteria, true))
+                    foreach (DicomDataset innerDataset in ((DicomSequence)dicomItem).Items)
                     {
-                        //handle match
-                        var valueString = ((DicomElement)dicomItem).Get<string>();
-
-                        if (fileResult.ResultItemCollection == null)
-                        {
-                            fileResult.ResultItemCollection = new ResultItemCollection();
-                        }
-
-                        fileResult.ResultItemCollection.Add(new ResultItem { Tag = dicomItem.Tag, ValueString = valueString, ResultType = Enums.ResultType.Tag });
-                        SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString });
-                        //Console.WriteLine($"match tag: {dicomItem.ToString()}");
+                        CompareDicomTagAndValue(innerDataset, fileResult, filename, sopClassName, patientName);
                     }
                 }
-
-                if (_criteria.SearchDicomValue)
+                else
                 {
-                    // contains sub sequence
-                    if (dicomItem.ValueRepresentation == DicomVR.SQ)
+
+                    if (_criteria.SearchDicomTag)
                     {
-                        foreach (DicomDataset innerDataset in ((DicomSequence)dicomItem).Items)
+                        if (CompareString(dicomItem.Tag.ToString(), _criteria, true))
                         {
-                            CompareDicomTagAndValue(innerDataset, fileResult, filename, sopClassName, patientName);
-                        }
-                    }
-                    // skip binary VRs
-                    else if (dicomItem.ValueRepresentation == DicomVR.OB ||
-                        dicomItem.ValueRepresentation == DicomVR.OF ||
-                        dicomItem.ValueRepresentation == DicomVR.OW)
-                    {
-                        continue;
-                    }
-                    // compare value
-                    else
-                    {
-                        //dicomItem
-                        if ((dicomItem is DicomElement) && (((DicomElement)dicomItem).Count > 0))
-                        {
+                            //handle match
                             var valueString = ((DicomElement)dicomItem).Get<string>();
-                            if (CompareString(valueString, _criteria, false))
+
+                            if (fileResult.ResultItemCollection == null)
                             {
-                                //handle match
-                                if (fileResult.ResultItemCollection == null)
-                                {
-                                    fileResult.ResultItemCollection = new ResultItemCollection();
-                                }
-
-                                fileResult.ResultItemCollection.Add(new ResultItem { Tag = dicomItem.Tag, ValueString = valueString, ResultType = Enums.ResultType.ValueString });
-                                SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString });
-                                //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
-                                break;
+                                fileResult.ResultItemCollection = new ResultItemCollection();
                             }
-                        }
 
-                        //the following code is too slow!
-                        /*
-                        for (int i = 0; i < ((DicomElement)dicomItem).Count; i++)
+                            fileResult.ResultItemCollection.Add(new ResultItem { Tag = dicomItem.Tag, ValueString = valueString, ResultType = Enums.ResultType.Tag });
+                            SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString });
+                            //Console.WriteLine($"match tag: {dicomItem.ToString()}");
+                        }
+                    }
+
+                    if (_criteria.SearchDicomValue)
+                    {
+                        // skip binary VRs
+                        if (dicomItem.ValueRepresentation == DicomVR.OB ||
+                            dicomItem.ValueRepresentation == DicomVR.OF ||
+                            dicomItem.ValueRepresentation == DicomVR.OW)
                         {
-                            string valueString = ((DicomElement)dicomItem).Get<string>(i);
-                            if (CompareString(valueString, _criteria, false))
-                            {
-                                //handle match
-                                searchResultDictionary.AddResult(filename, dicomItem.Tag, valueString);
-                                SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString, SearchResult = searchResultDictionary });
-                                //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
-                                break;
-                            }
+                            continue;
                         }
-                        */
+                        // compare value
+                        else
+                        {
+                            //dicomItem
+                            if ((dicomItem is DicomElement) && (((DicomElement)dicomItem).Count > 0))
+                            {
+                                var valueString = ((DicomElement)dicomItem).Get<string>();
+                                if (CompareString(valueString, _criteria, false))
+                                {
+                                    //handle match
+                                    if (fileResult.ResultItemCollection == null)
+                                    {
+                                        fileResult.ResultItemCollection = new ResultItemCollection();
+                                    }
+
+                                    fileResult.ResultItemCollection.Add(new ResultItem { Tag = dicomItem.Tag, ValueString = valueString, ResultType = Enums.ResultType.ValueString });
+                                    SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString });
+                                    //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
+                                    break;
+                                }
+                            }
+
+                            //the following code is too slow!
+                            /*
+                            for (int i = 0; i < ((DicomElement)dicomItem).Count; i++)
+                            {
+                                string valueString = ((DicomElement)dicomItem).Get<string>(i);
+                                if (CompareString(valueString, _criteria, false))
+                                {
+                                    //handle match
+                                    searchResultDictionary.AddResult(filename, dicomItem.Tag, valueString);
+                                    SearchFileMatch?.Invoke(this, new EventArgs.SearchFileMatchEventArgs { Filename = filename, DicomTag = dicomItem.Tag, ValueString = valueString, SearchResult = searchResultDictionary });
+                                    //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
+                                    break;
+                                }
+                            }
+                            */
+                        }
                     }
                 }
             }
