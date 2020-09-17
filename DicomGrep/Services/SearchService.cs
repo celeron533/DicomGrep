@@ -108,7 +108,7 @@ namespace DicomGrep.Services
             catch (Exception ex)// no permission on some folder
             {
                 // todo: exception event
-                throw;
+                //throw;
             }
         }
 

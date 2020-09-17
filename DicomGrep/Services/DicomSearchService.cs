@@ -55,7 +55,7 @@ namespace DicomGrep.Services
             catch (Exception ex)
             {
                 //event for error logging
-                throw;
+                //throw;
             }
         }
 
