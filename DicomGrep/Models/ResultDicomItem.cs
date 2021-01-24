@@ -1,0 +1,22 @@
+﻿using Dicom;
+using DicomGrep.Enums;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DicomGrep.Models
+{
+    public class ResultDicomItem
+    {
+        public DicomTag Tag { get; private set; }
+        public string ValueString { get; private set; }
+        public ResultType Type { get; private set; }
+
+        public ResultDicomItem(DicomTag tag, string valueString, ResultType type)
+        {
+            this.Tag = tag;
+            this.ValueString = valueString;
+            this.Type = type;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrep", "DicomGrep\DicomGrep.csproj", "{70E8E894-278C-4A40-9CC8-56573A5F96DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70E8E894-278C-4A40-9CC8-56573A5F96DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E8E894-278C-4A40-9CC8-56573A5F96DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E8E894-278C-4A40-9CC8-56573A5F96DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E8E894-278C-4A40-9CC8-56573A5F96DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E488AEEF-942A-4302-817B-91E6C1EE5BBF}
+	EndGlobalSection
+EndGlobal
