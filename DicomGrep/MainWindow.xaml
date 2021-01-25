@@ -35,7 +35,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}">
+                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
@@ -44,7 +44,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
-                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" >
+                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" SelectionMode="Single" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
