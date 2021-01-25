@@ -15,6 +15,7 @@ namespace DicomGrep.ViewModels
         private readonly SearchService searchService = new SearchService();
 
         private Object obj = new Object();
+        private Object obj2 = new Object();
 
         #region Search Criteria
 
@@ -154,10 +155,10 @@ namespace DicomGrep.ViewModels
         public ObservableCollection<ResultDicomFile> MatchedFileList { set; get; } = new ObservableCollection<ResultDicomFile>();
 
         private ResultDicomFile _selectedMatchedFile;
-        public ResultDicomFile SelectedMatchedFile 
+        public ResultDicomFile SelectedMatchedFile
         {
             get { return _selectedMatchedFile; }
-            set { SetProperty(ref _selectedMatchedFile, value); } 
+            set { SetProperty(ref _selectedMatchedFile, value); }
         }
 
 
@@ -183,25 +184,27 @@ namespace DicomGrep.ViewModels
 
             IncludeSubfolders = true;
 
-            CurrentFile = "C:\\dummy\\dicom.dcm";
-
             this.searchService.FileListCompleted += (sender, arg) => { this.TotalFileCount = arg.Count; };
 
             this.searchService.OnLoadDicomFile += (sender, arg) =>
             {
+                lock (obj)
+                {
+                    SearchedFileCount++;
+                    CurrentFile = arg.Filename;
+                }
             };
 
             this.searchService.OnCompletDicomFile += (sender, arg) =>
             {
-                lock (obj)
+                if (arg.IsMatched)
                 {
-                    if (arg.IsMatched)
+                    lock (obj2)
                     {
                         App.Current.Dispatcher.Invoke(() =>
                             MatchedFileList.Add(arg.ResultDicomFile));
                         MatchedFileCount++;
                     }
-                    SearchedFileCount++;
                 }
             };
 
