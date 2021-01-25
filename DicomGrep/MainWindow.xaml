@@ -40,6 +40,7 @@
                         <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
                         <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
                         <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
