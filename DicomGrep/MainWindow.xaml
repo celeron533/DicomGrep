@@ -93,10 +93,12 @@
                 </StackPanel>
             </StatusBarItem>
             <Separator/>
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <Grid>
-                    <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Background="{x:Null}"/>
-                    <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="BlueViolet" Background="{x:Null}" />
+                    <Grid>
+                        <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="LightGreen" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="Plum" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    </Grid>
                     <TextBlock Text="{Binding CurrentFile}" />
                 </Grid>
             </StatusBarItem>

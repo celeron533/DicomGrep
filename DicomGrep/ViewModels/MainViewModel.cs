@@ -190,21 +190,21 @@ namespace DicomGrep.ViewModels
             {
                 lock (obj)
                 {
-                    SearchedFileCount++;
                     CurrentFile = arg.Filename;
                 }
             };
 
             this.searchService.OnCompletDicomFile += (sender, arg) =>
             {
-                if (arg.IsMatched)
+                lock (obj2)
                 {
-                    lock (obj2)
+                    if (arg.IsMatched)
                     {
                         App.Current.Dispatcher.Invoke(() =>
                             MatchedFileList.Add(arg.ResultDicomFile));
                         MatchedFileCount++;
                     }
+                    SearchedFileCount++;
                 }
             };
 
@@ -226,7 +226,6 @@ namespace DicomGrep.ViewModels
             };
 
             MatchedFileList.Clear();
-            //SelectedMatchedFile = null;
 
             this.TotalFileCount = 0;
             this.SearchedFileCount = 0;
