@@ -63,7 +63,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
-                        <Button Grid.Column="1" MinWidth="20" Content="..."/>
+                        <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
                     </Grid>
                     <Label Content="File Types"/>
                     <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>

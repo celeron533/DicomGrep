@@ -13,6 +13,7 @@ namespace DicomGrep.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly SearchService searchService = new SearchService();
+        private readonly FolderPickupService folderPickupService = new FolderPickupService();
 
         private Object obj = new Object();
         private Object obj2 = new Object();
@@ -125,15 +126,27 @@ namespace DicomGrep.ViewModels
 
         #region Command
 
+        private ICommand _folderPickupCommand;
+        public ICommand FolderPickupCommand
+        {
+            get 
+            {
+                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ => 
+                {
+                    DoPickupFolder();
+                }));
+            }
+        }
+
         private ICommand _searchCommand;
         public ICommand SearchCommand
         {
             get
             {
                 return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ =>
-          {
-              DoSearch();
-          }));
+                {
+                    DoSearch();
+                }));
             }
         }
 
@@ -235,6 +248,16 @@ namespace DicomGrep.ViewModels
             {
                 this.searchService.Search(criteria);
             });
+        }
+
+        private void DoPickupFolder()
+        {
+            string folder = SearchPath;
+            if (folderPickupService.SelectFolder(ref folder))
+            {
+                SearchPath = folder;
+            }
+            
         }
 
     }
