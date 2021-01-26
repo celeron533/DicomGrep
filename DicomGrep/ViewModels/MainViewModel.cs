@@ -14,6 +14,7 @@ namespace DicomGrep.ViewModels
     {
         private readonly SearchService searchService = new SearchService();
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
+        private readonly ConfigurationService configurationService = new ConfigurationService();
 
         private Object obj = new Object();
         private Object obj2 = new Object();
@@ -177,20 +178,16 @@ namespace DicomGrep.ViewModels
 
         public MainViewModel()
         {
-            SearchPath = "C:\\";
+            configurationService.LoadConfiguration();
 
-            SearchPathHistory.Add("C:\\");
-            SearchPathHistory.Add("D:\\");
-            SearchPathHistory.Add("E:\\");
+            SearchPathHistory = new ObservableCollection<string>(configurationService.GetConfiguration().SearchPathHistory);
+            FileTypesHistory = new ObservableCollection<string>(configurationService.GetConfiguration().FileTypesHistory);
+            SearchTextHistory = new ObservableCollection<string>(configurationService.GetConfiguration().SearchTextHistory);
 
-            FileTypes = "*.dcm";
+            SearchPath = SearchPathHistory[0];
+            FileTypes = FileTypesHistory[0];
+            SearchText = SearchTextHistory[0];
 
-            FileTypesHistory.Add("*.dcm");
-            FileTypesHistory.Add("*.dicom");
-
-            SearchText = "Patient";
-
-            SearchTextHistory.Add("300A,006B");
 
             SearchDicomTag = true;
             SearchDicomValue = true;
@@ -238,6 +235,8 @@ namespace DicomGrep.ViewModels
                 IncludePrivateTag = IncludePrivateTag
             };
 
+
+
             MatchedFileList.Clear();
 
             this.TotalFileCount = 0;
@@ -257,7 +256,6 @@ namespace DicomGrep.ViewModels
             {
                 SearchPath = folder;
             }
-            
         }
 
     }
