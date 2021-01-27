@@ -13,5 +13,6 @@ namespace DicomGrep.Models
         // todo: other configuration item
         public int SearchThreads { get; set; }
         public int HistoryCapacity { get; set; }
+        public SearchCriteria SearchCriteria { get; set; }
     }
 }

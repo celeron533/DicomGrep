@@ -1,5 +1,6 @@
 ﻿using DicomGrep.Models;
 using DicomGrep.Services;
+using DicomGrep.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,8 @@ namespace DicomGrep.ViewModels
         private readonly SearchService searchService = new SearchService();
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
         private readonly ConfigurationService configurationService = new ConfigurationService();
+
+        Configuration CurrentConfiguration;
 
         private Object obj = new Object();
         private Object obj2 = new Object();
@@ -130,9 +133,9 @@ namespace DicomGrep.ViewModels
         private ICommand _folderPickupCommand;
         public ICommand FolderPickupCommand
         {
-            get 
+            get
             {
-                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ => 
+                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ =>
                 {
                     DoPickupFolder();
                 }));
@@ -178,21 +181,23 @@ namespace DicomGrep.ViewModels
 
         public MainViewModel()
         {
-            configurationService.LoadConfiguration();
+            configurationService.Load();
 
-            SearchPathHistory = new ObservableCollection<string>(configurationService.GetConfiguration().SearchPathHistory);
-            FileTypesHistory = new ObservableCollection<string>(configurationService.GetConfiguration().FileTypesHistory);
-            SearchTextHistory = new ObservableCollection<string>(configurationService.GetConfiguration().SearchTextHistory);
+            CurrentConfiguration = configurationService.GetConfiguration();
 
-            SearchPath = SearchPathHistory[0];
-            FileTypes = FileTypesHistory[0];
-            SearchText = SearchTextHistory[0];
+            SearchPathHistory = new ObservableCollection<string>(CurrentConfiguration.SearchPathHistory);
+            FileTypesHistory = new ObservableCollection<string>(CurrentConfiguration.FileTypesHistory);
+            SearchTextHistory = new ObservableCollection<string>(CurrentConfiguration.SearchTextHistory);
 
-
-            SearchDicomTag = true;
-            SearchDicomValue = true;
-
-            IncludeSubfolders = true;
+            SearchPath = CurrentConfiguration.SearchCriteria.SearchPath;
+            FileTypes = CurrentConfiguration.SearchCriteria.FileTypes;
+            SearchText = CurrentConfiguration.SearchCriteria.SearchText;
+            SearchDicomTag = CurrentConfiguration.SearchCriteria.SearchDicomTag;
+            SearchDicomValue = CurrentConfiguration.SearchCriteria.SearchDicomValue;
+            CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
+            WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
+            IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
+            IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
 
             this.searchService.FileListCompleted += (sender, arg) => { this.TotalFileCount = arg.Count; };
 
@@ -235,7 +240,16 @@ namespace DicomGrep.ViewModels
                 IncludePrivateTag = IncludePrivateTag
             };
 
+            Util.PushToList(SearchPath, SearchPathHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(FileTypes, FileTypesHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(SearchText, SearchTextHistory, CurrentConfiguration.HistoryCapacity);
 
+            CurrentConfiguration.SearchCriteria = criteria;
+            CurrentConfiguration.SearchPathHistory = new List<string>(SearchPathHistory);
+            CurrentConfiguration.FileTypesHistory = new List<string>(FileTypesHistory);
+            CurrentConfiguration.SearchTextHistory = new List<string>(SearchTextHistory);
+
+            configurationService.Save();
 
             MatchedFileList.Clear();
 

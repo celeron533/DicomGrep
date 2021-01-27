@@ -10,7 +10,7 @@ namespace DicomGrep.Services
 {
     public class ConfigurationService
     {
-        public static Configuration CurrentConfiguration { get; private set; }
+        private static Configuration CurrentConfiguration { get; set; }
         public const string CONFIG_FILE = "config.json";
 
         public Configuration GetConfiguration() => CurrentConfiguration;
@@ -23,11 +23,12 @@ namespace DicomGrep.Services
 
 
 
-        public bool SaveConfiguration()
+        public bool Save()
         {
+            JsonSerializerOptions option = new JsonSerializerOptions { WriteIndented = true };
             try
             {
-                File.WriteAllText(CONFIG_FILE, JsonSerializer.Serialize(CurrentConfiguration));
+                File.WriteAllText(CONFIG_FILE, JsonSerializer.Serialize(CurrentConfiguration, option));
             }
             catch
             {
@@ -36,7 +37,7 @@ namespace DicomGrep.Services
             return true;
         }
 
-        public bool LoadConfiguration()
+        public bool Load()
         {
             try
             {
@@ -58,38 +59,26 @@ namespace DicomGrep.Services
 
         private static Configuration DefaultConfiguration()
         {
+            SearchCriteria criteria = new SearchCriteria
+            {
+                SearchPath = "C:\\Users\\Public",
+                FileTypes = "*.dcm",
+                SearchText = "(0010,0020)",
+                SearchDicomTag = true,
+                SearchDicomValue = true,
+                IncludeSubfolders = true
+            };
+
             return new Configuration
             {
-                FileTypesHistory = new List<string> { "*.dcm" },
-                SearchPathHistory = new List<string> { "C:\\Users\\Public" },
-                SearchTextHistory = new List<string> { "(0010,0020)" },
+                FileTypesHistory = new List<string> { criteria.FileTypes },
+                SearchPathHistory = new List<string> { criteria.SearchPath },
+                SearchTextHistory = new List<string> { criteria.SearchText },
                 SearchThreads = 1,
-                HistoryCapacity = 10
+                HistoryCapacity = 10,
+                SearchCriteria = criteria
             };
         }
 
-
-        private void PushToList(string newItem, ref IList<string> list, int capacity)
-        {
-            int index = list.IndexOf(newItem);
-            if (index >= 0)
-            {
-                list.RemoveAt(index);
-            }
-
-            if (list.Count > capacity)
-            {
-                list.RemoveAt(list.Count - 1);
-            }
-
-            if (list.Count == 0)
-            {
-                list.Add(newItem);
-            }
-            else
-            {
-                list.Insert(0, newItem);
-            }
-        }
     }
 }
