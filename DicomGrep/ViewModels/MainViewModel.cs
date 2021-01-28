@@ -19,6 +19,7 @@ namespace DicomGrep.ViewModels
 
         Configuration CurrentConfiguration;
 
+        CancellationTokenSource tokenSource;
         private Object obj = new Object();
         private Object obj2 = new Object();
 
@@ -128,6 +129,20 @@ namespace DicomGrep.ViewModels
         }
 
 
+        private bool _canSearch = true;
+        public bool CanSearch
+        {
+            get { return _canSearch; }
+            set { SetProperty(ref _canSearch, value); }
+        }
+
+        private bool _canCancel = false;
+        public bool CanCancel
+        {
+            get { return _canCancel; }
+            set { SetProperty(ref _canCancel, value); }
+        }
+
         #region Command
 
         private ICommand _folderPickupCommand;
@@ -135,10 +150,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ =>
-                {
-                    DoPickupFolder();
-                }));
+                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ => DoPickupFolder()));
             }
         }
 
@@ -147,10 +159,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ =>
-                {
-                    DoSearch();
-                }));
+                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(), _ => CanSearch));
             }
         }
 
@@ -159,10 +168,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ =>
-                {
-                    System.Windows.MessageBox.Show("Responding to button click event...");
-                }));
+                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), _ => CanCancel));
             }
         }
 
@@ -199,7 +205,10 @@ namespace DicomGrep.ViewModels
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
             IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
 
-            this.searchService.FileListCompleted += (sender, arg) => { this.TotalFileCount = arg.Count; };
+            this.searchService.FileListCompleted += (sender, arg) =>
+            {
+                this.TotalFileCount = arg.Count;
+            };
 
             this.searchService.OnLoadDicomFile += (sender, arg) =>
             {
@@ -221,6 +230,12 @@ namespace DicomGrep.ViewModels
                     }
                     SearchedFileCount++;
                 }
+            };
+
+            this.searchService.OnSearchComplete += (sender, arg) =>
+            {
+                this.CanSearch = true;
+                this.CanCancel = false;
             };
 
         }
@@ -257,10 +272,22 @@ namespace DicomGrep.ViewModels
             this.SearchedFileCount = 0;
             this.MatchedFileCount = 0;
 
+            this.CanCancel = true;
+            this.CanSearch = false;
+
+            tokenSource = new CancellationTokenSource();
+
+            // todo: move to SearchAsync()
             Task.Run(() =>
             {
-                this.searchService.Search(criteria);
-            });
+                this.searchService.Search(criteria, tokenSource);
+            }, tokenSource.Token);
+        }
+
+        private void DoCancel()
+        {
+            tokenSource.Cancel();
+            //searchService.Cancel();
         }
 
         private void DoPickupFolder()

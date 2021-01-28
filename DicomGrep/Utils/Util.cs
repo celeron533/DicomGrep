@@ -6,6 +6,7 @@ namespace DicomGrep.Utils
 {
     public class Util
     {
+        // todo: use LRU
         public static void PushToList(string newItem, IList<string> list, int capacity)
         {
             if (capacity <= 1 )
