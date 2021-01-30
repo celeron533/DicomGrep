@@ -205,39 +205,46 @@ namespace DicomGrep.ViewModels
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
             IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
 
-            this.searchService.FileListCompleted += (sender, arg) =>
-            {
-                this.TotalFileCount = arg.Count;
-            };
+            this.searchService.FileListCompleted += SearchService_FileListCompleted;
 
-            this.searchService.OnLoadDicomFile += (sender, arg) =>
+            this.searchService.OnLoadDicomFile += SearchService_OnLoadDicomFile;
+
+            this.searchService.OnCompletDicomFile += SearchService_OnCompletDicomFile;
+
+            this.searchService.OnSearchComplete += SearchService_OnSearchComplete;
+
+        }
+
+        private void SearchService_FileListCompleted(object sender, Services.EventArgs.ListFileCompletedEventArgs e)
+        {
+            this.TotalFileCount = e.Count;
+        }
+
+        private void SearchService_OnLoadDicomFile(object sender, Services.EventArgs.OnLoadDicomFileEventArgs e)
+        {
+            lock (obj)
             {
-                lock (obj)
+                CurrentFile = e.Filename;
+            }
+        }
+
+        private void SearchService_OnCompletDicomFile(object sender, Services.EventArgs.OnCompleteDicomFileEventArgs e)
+        {
+            lock (obj2)
+            {
+                if (e.IsMatched)
                 {
-                    CurrentFile = arg.Filename;
+                    App.Current.Dispatcher.Invoke(() => MatchedFileList.Add(e.ResultDicomFile));
+                    MatchedFileCount++;
                 }
-            };
+                SearchedFileCount++;
+            }
+        }
 
-            this.searchService.OnCompletDicomFile += (sender, arg) =>
-            {
-                lock (obj2)
-                {
-                    if (arg.IsMatched)
-                    {
-                        App.Current.Dispatcher.Invoke(() =>
-                            MatchedFileList.Add(arg.ResultDicomFile));
-                        MatchedFileCount++;
-                    }
-                    SearchedFileCount++;
-                }
-            };
-
-            this.searchService.OnSearchComplete += (sender, arg) =>
-            {
-                this.CanSearch = true;
-                this.CanCancel = false;
-            };
-
+        private void SearchService_OnSearchComplete(object sender, Services.EventArgs.OnSearchCompleteEventArgs e)
+        {
+            this.CanSearch = true;
+            this.CanCancel = false;
         }
 
         private void DoSearch()
