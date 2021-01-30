@@ -54,33 +54,37 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
-            <StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <Label Content="Search Path"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
-                        <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
-                    </Grid>
-                    <Label Content="File Types"/>
-                    <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
-                    <Label Content="Search Text"/>
-                    <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
-                    <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
-                    <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
+                    <StackPanel Margin="0,0,0,16">
+                        <Label Content="Search Path"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
+                            <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
+                        </Grid>
+                        <Label Content="File Types"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
+                        <Label Content="Search Text"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,16">
+                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
+                        <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
+                    </StackPanel>
+                    <StackPanel Margin="8,0,0,0">
+                        <CheckBox Content="Search DICOM tag" IsChecked="{Binding SearchDicomTag}"/>
+                        <CheckBox Content="Search DICOM value" IsChecked="{Binding SearchDicomValue}"/>
+                        <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
+                        <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
+                        <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
+                        <CheckBox Content="Include private tag" IsChecked="{Binding IncludePrivateTag}"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel>
-                    <CheckBox Content="Search DICOM tag" IsChecked="{Binding SearchDicomTag}"/>
-                    <CheckBox Content="Search DICOM value" IsChecked="{Binding SearchDicomValue}"/>
-                    <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
-                    <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
-                    <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
-                    <CheckBox Content="Include private tag" IsChecked="{Binding IncludePrivateTag}"/>
-                </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
@@ -96,8 +100,8 @@
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <Grid>
                     <Grid>
-                        <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="LightGreen" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                        <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="Plum" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="LightGreen" Background="Transparent" BorderBrush="Transparent"/>
+                        <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="Plum" Background="Transparent" BorderBrush="Transparent"/>
                     </Grid>
                     <TextBlock Text="{Binding CurrentFile}" />
                 </Grid>
