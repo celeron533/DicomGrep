@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DicomGrep.Services
@@ -22,21 +23,34 @@ namespace DicomGrep.Services
         public delegate void OnCompletDicomFileDelegate(object sender, OnCompleteDicomFileEventArgs e);
         public event OnCompletDicomFileDelegate OnCompletDicomFile;
 
+        public delegate void OnSearchCompleteDelegate(object sender, OnSearchCompleteEventArgs e);
+        public event OnSearchCompleteDelegate OnSearchComplete;
+
         private SearchCriteria criteria;
         private IList<string> result = new List<string>();
+        private CancellationToken token;
 
 
-        public void Search(SearchCriteria criteria)
+        public void Search(SearchCriteria criteria, CancellationTokenSource tokenSource)
         {
             this.criteria = criteria;
+            this.token = tokenSource.Token;
 
             ListFilename();
 
             ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = 6 };
-            Parallel.ForEach(result, options, filename =>
+            Parallel.ForEach(result, options, (filename, loopStat) =>
              {
-                 SearchInDicomFile(filename);
+                 if (token.IsCancellationRequested)
+                     loopStat.Break();
+                 else
+                     SearchInDicomFile(filename);
              });
+            if (token.IsCancellationRequested)
+                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.UserCancelled });
+            else
+                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.Normal });
+            tokenSource.Dispose();
         }
 
 
@@ -57,7 +71,10 @@ namespace DicomGrep.Services
         {
             try
             {
-                Array.ForEach(Directory.GetFiles(directoryPath, criteria.FileTypes), fn => result.Add(fn));
+                if (token.IsCancellationRequested)
+                    return;
+                else
+                    Array.ForEach(Directory.GetFiles(directoryPath, criteria.FileTypes), fn => result.Add(fn));
             }
             catch (Exception e)
             { }
@@ -68,7 +85,10 @@ namespace DicomGrep.Services
                 {
                     foreach (string subdirectory in Directory.GetDirectories(directoryPath))
                     {
-                        LoopupDirectory(subdirectory);
+                        if (token.IsCancellationRequested)
+                            return;
+                        else
+                            LoopupDirectory(subdirectory);
                     }
                 }
                 catch (Exception e)
@@ -143,7 +163,7 @@ namespace DicomGrep.Services
                                 resultDicomItems = new List<ResultDicomItem>();
                             }
 
-                            resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultType.Tag));
+                            resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultTypeEnum.Tag));
 
                             //Console.WriteLine($"match tag: {dicomItem.ToString()}");
                         }
@@ -173,7 +193,7 @@ namespace DicomGrep.Services
                                         resultDicomItems = new List<ResultDicomItem>();
                                     }
 
-                                    resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultType.ValueString));
+                                    resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultTypeEnum.ValueString));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
                                     break;
@@ -231,6 +251,7 @@ namespace DicomGrep.Services
                     return refString.CaseInsensitiveContains(testString, StringComparison.InvariantCultureIgnoreCase);
             }
         }
+
 
     }
 }

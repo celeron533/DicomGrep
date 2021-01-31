@@ -1,5 +1,7 @@
-﻿using DicomGrep.Models;
+﻿using DicomGrep.Enums;
+using DicomGrep.Models;
 using DicomGrep.Services;
+using DicomGrep.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,8 +15,15 @@ namespace DicomGrep.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly SearchService searchService = new SearchService();
+        private readonly FolderPickupService folderPickupService = new FolderPickupService();
+        private readonly ConfigurationService configurationService = new ConfigurationService();
+        private readonly FileOperationService fileOperationService = new FileOperationService();
 
+        Configuration CurrentConfiguration;
+
+        CancellationTokenSource tokenSource;
         private Object obj = new Object();
+        private Object obj2 = new Object();
 
         #region Search Criteria
 
@@ -122,17 +131,37 @@ namespace DicomGrep.ViewModels
         }
 
 
+        private bool _canSearch = true;
+        public bool CanSearch
+        {
+            get { return _canSearch; }
+            set { SetProperty(ref _canSearch, value); }
+        }
+
+        private bool _canCancel = false;
+        public bool CanCancel
+        {
+            get { return _canCancel; }
+            set { SetProperty(ref _canCancel, value); }
+        }
+
         #region Command
+
+        private ICommand _folderPickupCommand;
+        public ICommand FolderPickupCommand
+        {
+            get
+            {
+                return _folderPickupCommand ?? (_folderPickupCommand = new RelayCommand<object>(_ => DoPickupFolder()));
+            }
+        }
 
         private ICommand _searchCommand;
         public ICommand SearchCommand
         {
             get
             {
-                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ =>
-          {
-              DoSearch();
-          }));
+                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(), _ => CanSearch));
             }
         }
 
@@ -141,10 +170,16 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ =>
-                {
-                    System.Windows.MessageBox.Show("Responding to button click event...");
-                }));
+                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), _ => CanCancel));
+            }
+        }
+
+        private ICommand _fileOperationCommand;
+        public ICommand FileOperationCommand
+        {
+            get
+            {
+                return _fileOperationCommand ?? (_fileOperationCommand = new RelayCommand<FileOperationsEnum>(foe => DoFileOperation(foe), _ => SelectedMatchedFile != null));
             }
         }
 
@@ -154,57 +189,73 @@ namespace DicomGrep.ViewModels
         public ObservableCollection<ResultDicomFile> MatchedFileList { set; get; } = new ObservableCollection<ResultDicomFile>();
 
         private ResultDicomFile _selectedMatchedFile;
-        public ResultDicomFile SelectedMatchedFile 
+        public ResultDicomFile SelectedMatchedFile
         {
             get { return _selectedMatchedFile; }
-            set { SetProperty(ref _selectedMatchedFile, value); } 
+            set { SetProperty(ref _selectedMatchedFile, value); }
         }
 
 
         public MainViewModel()
         {
-            SearchPath = "C:\\";
+            configurationService.Load();
 
-            SearchPathHistory.Add("C:\\");
-            SearchPathHistory.Add("D:\\");
-            SearchPathHistory.Add("E:\\");
+            CurrentConfiguration = configurationService.GetConfiguration();
 
-            FileTypes = "*.dcm";
+            SearchPathHistory = new ObservableCollection<string>(CurrentConfiguration.SearchPathHistory);
+            FileTypesHistory = new ObservableCollection<string>(CurrentConfiguration.FileTypesHistory);
+            SearchTextHistory = new ObservableCollection<string>(CurrentConfiguration.SearchTextHistory);
 
-            FileTypesHistory.Add("*.dcm");
-            FileTypesHistory.Add("*.dicom");
+            SearchPath = CurrentConfiguration.SearchCriteria.SearchPath;
+            FileTypes = CurrentConfiguration.SearchCriteria.FileTypes;
+            SearchText = CurrentConfiguration.SearchCriteria.SearchText;
+            SearchDicomTag = CurrentConfiguration.SearchCriteria.SearchDicomTag;
+            SearchDicomValue = CurrentConfiguration.SearchCriteria.SearchDicomValue;
+            CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
+            WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
+            IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
+            IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
 
-            SearchText = "Patient";
+            this.searchService.FileListCompleted += SearchService_FileListCompleted;
 
-            SearchTextHistory.Add("300A,006B");
+            this.searchService.OnLoadDicomFile += SearchService_OnLoadDicomFile;
 
-            SearchDicomTag = true;
-            SearchDicomValue = true;
+            this.searchService.OnCompletDicomFile += SearchService_OnCompletDicomFile;
 
-            IncludeSubfolders = true;
+            this.searchService.OnSearchComplete += SearchService_OnSearchComplete;
 
-            CurrentFile = "C:\\dummy\\dicom.dcm";
+        }
 
-            this.searchService.FileListCompleted += (sender, arg) => { this.TotalFileCount = arg.Count; };
+        private void SearchService_FileListCompleted(object sender, Services.EventArgs.ListFileCompletedEventArgs e)
+        {
+            this.TotalFileCount = e.Count;
+        }
 
-            this.searchService.OnLoadDicomFile += (sender, arg) =>
+        private void SearchService_OnLoadDicomFile(object sender, Services.EventArgs.OnLoadDicomFileEventArgs e)
+        {
+            lock (obj)
             {
-            };
+                CurrentFile = e.Filename;
+            }
+        }
 
-            this.searchService.OnCompletDicomFile += (sender, arg) =>
+        private void SearchService_OnCompletDicomFile(object sender, Services.EventArgs.OnCompleteDicomFileEventArgs e)
+        {
+            lock (obj2)
             {
-                lock (obj)
+                if (e.IsMatched)
                 {
-                    if (arg.IsMatched)
-                    {
-                        App.Current.Dispatcher.Invoke(() =>
-                            MatchedFileList.Add(arg.ResultDicomFile));
-                        MatchedFileCount++;
-                    }
-                    SearchedFileCount++;
+                    App.Current.Dispatcher.Invoke(() => MatchedFileList.Add(e.ResultDicomFile));
+                    MatchedFileCount++;
                 }
-            };
+                SearchedFileCount++;
+            }
+        }
 
+        private void SearchService_OnSearchComplete(object sender, Services.EventArgs.OnSearchCompleteEventArgs e)
+        {
+            this.CanSearch = true;
+            this.CanCancel = false;
         }
 
         private void DoSearch()
@@ -222,18 +273,74 @@ namespace DicomGrep.ViewModels
                 IncludePrivateTag = IncludePrivateTag
             };
 
+            Util.PushToList(SearchPath, SearchPathHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(FileTypes, FileTypesHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(SearchText, SearchTextHistory, CurrentConfiguration.HistoryCapacity);
+
+            CurrentConfiguration.SearchCriteria = criteria;
+            CurrentConfiguration.SearchPathHistory = new List<string>(SearchPathHistory);
+            CurrentConfiguration.FileTypesHistory = new List<string>(FileTypesHistory);
+            CurrentConfiguration.SearchTextHistory = new List<string>(SearchTextHistory);
+
+            configurationService.Save();
+
             MatchedFileList.Clear();
-            //SelectedMatchedFile = null;
+            SelectedMatchedFile = null;
 
             this.TotalFileCount = 0;
             this.SearchedFileCount = 0;
             this.MatchedFileCount = 0;
 
+            this.CanCancel = true;
+            this.CanSearch = false;
+
+            tokenSource = new CancellationTokenSource();
+
+            // todo: move to SearchAsync()
             Task.Run(() =>
             {
-                this.searchService.Search(criteria);
-            });
+                this.searchService.Search(criteria, tokenSource);
+            }, tokenSource.Token);
         }
 
+        private void DoCancel()
+        {
+            tokenSource.Cancel();
+            //searchService.Cancel();
+        }
+
+        private void DoPickupFolder()
+        {
+            string folder = SearchPath;
+            if (folderPickupService.SelectFolder(ref folder))
+            {
+                SearchPath = folder;
+            }
+        }
+
+        private void DoFileOperation(FileOperationsEnum foe)
+        {
+            if (SelectedMatchedFile == null)
+            {
+                return;
+            }
+            switch (foe)
+            {
+                case FileOperationsEnum.OpenDirectory:
+                    fileOperationService.OpenDirectory(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.OpenFile:
+                    fileOperationService.OpenFile(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.CopyFullNamePath:
+                    fileOperationService.CopyFullNamePath(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.CopyName:
+                    fileOperationService.CopyName(SelectedMatchedFile.FullFilename);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
     }
 }

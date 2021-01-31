@@ -20,7 +20,8 @@ namespace DicomGrep.ViewModels
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");
-            _execute = execute; _canExecute = canExecute;
+            _execute = execute;
+            _canExecute = canExecute;
         }
         #endregion // Constructors 
 
@@ -28,7 +29,7 @@ namespace DicomGrep.ViewModels
         #region ICommand Members 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute((T)parameter);
+            return _canExecute == null || _canExecute((T)parameter);
         }
 
         public event EventHandler CanExecuteChanged
@@ -40,4 +41,5 @@ namespace DicomGrep.ViewModels
         public void Execute(object parameter) { _execute((T)parameter); }
         #endregion // ICommand Members 
     }
+
 }

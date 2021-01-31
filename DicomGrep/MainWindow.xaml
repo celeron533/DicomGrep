@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicomGrep"
         xmlns:vm="clr-namespace:DicomGrep.ViewModels"
+        xmlns:enums="clr-namespace:DicomGrep.Enums"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="640" Width="960" MinWidth="300" MinHeight="200">
@@ -35,16 +36,42 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}">
+                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
                         <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
                         <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding DirectoryName, Mode=OneWay}"/>
                     </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Open Directory" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>OpenDirectory</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Open File" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>OpenFile</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Copy Name" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>CopyName</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Copy Full Name Path" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>CopyFullNamePath</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
                 <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
-                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" >
+                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" SelectionMode="Single" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
@@ -53,33 +80,37 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
-            <StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <Label Content="Search Path"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
-                        <Button Grid.Column="1" MinWidth="20" Content="..."/>
-                    </Grid>
-                    <Label Content="File Types"/>
-                    <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
-                    <Label Content="Search Text"/>
-                    <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
-                    <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
-                    <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
+                    <StackPanel Margin="0,0,0,16">
+                        <Label Content="Search Path"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
+                            <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
+                        </Grid>
+                        <Label Content="File Types"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
+                        <Label Content="Search Text"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,16">
+                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
+                        <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
+                    </StackPanel>
+                    <StackPanel Margin="8,0,0,0">
+                        <CheckBox Content="Search DICOM tag" IsChecked="{Binding SearchDicomTag}"/>
+                        <CheckBox Content="Search DICOM value" IsChecked="{Binding SearchDicomValue}"/>
+                        <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
+                        <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
+                        <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
+                        <CheckBox Content="Include private tag" IsChecked="{Binding IncludePrivateTag}"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel>
-                    <CheckBox Content="Search DICOM tag" IsChecked="{Binding SearchDicomTag}"/>
-                    <CheckBox Content="Search DICOM value" IsChecked="{Binding SearchDicomValue}"/>
-                    <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
-                    <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
-                    <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
-                    <CheckBox Content="Include private tag" IsChecked="{Binding IncludePrivateTag}"/>
-                </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
@@ -92,10 +123,12 @@
                 </StackPanel>
             </StatusBarItem>
             <Separator/>
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <Grid>
-                    <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Background="{x:Null}"/>
-                    <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="BlueViolet" Background="{x:Null}" />
+                    <Grid>
+                        <ProgressBar Value="{Binding SearchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="LightGreen" Background="Transparent" BorderBrush="Transparent"/>
+                        <ProgressBar Value="{Binding MatchedFileCount}" Maximum="{Binding TotalFileCount}" Foreground="Plum" Background="Transparent" BorderBrush="Transparent"/>
+                    </Grid>
                     <TextBlock Text="{Binding CurrentFile}" />
                 </Grid>
             </StatusBarItem>

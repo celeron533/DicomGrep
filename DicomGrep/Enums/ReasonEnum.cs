@@ -4,10 +4,11 @@ using System.Text;
 
 namespace DicomGrep.Enums
 {
-    public enum ResultType
+    public enum ReasonEnum
     {
-        Tag,
-        ValueString,
+        Normal,
+        UserCancelled,
+        Error,
         Unknown
     }
 }

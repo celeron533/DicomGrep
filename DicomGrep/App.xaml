@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:DicomGrep"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Views/Styles/Styles.xaml"/>
     </Application.Resources>
 </Application>
