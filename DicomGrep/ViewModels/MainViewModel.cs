@@ -1,4 +1,5 @@
-﻿using DicomGrep.Models;
+﻿using DicomGrep.Enums;
+using DicomGrep.Models;
 using DicomGrep.Services;
 using DicomGrep.Utils;
 using System;
@@ -16,6 +17,7 @@ namespace DicomGrep.ViewModels
         private readonly SearchService searchService = new SearchService();
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
         private readonly ConfigurationService configurationService = new ConfigurationService();
+        private readonly FileOperationService fileOperationService = new FileOperationService();
 
         Configuration CurrentConfiguration;
 
@@ -172,6 +174,15 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        private ICommand _fileOperationCommand;
+        public ICommand FileOperationCommand
+        {
+            get
+            {
+                return _fileOperationCommand ?? (_fileOperationCommand = new RelayCommand<FileOperationsEnum>(foe => DoFileOperation(foe), _ => SelectedMatchedFile != null));
+            }
+        }
+
         #endregion Command END
 
 
@@ -274,6 +285,7 @@ namespace DicomGrep.ViewModels
             configurationService.Save();
 
             MatchedFileList.Clear();
+            SelectedMatchedFile = null;
 
             this.TotalFileCount = 0;
             this.SearchedFileCount = 0;
@@ -306,5 +318,29 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        private void DoFileOperation(FileOperationsEnum foe)
+        {
+            if (SelectedMatchedFile == null)
+            {
+                return;
+            }
+            switch (foe)
+            {
+                case FileOperationsEnum.OpenDirectory:
+                    fileOperationService.OpenDirectory(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.OpenFile:
+                    fileOperationService.OpenFile(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.CopyFullNamePath:
+                    fileOperationService.CopyFullNamePath(SelectedMatchedFile.FullFilename);
+                    break;
+                case FileOperationsEnum.CopyName:
+                    fileOperationService.CopyName(SelectedMatchedFile.FullFilename);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
     }
 }
