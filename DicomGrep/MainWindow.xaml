@@ -89,13 +89,31 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}">
+                                <i:Interaction.Triggers>
+                                    <i:KeyTrigger Key="Return">
+                                        <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                    </i:KeyTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
                             <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
                         </Grid>
                         <Label Content="File Types"/>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}">
+                            <i:Interaction.Triggers>
+                                <i:KeyTrigger Key="Return">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </i:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                         <Label Content="Search Text"/>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">
+                            <i:Interaction.Triggers>
+                                <i:KeyTrigger Key="Return">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </i:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,16">
                         <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
