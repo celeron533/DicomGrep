@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
         <Menu MinHeight="20">
             <MenuItem Header="File">
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
@@ -116,7 +117,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,16">
-                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
+                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}" Margin="0,0,0,8"/>
                         <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
                     </StackPanel>
                     <StackPanel Margin="8,0,0,0">
