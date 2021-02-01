@@ -43,7 +43,7 @@
                         <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
                         <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding DirectoryName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Located in" Binding="{Binding DirectoryName, Mode=OneWay}"/>
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
