@@ -190,7 +190,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _aboutCommand ?? (_aboutCommand = new RelayCommand<object>(_ => { dialogService.ShowViewDialog(new AboutView()); }));
+                return _aboutCommand ?? (_aboutCommand = new RelayCommand<object>(_ => { dialogService.ShowViewDialog(new AboutView()/*not a good practise in MVVM*/); }));
             }
         }
 
