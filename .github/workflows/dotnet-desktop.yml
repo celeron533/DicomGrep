@@ -18,11 +18,11 @@ jobs:
   build:
 
     runs-on: windows-latest
-    #strategy:
-      #matrix:
-        #configuration: 
-        #  - Debug
-        #  - Release
+    strategy:
+      matrix:
+        configuration: 
+          - Debug
+          - Release
 
     steps:
     - uses: actions/checkout@v2
@@ -33,11 +33,11 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Upload articraft
       uses: actions/upload-artifact@v2
       with:
-        name: articraft
-        path: DicomGrep/bin/Release/netcoreapp3.1
+        name: DicomGrep-${{ matrix.configuration }}
+        path: DicomGrep/bin/${{ matrix.configuration }}/netcoreapp3.1
