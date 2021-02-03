@@ -8,7 +8,7 @@
         xmlns:enums="clr-namespace:DicomGrep.Enums"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="960" MinWidth="300" MinHeight="200">
+        Title="Dicom Grep" Height="640" Width="960" MinWidth="300" MinHeight="200">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
         <Menu MinHeight="20">
             <MenuItem Header="File">
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
@@ -43,7 +44,7 @@
                         <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
                         <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding DirectoryName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Located in" Binding="{Binding DirectoryName, Mode=OneWay}"/>
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
@@ -89,16 +90,34 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}"/>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding SearchPathHistory}" Text="{Binding SearchPath}">
+                                <i:Interaction.Triggers>
+                                    <i:KeyTrigger Key="Return">
+                                        <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                    </i:KeyTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
                             <Button Grid.Column="1" MinWidth="20" Content="..." Command="{Binding FolderPickupCommand}"/>
                         </Grid>
                         <Label Content="File Types"/>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding FileTypesHistory}" Text="{Binding FileTypes}">
+                            <i:Interaction.Triggers>
+                                <i:KeyTrigger Key="Return">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </i:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                         <Label Content="Search Text"/>
-                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}"/>
+                        <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">
+                            <i:Interaction.Triggers>
+                                <i:KeyTrigger Key="Return">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </i:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,16">
-                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}"/>
+                        <Button Content="Search" Command="{Binding SearchCommand, Mode=OneWay}" Margin="0,0,0,8"/>
                         <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
                     </StackPanel>
                     <StackPanel Margin="8,0,0,0">

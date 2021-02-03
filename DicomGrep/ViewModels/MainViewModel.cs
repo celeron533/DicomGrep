@@ -2,6 +2,7 @@
 using DicomGrep.Models;
 using DicomGrep.Services;
 using DicomGrep.Utils;
+using DicomGrep.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +19,7 @@ namespace DicomGrep.ViewModels
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
         private readonly ConfigurationService configurationService = new ConfigurationService();
         private readonly FileOperationService fileOperationService = new FileOperationService();
+        private readonly DialogService dialogService = new DialogService();
 
         Configuration CurrentConfiguration;
 
@@ -180,6 +182,24 @@ namespace DicomGrep.ViewModels
             get
             {
                 return _fileOperationCommand ?? (_fileOperationCommand = new RelayCommand<FileOperationsEnum>(foe => DoFileOperation(foe), _ => SelectedMatchedFile != null));
+            }
+        }
+
+        private ICommand _aboutCommand;
+        public ICommand AboutCommand
+        {
+            get
+            {
+                return _aboutCommand ?? (_aboutCommand = new RelayCommand<object>(_ => { dialogService.ShowViewDialog(new AboutView()/*not a good practise in MVVM*/); }));
+            }
+        }
+
+        private ICommand _exitCommand;
+        public ICommand ExitCommand
+        {
+            get
+            {
+                return _exitCommand ?? (_exitCommand = new RelayCommand<object>(_ => App.Current.Shutdown()));
             }
         }
 
