@@ -21,6 +21,7 @@ namespace DicomGrep.Models
             this.FullFilename = filename;
             this.SOPClassName = SOPClassName;
             this.SOPClassUID = SOPClassUID;
+            this.PatientName = PatientName;
             this.ResultDicomItems = resultDicomItems;
         }
     }
