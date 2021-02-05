@@ -133,7 +133,7 @@
         </Grid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" ToolTip="matched / searched / total">
                     <TextBlock Text="{Binding MatchedFileCount}"/>
                     <TextBlock Text="/"/>
                     <TextBlock Text="{Binding SearchedFileCount}"/>
