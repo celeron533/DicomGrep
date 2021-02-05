@@ -185,15 +185,6 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private ICommand _aboutCommand;
-        public ICommand AboutCommand
-        {
-            get
-            {
-                return _aboutCommand ?? (_aboutCommand = new RelayCommand<object>(_ => { dialogService.ShowViewDialog(new AboutView()/*not a good practise in MVVM*/); }));
-            }
-        }
-
         private ICommand _exitCommand;
         public ICommand ExitCommand
         {

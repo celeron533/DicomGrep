@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         <Menu MinHeight="20">
             <MenuItem Header="File">
-                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="About" Click="About_OnClick"/>
                 <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
         </Menu>

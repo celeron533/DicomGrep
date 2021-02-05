@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DicomGrep.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace DicomGrep
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void About_OnClick(object sender, RoutedEventArgs e)
+        {
+            new AboutView().ShowDialog();
         }
     }
 }
