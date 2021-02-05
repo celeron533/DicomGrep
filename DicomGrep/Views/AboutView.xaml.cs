@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,11 @@ namespace DicomGrep.Views
         public AboutView()
         {
             InitializeComponent();
+        }
+
+        private void GithubWebsite_OnRequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://github.com/celeron533/DicomGrep") { UseShellExecute = true });
         }
     }
 }

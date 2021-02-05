@@ -4,9 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicomGrep.Views"
+        xmlns:vm="clr-namespace:DicomGrep.ViewModels"
         mc:Ignorable="d"
         Title="About" Height="350" Width="600">
+    <Window.DataContext>
+        <vm:AboutViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="100" Margin="10,10,10,10" Width="100" Source="/Views/Images/logo_256.png"/>
+
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock Margin="5,5,0,0" FontSize="24">Dicom Grep</TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                <TextBlock Text="Version: " HorizontalAlignment="Left"/>
+                <TextBlock Text="{Binding Version}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                <TextBlock Text="Github: " HorizontalAlignment="Left"/>
+                <TextBlock>
+                    <Hyperlink RequestNavigate="GithubWebsite_OnRequestNavigate" NavigateUri="/">https://github.com/celeron533/DicomGrep</Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+
+
     </Grid>
 </Window>
