@@ -23,21 +23,23 @@ jobs:
         configuration: 
           - Debug
           #- Release
+        dotnet-version:
+          - '5.0.x'
 
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1.7.2
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: ${{ matrix.dotnet-version }}
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --output bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Upload articraft
       uses: actions/upload-artifact@v2
       with:
         name: DicomGrep-${{ matrix.configuration }}
-        path: DicomGrep/bin/${{ matrix.configuration }}/net5.0-windows
+        path: bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
