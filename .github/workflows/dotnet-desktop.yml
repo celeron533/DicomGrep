@@ -41,5 +41,5 @@ jobs:
     - name: Upload articraft
       uses: actions/upload-artifact@v2
       with:
-        name: DicomGrep-${{ matrix.configuration }}
+        name: DicomGrep-${{ matrix.configuration }}-${{ github.sha }}
         path: bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
