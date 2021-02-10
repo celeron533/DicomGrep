@@ -16,5 +16,7 @@ namespace DicomGrep.Models
         public bool WholeWord { get; set; }
         public bool IncludeSubfolders { get; set; }
         public bool IncludePrivateTag { get; set; }
+
+        public int SearchThreads { get; set; }
     }
 }

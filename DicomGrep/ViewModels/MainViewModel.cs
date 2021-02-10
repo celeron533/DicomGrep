@@ -102,6 +102,15 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _includePrivateTag, value); }
         }
 
+        private int _searchThreads;
+        public int SearchThreads
+        {
+            get { return _searchThreads; }
+            set { SetProperty(ref _searchThreads, value); }
+        }
+
+        public ObservableCollection<int> CPULogicCores { set; get; } = new ObservableCollection<int>();
+
         #endregion Search Criteria END
 
         private int _totalFileCount;
@@ -226,6 +235,9 @@ namespace DicomGrep.ViewModels
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
             IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
+            SearchThreads = Math.Min(CurrentConfiguration.SearchCriteria.SearchThreads, Environment.ProcessorCount);
+
+            CPULogicCores = new ObservableCollection<int>(GetCPULogicCoresList());
 
             this.searchService.FileListCompleted += SearchService_FileListCompleted;
 
@@ -235,6 +247,14 @@ namespace DicomGrep.ViewModels
 
             this.searchService.OnSearchComplete += SearchService_OnSearchComplete;
 
+        }
+
+        private IEnumerable<int> GetCPULogicCoresList()
+        {
+            for (int i = 1; i <= Environment.ProcessorCount; i++)
+            {
+                yield return i;
+            }
         }
 
         private void SearchService_FileListCompleted(object sender, Services.EventArgs.ListFileCompletedEventArgs e)
@@ -281,7 +301,8 @@ namespace DicomGrep.ViewModels
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
                 IncludeSubfolders = IncludeSubfolders,
-                IncludePrivateTag = IncludePrivateTag
+                IncludePrivateTag = IncludePrivateTag,
+                SearchThreads = SearchThreads
             };
 
             Util.PushToList(SearchPath, SearchPathHistory, CurrentConfiguration.HistoryCapacity);

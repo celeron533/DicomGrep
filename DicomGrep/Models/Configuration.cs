@@ -11,7 +11,6 @@ namespace DicomGrep.Models
         public List<string> SearchTextHistory { get; set; }
 
         // todo: other configuration item
-        public int SearchThreads { get; set; }
         public int HistoryCapacity { get; set; }
         public SearchCriteria SearchCriteria { get; set; }
     }

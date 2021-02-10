@@ -38,7 +38,7 @@ namespace DicomGrep.Services
 
             ListFilename();
 
-            ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = 6 };
+            ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = criteria.SearchThreads };
             Parallel.ForEach(result, options, (filename, loopStat) =>
              {
                  if (token.IsCancellationRequested)

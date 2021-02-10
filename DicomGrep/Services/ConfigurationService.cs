@@ -66,7 +66,8 @@ namespace DicomGrep.Services
                 SearchText = "(0010,0020)",
                 SearchDicomTag = true,
                 SearchDicomValue = true,
-                IncludeSubfolders = true
+                IncludeSubfolders = true,
+                SearchThreads = 1
             };
 
             return new Configuration
@@ -74,7 +75,6 @@ namespace DicomGrep.Services
                 FileTypesHistory = new List<string> { criteria.FileTypes },
                 SearchPathHistory = new List<string> { criteria.SearchPath },
                 SearchTextHistory = new List<string> { criteria.SearchText },
-                SearchThreads = 1,
                 HistoryCapacity = 10,
                 SearchCriteria = criteria
             };
