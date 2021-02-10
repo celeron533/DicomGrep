@@ -22,9 +22,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Images\logo_128.png" />
+    <None Remove="Views\Images\logo_16.png" />
+    <None Remove="Views\Images\logo_256.png" />
+    <None Remove="Views\Images\logo_32.png" />
+    <None Remove="Views\Images\logo_48.png" />
+    <None Remove="Views\Images\logo_64.png" />
+    <None Remove="Views\Images\logo_96.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="fo-dicom.NetCore" Version="4.0.7" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Images\logo_128.png" />
+    <Resource Include="Views\Images\logo_16.png" />
+    <Resource Include="Views\Images\logo_256.png" />
+    <Resource Include="Views\Images\logo_32.png" />
+    <Resource Include="Views\Images\logo_48.png" />
+    <Resource Include="Views\Images\logo_64.png" />
+    <Resource Include="Views\Images\logo_96.png" />
   </ItemGroup>
 
 </Project>

@@ -15,7 +15,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="100" Margin="10,10,10,10" Width="100" Source="/Views/Images/logo_256.png"/>
+        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="100" Margin="10,10,10,10" Width="100" Source="Images/logo_256.png"/>
 
         <StackPanel Grid.Column="1" Margin="10">
             <TextBlock Margin="5,5,0,0" FontSize="24">Dicom Grep</TextBlock>
