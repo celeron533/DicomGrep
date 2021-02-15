@@ -4,6 +4,8 @@ An open source tool for searching Dicom files contents.
 
 In "Just could use" state. No warranty.
 
+Compiled with .NET5. You may need additional runtime for this program.
+
 ## Features
 1. Search DICOM by file contents (of course!).
 2. Remember 10 search criteria histories.
