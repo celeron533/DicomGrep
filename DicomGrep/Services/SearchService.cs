@@ -61,13 +61,13 @@ namespace DicomGrep.Services
 
             if (Directory.Exists(criteria.SearchPath))
             {
-                LoopupDirectory(criteria.SearchPath);
+                LookupDirectory(criteria.SearchPath);
             }
 
             FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(result));
         }
 
-        private void LoopupDirectory(string directoryPath)
+        private void LookupDirectory(string directoryPath)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace DicomGrep.Services
                         if (token.IsCancellationRequested)
                             return;
                         else
-                            LoopupDirectory(subdirectory);
+                            LookupDirectory(subdirectory);
                     }
                 }
                 catch (Exception e)
