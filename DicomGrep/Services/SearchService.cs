@@ -27,7 +27,7 @@ namespace DicomGrep.Services
         public event OnSearchCompleteDelegate OnSearchComplete;
 
         private SearchCriteria criteria;
-        private IList<string> result = new List<string>();
+        private IList<string> filenameList = new List<string>();
         private CancellationToken token;
 
 
@@ -36,35 +36,44 @@ namespace DicomGrep.Services
             this.criteria = criteria;
             this.token = tokenSource.Token;
 
-            ListFilename();
+            CreateFilenameList();
 
-            ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = criteria.SearchThreads };
-            Parallel.ForEach(result, options, (filename, loopStat) =>
-             {
-                 if (token.IsCancellationRequested)
-                     loopStat.Break();
-                 else
+            ParallelOptions options = new ParallelOptions 
+            {
+                MaxDegreeOfParallelism = criteria.SearchThreads,
+                CancellationToken = this.token
+            };
+            try
+            {
+                Parallel.ForEach(filenameList, options, (filename, loopStat) =>
+                 {
+                     options.CancellationToken.ThrowIfCancellationRequested();
                      SearchInDicomFile(filename);
-             });
-            if (token.IsCancellationRequested)
-                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.UserCancelled });
-            else
+                 });
                 OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.Normal });
-            tokenSource.Dispose();
+            }
+            catch (OperationCanceledException)
+            {
+                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.UserCancelled });
+            }
+            finally
+            {
+                tokenSource.Dispose();
+            }
         }
 
 
 
-        private void ListFilename()
+        private void CreateFilenameList()
         {
-            result.Clear();
+            filenameList.Clear();
 
             if (Directory.Exists(criteria.SearchPath))
             {
                 LookupDirectory(criteria.SearchPath);
             }
 
-            FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(result));
+            FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(filenameList));
         }
 
         private void LookupDirectory(string directoryPath)
@@ -74,7 +83,7 @@ namespace DicomGrep.Services
                 if (token.IsCancellationRequested)
                     return;
                 else
-                    Array.ForEach(Directory.GetFiles(directoryPath, criteria.FileTypes), fn => result.Add(fn));
+                    Array.ForEach(Directory.GetFiles(directoryPath, criteria.FileTypes), fn => filenameList.Add(fn));
             }
             catch (Exception e)
             { }
