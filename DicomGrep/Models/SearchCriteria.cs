@@ -8,7 +8,22 @@ namespace DicomGrep.Models
     {
         public string SearchPath { get; set; }
         public string FileTypes { get; set; }
-        public string SearchText { get; set; }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get
+            {
+                return _searchText;
+            }
+            set
+            {
+                _searchText = value;
+                SearchTextForTag = _searchText.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", "");
+            }
+        }
+
+        public string SearchTextForTag { get; private set; }
 
         public bool SearchDicomTag { get; set; }
         public bool SearchDicomValue { get; set; }

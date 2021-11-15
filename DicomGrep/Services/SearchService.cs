@@ -114,7 +114,7 @@ namespace DicomGrep.Services
             {
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
 
-                DicomFile dicomFile = DicomFile.Open(filePath);
+                DicomFile dicomFile = DicomFile.Open(filePath, FileReadOption.ReadLargeOnDemand, 16 * 1024);
                 ResultDicomFile resultDicomFile = null;
                 IList<ResultDicomItem> resultDicomItems = null;
                 //new DicomDatasetWalker(dicomFile.Dataset).Walk(new DatasetWalker());
@@ -239,7 +239,7 @@ namespace DicomGrep.Services
             if (isDicomTag)
             {
                 return CompareString(refString.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", ""),
-                                    criteria.SearchText.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", ""),
+                                    criteria.SearchTextForTag,
                                     false, criteria.WholeWord);
             }
             else
