@@ -1,5 +1,4 @@
-﻿using Dicom;
-using DicomGrep.Extensions;
+﻿using DicomGrep.Extensions;
 using DicomGrep.Models;
 using DicomGrep.Services.EventArgs;
 using System;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FellowOakDicom;
 
 namespace DicomGrep.Services
 {
@@ -230,6 +230,11 @@ namespace DicomGrep.Services
 
         private bool CompareString(string refString, SearchCriteria criteria, bool isDicomTag)
         {
+            if (string.IsNullOrEmpty(refString))
+            {
+                return false;
+            }
+
             // Dicom tag: case insensitive, ignore some characters
             if (isDicomTag)
             {

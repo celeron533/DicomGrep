@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom.NetCore" Version="4.0.8" />
+    <PackageReference Include="fo-dicom" Version="5.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
     <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.10.2" />
   </ItemGroup>
