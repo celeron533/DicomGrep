@@ -142,6 +142,15 @@ namespace DicomGrep.Services
             {
                 //event for error logging
                 //throw;
+
+                if (ex is DicomDataException)  // normally caused by incorrect Dicom file format
+                {
+                    // log
+                }
+                else
+                {
+                    
+                }
             }
         }
 
