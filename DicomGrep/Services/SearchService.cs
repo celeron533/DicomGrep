@@ -112,9 +112,7 @@ namespace DicomGrep.Services
         }
 
 
-
-
-        public void SearchInDicomFile(string filePath)
+        private void SearchInDicomFile(string filePath)
         {
             ResultDicomFile resultDicomFile = null;
             bool isMatched = false;
@@ -220,9 +218,9 @@ namespace DicomGrep.Services
                         else
                         {
                             //dicomItem
-                            if ((dicomItem is DicomElement) && (((DicomElement)dicomItem).Count > 0))
+                            if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
-                                var valueString = ((DicomElement)dicomItem).Get<string>();
+                                var valueString = element.Get<string>();
                                 if (CompareString(valueString, criteria, false))
                                 {
                                     //handle match
@@ -231,7 +229,7 @@ namespace DicomGrep.Services
                                         resultDicomItems = new List<ResultDicomItem>();
                                     }
 
-                                    resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultTypeEnum.ValueString));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, Enums.ResultTypeEnum.ValueString));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
                                     break;
