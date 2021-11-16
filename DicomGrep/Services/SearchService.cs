@@ -30,11 +30,17 @@ namespace DicomGrep.Services
         private IList<string> filenameList = new List<string>();
         private CancellationToken token;
 
+        private int searchedFileCount = 0;
+        private int matchedFileCount = 0;
+
 
         public void Search(SearchCriteria criteria, CancellationTokenSource tokenSource)
         {
             this.criteria = criteria;
             this.token = tokenSource.Token;
+
+            searchedFileCount = 0;
+            matchedFileCount = 0;
 
             CreateFilenameList();
 
@@ -110,12 +116,14 @@ namespace DicomGrep.Services
 
         public void SearchInDicomFile(string filePath)
         {
+            ResultDicomFile resultDicomFile = null;
+            bool isMatched = false;
             try
             {
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
 
                 DicomFile dicomFile = DicomFile.Open(filePath, FileReadOption.ReadLargeOnDemand, 16 * 1024);
-                ResultDicomFile resultDicomFile = null;
+                
                 IList<ResultDicomItem> resultDicomItems = null;
                 //new DicomDatasetWalker(dicomFile.Dataset).Walk(new DatasetWalker());
 
@@ -133,24 +141,36 @@ namespace DicomGrep.Services
                 CompareDicomTagAndValue(dicomFile.FileMetaInfo, ref resultDicomItems);
                 CompareDicomTagAndValue(dicomFile.Dataset, ref resultDicomItems);
 
-                resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName, resultDicomItems);
-                bool isMatched = resultDicomItems?.Count > 0;
+                resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName,
+                    resultDicomItems);
+                isMatched = resultDicomItems?.Count > 0;
+                if (isMatched)
+                {
+                    Interlocked.Increment(ref matchedFileCount);
+                }
 
-                OnCompletDicomFile?.Invoke(this, new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatched));
+
             }
             catch (Exception ex)
             {
                 //event for error logging
                 //throw;
 
-                if (ex is DicomDataException)  // normally caused by incorrect Dicom file format
+                if (ex is DicomDataException) // normally caused by incorrect Dicom file format
                 {
                     // log
                 }
                 else
                 {
-                    
+
                 }
+            }
+            finally
+            {
+                Interlocked.Increment(ref searchedFileCount);
+                OnCompletDicomFile?.Invoke(this,
+                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatched, searchedFileCount,
+                        matchedFileCount));
             }
         }
 
