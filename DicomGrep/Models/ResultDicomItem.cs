@@ -1,8 +1,8 @@
-﻿using Dicom;
-using DicomGrep.Enums;
+﻿using DicomGrep.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FellowOakDicom;
 
 namespace DicomGrep.Models
 {

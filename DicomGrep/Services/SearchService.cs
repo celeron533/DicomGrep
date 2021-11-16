@@ -1,5 +1,4 @@
-﻿using Dicom;
-using DicomGrep.Extensions;
+﻿using DicomGrep.Extensions;
 using DicomGrep.Models;
 using DicomGrep.Services.EventArgs;
 using System;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FellowOakDicom;
 
 namespace DicomGrep.Services
 {
@@ -30,11 +30,17 @@ namespace DicomGrep.Services
         private IList<string> filenameList = new List<string>();
         private CancellationToken token;
 
+        private int searchedFileCount = 0;
+        private int matchedFileCount = 0;
+
 
         public void Search(SearchCriteria criteria, CancellationTokenSource tokenSource)
         {
             this.criteria = criteria;
             this.token = tokenSource.Token;
+
+            searchedFileCount = 0;
+            matchedFileCount = 0;
 
             CreateFilenameList();
 
@@ -106,16 +112,16 @@ namespace DicomGrep.Services
         }
 
 
-
-
-        public void SearchInDicomFile(string filePath)
+        private void SearchInDicomFile(string filePath)
         {
+            ResultDicomFile resultDicomFile = null;
+            bool isMatched = false;
             try
             {
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
 
-                DicomFile dicomFile = DicomFile.Open(filePath);
-                ResultDicomFile resultDicomFile = null;
+                DicomFile dicomFile = DicomFile.Open(filePath, FileReadOption.ReadLargeOnDemand, 16 * 1024);
+                
                 IList<ResultDicomItem> resultDicomItems = null;
                 //new DicomDatasetWalker(dicomFile.Dataset).Walk(new DatasetWalker());
 
@@ -133,15 +139,36 @@ namespace DicomGrep.Services
                 CompareDicomTagAndValue(dicomFile.FileMetaInfo, ref resultDicomItems);
                 CompareDicomTagAndValue(dicomFile.Dataset, ref resultDicomItems);
 
-                resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName, resultDicomItems);
-                bool isMatched = resultDicomItems?.Count > 0;
+                resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName,
+                    resultDicomItems);
+                isMatched = resultDicomItems?.Count > 0;
+                if (isMatched)
+                {
+                    Interlocked.Increment(ref matchedFileCount);
+                }
 
-                OnCompletDicomFile?.Invoke(this, new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatched));
+
             }
             catch (Exception ex)
             {
                 //event for error logging
                 //throw;
+
+                if (ex is DicomDataException) // normally caused by incorrect Dicom file format
+                {
+                    // log
+                }
+                else
+                {
+
+                }
+            }
+            finally
+            {
+                Interlocked.Increment(ref searchedFileCount);
+                OnCompletDicomFile?.Invoke(this,
+                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatched, searchedFileCount,
+                        matchedFileCount));
             }
         }
 
@@ -191,9 +218,9 @@ namespace DicomGrep.Services
                         else
                         {
                             //dicomItem
-                            if ((dicomItem is DicomElement) && (((DicomElement)dicomItem).Count > 0))
+                            if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
-                                var valueString = ((DicomElement)dicomItem).Get<string>();
+                                var valueString = element.Get<string>();
                                 if (CompareString(valueString, criteria, false))
                                 {
                                     //handle match
@@ -202,7 +229,7 @@ namespace DicomGrep.Services
                                         resultDicomItems = new List<ResultDicomItem>();
                                     }
 
-                                    resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultTypeEnum.ValueString));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, Enums.ResultTypeEnum.ValueString));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
                                     break;
@@ -230,11 +257,16 @@ namespace DicomGrep.Services
 
         private bool CompareString(string refString, SearchCriteria criteria, bool isDicomTag)
         {
+            if (string.IsNullOrEmpty(refString))
+            {
+                return false;
+            }
+
             // Dicom tag: case insensitive, ignore some characters
             if (isDicomTag)
             {
                 return CompareString(refString.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", ""),
-                                    criteria.SearchText.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", ""),
+                                    criteria.SearchTextForTag,
                                     false, criteria.WholeWord);
             }
             else

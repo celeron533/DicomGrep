@@ -277,9 +277,9 @@ namespace DicomGrep.ViewModels
                 if (e.IsMatched)
                 {
                     App.Current.Dispatcher.Invoke(() => MatchedFileList.Add(e.ResultDicomFile));
-                    MatchedFileCount++;
+                    MatchedFileCount = e.MatchedFileCount;
                 }
-                SearchedFileCount++;
+                SearchedFileCount = e.SearchedFileCount;
             }
         }
 
