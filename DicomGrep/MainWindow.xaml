@@ -107,7 +107,17 @@
                                 </i:KeyTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
-                        <Label Content="Search Text"/>
+                        <Label Content="Dicom tag"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox IsEditable="True">
+                            </ComboBox>
+                            <Button Content="..." Grid.Column="1"></Button>
+                        </Grid>
+                        <Label Content="Dicom value"></Label>
                         <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">
                             <i:Interaction.Triggers>
                                 <i:KeyTrigger Key="Return">

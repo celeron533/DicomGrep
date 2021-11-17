@@ -9,6 +9,10 @@ namespace DicomGrep.Models
         public string SearchPath { get; set; }
         public string FileTypes { get; set; }
 
+        public bool AllDicomTag { get; set; }
+        public string DicomTag { get; set; }
+        public string DicomTagValue { get; set; }
+
         private string _searchText;
         public string SearchText
         {
