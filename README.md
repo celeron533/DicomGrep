@@ -6,6 +6,8 @@ In "Just could use" state. No warranty.
 
 Compiled with .NET5. You may need additional runtime for this program.
 
+[![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
+
 ## Features
 1. Search DICOM by file contents (of course!).
 2. Remember 10 search criteria histories.
