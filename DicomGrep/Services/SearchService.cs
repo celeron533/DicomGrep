@@ -199,7 +199,7 @@ namespace DicomGrep.Services
                         // then compare tag value
                         else
                         {
-                            //dicomItem
+                            // dicomItem
                             if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
                                 var valueString = element.Get<string>();

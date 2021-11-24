@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace DicomGrep.Models
 {
@@ -10,7 +11,9 @@ namespace DicomGrep.Models
         public string SearchPath { get; set; }
         public string SearchSopClassUid { get; set; }
 
+        [JsonIgnore]
         public DicomTag ParsedDicomTag { get; private set; } = null;
+
         private string _searchTag;
         public string SearchTag 
         {

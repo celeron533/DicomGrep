@@ -63,6 +63,8 @@ namespace DicomGrep.Services
             {
                 SearchPath = "C:\\Users\\Public",
                 FileTypes = "*.dcm",
+                SearchSopClassUid = "",
+                SearchTag = "",
                 SearchText = "TREATMENT",
                 IncludeSubfolders = true,
                 SearchThreads = 1

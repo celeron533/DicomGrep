@@ -126,7 +126,7 @@
                             </ComboBox>
                             <Button Content="..." MinWidth="20" Grid.Column="1" Command="{Binding DicomTagLookupCommand}"></Button>
                         </Grid>
-                        <Label Content="Dicom Value"></Label>
+                        <Label Content="Dicom Tag Value"></Label>
                         <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">
                             <i:Interaction.Triggers>
                                 <i:KeyTrigger Key="Return">
