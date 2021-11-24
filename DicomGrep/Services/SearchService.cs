@@ -186,26 +186,8 @@ namespace DicomGrep.Services
                 }
                 else
                 {
-
-                    if (criteria.SearchDicomTag)
-                    {
-                        if (CompareString(dicomItem.Tag.ToString(), criteria, true))
-                        {
-                            //handle match
-                            var valueString = ((DicomElement)dicomItem).Get<string>();
-
-                            if (resultDicomItems == null)
-                            {
-                                resultDicomItems = new List<ResultDicomItem>();
-                            }
-
-                            resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, valueString, Enums.ResultTypeEnum.Tag));
-
-                            //Console.WriteLine($"match tag: {dicomItem.ToString()}");
-                        }
-                    }
-
-                    if (criteria.SearchDicomValue)
+                    // check the tag first
+                    if (criteria.ParsedDicomTag == null || dicomItem.Tag == criteria.ParsedDicomTag)
                     {
                         // skip binary VRs
                         if (dicomItem.ValueRepresentation == DicomVR.OB ||
@@ -214,14 +196,14 @@ namespace DicomGrep.Services
                         {
                             continue;
                         }
-                        // compare value
+                        // then compare tag value
                         else
                         {
                             //dicomItem
                             if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
                                 var valueString = element.Get<string>();
-                                if (CompareString(valueString, criteria, false))
+                                if ( string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
                                 {
                                     //handle match
                                     if (resultDicomItems == null)
@@ -229,10 +211,10 @@ namespace DicomGrep.Services
                                         resultDicomItems = new List<ResultDicomItem>();
                                     }
 
-                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, Enums.ResultTypeEnum.ValueString));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
-                                    break;
+                                    
                                 }
                             }
 
@@ -250,6 +232,7 @@ namespace DicomGrep.Services
                             */
                         }
                     }
+
                 }
             }
             return resultDicomItems;
@@ -262,17 +245,8 @@ namespace DicomGrep.Services
                 return false;
             }
 
-            // Dicom tag: case insensitive, ignore some characters
-            if (isDicomTag)
-            {
-                return CompareString(refString.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", ""),
-                                    criteria.SearchTextForTag,
-                                    false, criteria.WholeWord);
-            }
-            else
-            {
-                return CompareString(refString, criteria.SearchText, criteria.CaseSensitive, criteria.WholeWord);
-            }
+            return CompareString(refString, criteria.SearchText, criteria.CaseSensitive, criteria.WholeWord);
+
         }
 
         private bool CompareString(string refString, string testString, bool caseSensitive, bool wholeWord)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FellowOakDicom;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,30 +8,38 @@ namespace DicomGrep.Models
     public class SearchCriteria
     {
         public string SearchPath { get; set; }
-        public string FileTypes { get; set; }
+        public string SearchSopClassUid { get; set; }
 
-        public bool AllDicomTag { get; set; }
-        public string DicomTag { get; set; }
-        public string DicomTagValue { get; set; }
-
-        private string _searchText;
-        public string SearchText
+        public DicomTag ParsedDicomTag { get; private set; } = null;
+        private string _searchTag;
+        public string SearchTag 
         {
-            get
+            get => _searchTag;
+            set 
             {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                SearchTextForTag = _searchText.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", "");
+                _searchTag = value;
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    ParsedDicomTag = null;
+                }
+                else
+                {
+                    try
+                    {
+                        ParsedDicomTag = DicomTag.Parse(value);
+                    }
+                    catch
+                    {
+                        ParsedDicomTag = null;
+                    }
+                }
             }
         }
 
-        public string SearchTextForTag { get; private set; }
+        public string FileTypes { get; set; }
 
-        public bool SearchDicomTag { get; set; }
-        public bool SearchDicomValue { get; set; }
+        public string SearchText { get; set; }
+
         public bool CaseSensitive { get; set; }
         public bool WholeWord { get; set; }
         public bool IncludeSubfolders { get; set; }

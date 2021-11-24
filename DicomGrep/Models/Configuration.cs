@@ -8,6 +8,8 @@ namespace DicomGrep.Models
     {
         public List<string> SearchPathHistory { get; set; }
         public List<string> FileTypesHistory { get; set; }
+        public List<string> SopClassUidHistory { get; set; }
+        public List<string> DicomTagHistory { get; set; }
         public List<string> SearchTextHistory { get; set; }
 
         // todo: other configuration item
