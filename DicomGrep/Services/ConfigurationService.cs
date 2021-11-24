@@ -63,15 +63,17 @@ namespace DicomGrep.Services
             {
                 SearchPath = "C:\\Users\\Public",
                 FileTypes = "*.dcm",
-                SearchText = "(0010,0020)",
-                SearchDicomTag = true,
-                SearchDicomValue = true,
+                SearchSopClassUid = "",
+                SearchTag = "",
+                SearchText = "TREATMENT",
                 IncludeSubfolders = true,
                 SearchThreads = 1
             };
 
             return new Configuration
             {
+                SopClassUidHistory = new List<string> { criteria.SearchSopClassUid },
+                DicomTagHistory = new List<string> { criteria.SearchTag },
                 FileTypesHistory = new List<string> { criteria.FileTypes },
                 SearchPathHistory = new List<string> { criteria.SearchPath },
                 SearchTextHistory = new List<string> { criteria.SearchText },

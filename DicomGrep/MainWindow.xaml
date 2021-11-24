@@ -77,7 +77,6 @@
                         <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding ValueString, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=OneWay}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
@@ -107,7 +106,27 @@
                                 </i:KeyTrigger>
                             </i:Interaction.Triggers>
                         </ComboBox>
-                        <Label Content="Search Text"/>
+                        <Label Content="SOP Class UID"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding SopClassUidHistory}" Text="{Binding SopClassUid}">
+                            </ComboBox>
+                            <Button Content="..." MinWidth="20" Command="{Binding SopClassLookupCommand}" Grid.Column="1"></Button>
+                        </Grid>
+                        <Label Content="Dicom Tag"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox IsEditable="True" ItemsSource="{Binding DicomTagHistory}" Text="{Binding Tag}">
+                            </ComboBox>
+                            <Button Content="..." MinWidth="20" Grid.Column="1" Command="{Binding DicomTagLookupCommand}"></Button>
+                        </Grid>
+                        <Label Content="Dicom Tag Value"></Label>
                         <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">
                             <i:Interaction.Triggers>
                                 <i:KeyTrigger Key="Return">
@@ -121,8 +140,6 @@
                         <Button Content="Cancel" Command="{Binding CancelCommand, Mode=OneWay}"/>
                     </StackPanel>
                     <StackPanel Margin="8,0,0,0">
-                        <CheckBox Content="Search DICOM tag" IsChecked="{Binding SearchDicomTag}"/>
-                        <CheckBox Content="Search DICOM value" IsChecked="{Binding SearchDicomValue}"/>
                         <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
                         <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
                         <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>

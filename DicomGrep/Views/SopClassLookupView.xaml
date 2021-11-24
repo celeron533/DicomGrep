@@ -1,0 +1,39 @@
+﻿<Window x:Class="DicomGrep.Views.SopClassLookupView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DicomGrep.Views"
+        xmlns:vm="clr-namespace:DicomGrep.ViewModels"
+        mc:Ignorable="d"
+        Title="Looking for SOP Class UID" Height="650" Width="900">
+    <Window.DataContext>
+        <vm:SopClassLookupViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Name="header" MinHeight="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" MinWidth="120"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Selected:" Grid.Row="0" Grid.Column="0"/>
+            <TextBox Name="selected" Text="{Binding SelectedUID.UID, Mode=OneWay}" Grid.Row="0" Grid.Column="1"/>
+            <Label Content="Filter:" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Name="filter" TextChanged="Filter_TextChanged" Grid.Row="1" Grid.Column="1"/>
+            <Button Name="pick" Content="Pick" Grid.Column="2" Grid.RowSpan="2" IsDefault="True" Click="pick_Click" Margin="8"/>
+        </Grid>
+        <DataGrid Name="dataGridUid" ItemsSource="{Binding SOPClassUIDs, Mode=OneWay}"  AutoGenerateColumns="True"
+                  SelectedItem="{Binding SelectedUID, Mode=OneWayToSource}" SelectionMode="Single"
+                  Grid.Row="1"/>
+
+    </Grid>
+</Window>

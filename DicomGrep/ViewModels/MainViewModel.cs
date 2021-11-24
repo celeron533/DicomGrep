@@ -15,10 +15,13 @@ namespace DicomGrep.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        // todo: using DI
         private readonly SearchService searchService = new SearchService();
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
         private readonly ConfigurationService configurationService = new ConfigurationService();
         private readonly FileOperationService fileOperationService = new FileOperationService();
+        private readonly SopClassLookupService sopClassLookupService = new SopClassLookupService();
+        private readonly DicomTagLookupService dicomTagLookupService = new DicomTagLookupService();
         private readonly DialogService dialogService = new DialogService();
 
         Configuration CurrentConfiguration;
@@ -48,6 +51,24 @@ namespace DicomGrep.ViewModels
 
         public ObservableCollection<string> FileTypesHistory { set; get; } = new ObservableCollection<string>();
 
+        private string _sopClassUid;
+        public string SopClassUid
+        {
+            get { return _sopClassUid; }
+            set { SetProperty(ref _sopClassUid, value); }
+        }
+
+        public ObservableCollection<string> SopClassUidHistory { set; get; } = new ObservableCollection<string>();
+
+        private string _tag;
+        public string Tag
+        {
+            get { return _tag; }
+            set { SetProperty(ref _tag, value); }
+        }
+
+        public ObservableCollection<string> DicomTagHistory { set; get; } = new ObservableCollection<string>();
+
 
         private string _searchText;
         public string SearchText
@@ -59,20 +80,6 @@ namespace DicomGrep.ViewModels
         public ObservableCollection<string> SearchTextHistory { set; get; } = new ObservableCollection<string>();
 
 
-
-        private bool _searchDicomTag;
-        public bool SearchDicomTag
-        {
-            get { return _searchDicomTag; }
-            set { SetProperty(ref _searchDicomTag, value); }
-        }
-
-        private bool _searchDicomValue;
-        public bool SearchDicomValue
-        {
-            get { return _searchDicomValue; }
-            set { SetProperty(ref _searchDicomValue, value); }
-        }
 
         private bool _caseSensitive;
         public bool CaseSensitive
@@ -194,6 +201,24 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        private ICommand _sopClassLookupCommand;
+        public ICommand SopClassLookupCommand
+        {
+            get
+            {
+                return _sopClassLookupCommand ?? (_sopClassLookupCommand = new RelayCommand<object>(_=> DoSopClassLookup()));
+            }
+        }
+
+        private ICommand _dicomtagLookupCommand;
+        public ICommand DicomTagLookupCommand
+        {
+            get
+            {
+                return _dicomtagLookupCommand ?? (_dicomtagLookupCommand = new RelayCommand<object>(_=> DoDicomTagLookup()));
+            }
+        }
+
         private ICommand _exitCommand;
         public ICommand ExitCommand
         {
@@ -222,15 +247,15 @@ namespace DicomGrep.ViewModels
 
             CurrentConfiguration = configurationService.GetConfiguration();
 
-            SearchPathHistory = new ObservableCollection<string>(CurrentConfiguration.SearchPathHistory);
-            FileTypesHistory = new ObservableCollection<string>(CurrentConfiguration.FileTypesHistory);
-            SearchTextHistory = new ObservableCollection<string>(CurrentConfiguration.SearchTextHistory);
+            SearchPathHistory = new ObservableCollection<string>(CurrentConfiguration.SearchPathHistory ?? new List<string>());
+            FileTypesHistory = new ObservableCollection<string>(CurrentConfiguration.FileTypesHistory ?? new List<string>());
+            SopClassUidHistory = new ObservableCollection<string>(CurrentConfiguration.SopClassUidHistory ?? new List<string>());
+            DicomTagHistory = new ObservableCollection<string>(CurrentConfiguration.DicomTagHistory ?? new List<string>());
+            SearchTextHistory = new ObservableCollection<string>(CurrentConfiguration.SearchTextHistory ?? new List<string>());
 
             SearchPath = CurrentConfiguration.SearchCriteria.SearchPath;
             FileTypes = CurrentConfiguration.SearchCriteria.FileTypes;
             SearchText = CurrentConfiguration.SearchCriteria.SearchText;
-            SearchDicomTag = CurrentConfiguration.SearchCriteria.SearchDicomTag;
-            SearchDicomValue = CurrentConfiguration.SearchCriteria.SearchDicomValue;
             CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
@@ -295,9 +320,9 @@ namespace DicomGrep.ViewModels
             {
                 SearchPath = SearchPath,
                 FileTypes = FileTypes,
+                SearchSopClassUid = SopClassUid,
+                SearchTag = Tag,
                 SearchText = SearchText,
-                SearchDicomTag = SearchDicomTag,
-                SearchDicomValue = SearchDicomValue,
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
                 IncludeSubfolders = IncludeSubfolders,
@@ -307,11 +332,15 @@ namespace DicomGrep.ViewModels
 
             Util.PushToList(SearchPath, SearchPathHistory, CurrentConfiguration.HistoryCapacity);
             Util.PushToList(FileTypes, FileTypesHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(SopClassUid, SopClassUidHistory, CurrentConfiguration.HistoryCapacity);
+            Util.PushToList(Tag, DicomTagHistory, CurrentConfiguration.HistoryCapacity);
             Util.PushToList(SearchText, SearchTextHistory, CurrentConfiguration.HistoryCapacity);
 
             CurrentConfiguration.SearchCriteria = criteria;
             CurrentConfiguration.SearchPathHistory = new List<string>(SearchPathHistory);
             CurrentConfiguration.FileTypesHistory = new List<string>(FileTypesHistory);
+            CurrentConfiguration.SopClassUidHistory = new List<string>(SopClassUidHistory);
+            CurrentConfiguration.DicomTagHistory = new List<string>(DicomTagHistory);
             CurrentConfiguration.SearchTextHistory = new List<string>(SearchTextHistory);
 
             configurationService.Save();
@@ -347,6 +376,24 @@ namespace DicomGrep.ViewModels
             if (folderPickupService.SelectFolder(ref folder))
             {
                 SearchPath = folder;
+            }
+        }
+
+        private void DoSopClassLookup()
+        {
+            string uid = SopClassUid;
+            if (sopClassLookupService.SelectSopClass(ref uid))
+            {
+                SopClassUid = uid;
+            }
+        }
+
+        private void DoDicomTagLookup()
+        {
+            string tag = Tag;
+            if (dicomTagLookupService.SelectDicomTag(ref tag))
+            {
+                Tag = tag;
             }
         }
 

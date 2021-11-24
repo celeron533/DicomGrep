@@ -10,13 +10,11 @@ namespace DicomGrep.Models
     {
         public DicomTag Tag { get; private set; }
         public string ValueString { get; private set; }
-        public ResultTypeEnum Type { get; private set; }
 
-        public ResultDicomItem(DicomTag tag, string valueString, ResultTypeEnum type)
+        public ResultDicomItem(DicomTag tag, string valueString)
         {
             this.Tag = tag;
             this.ValueString = valueString;
-            this.Type = type;
         }
     }
 }
