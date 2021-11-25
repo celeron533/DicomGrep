@@ -129,12 +129,17 @@ namespace DicomGrep.Services
                 string sopClassName = string.Empty;
                 DicomUID sopClassUID = null;
 
-                dicomFile.Dataset.TryGetString(DicomTag.PatientName, out patientName);
+
                 if (dicomFile.Dataset.TryGetSingleValue<DicomUID>(DicomTag.SOPClassUID, out sopClassUID))
                 {
+                    // compare the sop class uid
+                    if (!string.IsNullOrWhiteSpace(criteria.SearchSopClassUid) && sopClassUID.UID != criteria.SearchSopClassUid)
+                    {
+                        return;
+                    }
                     sopClassName = sopClassUID?.Name;
                 }
-
+                dicomFile.Dataset.TryGetString(DicomTag.PatientName, out patientName);
 
                 CompareDicomTagAndValue(dicomFile.FileMetaInfo, ref resultDicomItems);
                 CompareDicomTagAndValue(dicomFile.Dataset, ref resultDicomItems);
