@@ -11,13 +11,17 @@
         <vm:AboutViewModel/>
     </Window.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="100" Margin="10,10,10,10" Width="100" Source="Images/logo_256.png"/>
+        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="100" Margin="10,10,10,10" Width="100" Source="Images/logo_256.png" Grid.Row="0" Grid.Column="0"/>
 
-        <StackPanel Grid.Column="1" Margin="10">
+        <StackPanel Margin="10" Grid.Row="0" Grid.Column="1">
             <TextBlock Margin="5,5,0,0" FontSize="24">Dicom Grep</TextBlock>
             <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                 <TextBlock Text="Version: " HorizontalAlignment="Left"/>
@@ -26,11 +30,30 @@
             <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                 <TextBlock Text="Github: " HorizontalAlignment="Left"/>
                 <TextBlock>
-                    <Hyperlink RequestNavigate="GithubWebsite_OnRequestNavigate" NavigateUri="/">https://github.com/celeron533/DicomGrep</Hyperlink>
+                    <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/celeron533/DicomGrep">https://github.com/celeron533/DicomGrep</Hyperlink>
                 </TextBlock>
             </StackPanel>
         </StackPanel>
-
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Label Content="Acknowledgments" FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,5,5,5">
+            <TextBlock>fo-dicom
+                <Hyperlink NavigateUri="https://github.com/fo-dicom/fo-dicom" RequestNavigate="Hyperlink_RequestNavigate">
+                    https://github.com/fo-dicom/fo-dicom
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>Microsoft.Xaml.Behaviors.Wpf
+                <Hyperlink NavigateUri="https://github.com/Microsoft/XamlBehaviorsWpf" RequestNavigate="Hyperlink_RequestNavigate">
+                    https://github.com/Microsoft/XamlBehaviorsWpf
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>WinCopies.WindowsAPICodePack.Shell
+                <Hyperlink NavigateUri="https://wincopies.com/windows-api-codepack" RequestNavigate="Hyperlink_RequestNavigate">
+                    https://wincopies.com/windows-api-codepack
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
 
     </Grid>
 </Window>
