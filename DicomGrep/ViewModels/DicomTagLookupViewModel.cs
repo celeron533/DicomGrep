@@ -27,6 +27,10 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        /// <summary>
+        /// Get all public DICOM tag definitions. Private tags are not included.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<DicomTag> GetAllDicomTagDefs()
         {
             return typeof(DicomTag).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
