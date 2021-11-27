@@ -3,6 +3,7 @@ using DicomGrep.Models;
 using DicomGrep.Services;
 using DicomGrep.Utils;
 using DicomGrep.Views;
+using FellowOakDicom;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -243,6 +244,9 @@ namespace DicomGrep.ViewModels
 
         public MainViewModel()
         {
+            // todo: choose a better place to initialize the fo-dicom?
+            DicomDictionary.EnsureDefaultDictionariesLoaded(true);
+
             configurationService.Load();
 
             CurrentConfiguration = configurationService.GetConfiguration();
