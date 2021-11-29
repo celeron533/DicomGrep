@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace DicomGrep.Utils
@@ -9,25 +10,32 @@ namespace DicomGrep.Utils
         // todo: use LRU
         public static void PushToList(string newItem, IList<string> list, int capacity)
         {
-            if (capacity <= 1 )
+            if (capacity <= 1)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
             int index = list.IndexOf(newItem);
 
-            if (list.Count == 0)
+            if (index < 0)
             {
                 list.Add(newItem);
             }
+            else if (index == 0)
+            {
+                // already in the list and it is the 1st item, do nothing
+            }
             else
             {
-                list.Insert(0, newItem);
-            }
-
-            if (index >= 0)
-            {
-                list.RemoveAt(index + 1);
+                if (list is ObservableCollection<string> observableCollection)
+                {
+                    observableCollection.Move(index, 0);
+                }
+                else
+                {
+                    list.RemoveAt(index);
+                    list.Insert(0, newItem);
+                }
             }
 
             while (list.Count > capacity)

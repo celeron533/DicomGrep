@@ -143,7 +143,6 @@
                         <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
                         <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
                         <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
-                        <CheckBox Content="Include private tag" IsChecked="{Binding IncludePrivateTag}"/>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Treads: "/>
                             <ComboBox ItemsSource="{Binding CPULogicCores}" SelectedValue="{Binding SearchThreads}" MinWidth="70"/>

@@ -192,7 +192,8 @@ namespace DicomGrep.Services
                 else
                 {
                     // check the tag first
-                    if (criteria.ParsedDicomTag == null || dicomItem.Tag == criteria.ParsedDicomTag)
+                    if ( string.IsNullOrEmpty(criteria.SearchTagFlattened) ||
+                         dicomItem.Tag.ToString("J",null) == criteria.SearchTagFlattened) // both of the string are in UPPER case
                     {
                         // skip binary VRs
                         if (dicomItem.ValueRepresentation == DicomVR.OB ||

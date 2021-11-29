@@ -40,7 +40,7 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _searchPath, value); }
         }
 
-        public ObservableCollection<string> SearchPathHistory { set; get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> SearchPathHistory { set; get; }
 
 
         private string _fileTypes;
@@ -50,7 +50,7 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _fileTypes, value); }
         }
 
-        public ObservableCollection<string> FileTypesHistory { set; get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> FileTypesHistory { set; get; }
 
         private string _sopClassUid;
         public string SopClassUid
@@ -59,7 +59,7 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _sopClassUid, value); }
         }
 
-        public ObservableCollection<string> SopClassUidHistory { set; get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> SopClassUidHistory { set; get; }
 
         private string _tag;
         public string Tag
@@ -68,7 +68,7 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _tag, value); }
         }
 
-        public ObservableCollection<string> DicomTagHistory { set; get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> DicomTagHistory { set; get; }
 
 
         private string _searchText;
@@ -78,7 +78,7 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _searchText, value); }
         }
 
-        public ObservableCollection<string> SearchTextHistory { set; get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> SearchTextHistory { set; get; }
 
 
 
@@ -101,13 +101,6 @@ namespace DicomGrep.ViewModels
         {
             get { return _includeSubfolders; }
             set { SetProperty(ref _includeSubfolders, value); }
-        }
-
-        private bool _includePrivateTag;
-        public bool IncludePrivateTag
-        {
-            get { return _includePrivateTag; }
-            set { SetProperty(ref _includePrivateTag, value); }
         }
 
         private int _searchThreads;
@@ -259,11 +252,12 @@ namespace DicomGrep.ViewModels
 
             SearchPath = CurrentConfiguration.SearchCriteria.SearchPath;
             FileTypes = CurrentConfiguration.SearchCriteria.FileTypes;
+            SopClassUid = CurrentConfiguration.SearchCriteria.SearchSopClassUid;
+            Tag = CurrentConfiguration.SearchCriteria.SearchTag;
             SearchText = CurrentConfiguration.SearchCriteria.SearchText;
             CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
-            IncludePrivateTag = CurrentConfiguration.SearchCriteria.IncludePrivateTag;
             SearchThreads = Math.Min(CurrentConfiguration.SearchCriteria.SearchThreads, Environment.ProcessorCount);
 
             CPULogicCores = new ObservableCollection<int>(GetCPULogicCoresList());
@@ -330,7 +324,6 @@ namespace DicomGrep.ViewModels
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
                 IncludeSubfolders = IncludeSubfolders,
-                IncludePrivateTag = IncludePrivateTag,
                 SearchThreads = SearchThreads
             };
 

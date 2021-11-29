@@ -11,33 +11,27 @@ namespace DicomGrep.Models
         public string SearchPath { get; set; }
         public string SearchSopClassUid { get; set; }
 
-        [JsonIgnore]
-        public DicomTag ParsedDicomTag { get; private set; } = null;
-
         private string _searchTag;
-        public string SearchTag 
+
+        public string SearchTag
         {
             get => _searchTag;
-            set 
+            set
             {
                 _searchTag = value;
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    ParsedDicomTag = null;
-                }
-                else
-                {
-                    try
-                    {
-                        ParsedDicomTag = DicomTag.Parse(value);
-                    }
-                    catch
-                    {
-                        ParsedDicomTag = null;
-                    }
-                }
+                _searchTagFlattened = value?.Substring(0, value.IndexOf(':') > 0 ? value.IndexOf(':') : value.Length)
+                    .Replace("(", "")
+                    .Replace(")", "")
+                    .Replace(",", "")
+                    .Replace(".", "")
+                    .Replace(" ", "")
+                    .ToUpper();
             }
         }
+
+        private string _searchTagFlattened;
+        [JsonIgnore]
+        public string SearchTagFlattened => _searchTagFlattened;
 
         public string FileTypes { get; set; }
 
@@ -46,7 +40,6 @@ namespace DicomGrep.Models
         public bool CaseSensitive { get; set; }
         public bool WholeWord { get; set; }
         public bool IncludeSubfolders { get; set; }
-        public bool IncludePrivateTag { get; set; }
 
         public int SearchThreads { get; set; }
     }
