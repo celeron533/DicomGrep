@@ -42,5 +42,19 @@ namespace DicomGrep.Models
         public bool IncludeSubfolders { get; set; }
 
         public int SearchThreads { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"SearchPath = '{SearchPath}', " +
+                $"SearchSopClassUid = '{SearchSopClassUid}', " +
+                $"SearchTag = '{SearchTag}', " +
+                $"FileTypes = '{FileTypes}', " +
+                $"SearchText = '{SearchText}', " +
+                $"CaseSensitive = {CaseSensitive}, " +
+                $"WholeWord= {WholeWord}, " +
+                $"IncludeSubfolders = {IncludeSubfolders}, " +
+                $"SearchThreads = {SearchThreads}";
+        }
     }
 }

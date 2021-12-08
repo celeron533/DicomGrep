@@ -14,6 +14,8 @@ namespace DicomGrep.Services
 {
     public class SearchService
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public delegate void ListFileCompletedDelegate(object sender, ListFileCompletedEventArgs e);
         public event ListFileCompletedDelegate FileListCompleted;
 
@@ -36,6 +38,8 @@ namespace DicomGrep.Services
 
         public void Search(SearchCriteria criteria, CancellationTokenSource tokenSource)
         {
+            logger.Info(criteria.ToString());
+
             this.criteria = criteria;
             this.token = tokenSource.Token;
 
@@ -61,6 +65,7 @@ namespace DicomGrep.Services
             catch (OperationCanceledException)
             {
                 OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.UserCancelled });
+                logger.Info("User cancelled the search.");
             }
             finally
             {
@@ -92,7 +97,9 @@ namespace DicomGrep.Services
                     Array.ForEach(Directory.GetFiles(directoryPath, criteria.FileTypes), fn => filenameList.Add(fn));
             }
             catch (Exception e)
-            { }
+            {
+                logger.Warn(e, $"Unable to access files in: '{directoryPath}'");
+            }
 
             if (criteria.IncludeSubfolders)
             {
@@ -107,7 +114,9 @@ namespace DicomGrep.Services
                     }
                 }
                 catch (Exception e)
-                { }
+                {
+                    logger.Warn(e, $"Unable to access directory: '{directoryPath}'");
+                }
             }
         }
 
@@ -161,11 +170,11 @@ namespace DicomGrep.Services
 
                 if (ex is DicomDataException) // normally caused by incorrect Dicom file format
                 {
-                    // log
+                    logger.Warn(ex, $"'{filePath}' is not a valid DICOM file.");
                 }
                 else
                 {
-
+                    logger.Info(ex);
                 }
             }
             finally
