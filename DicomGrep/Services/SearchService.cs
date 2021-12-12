@@ -98,7 +98,7 @@ namespace DicomGrep.Services
             }
             catch (Exception e)
             {
-                logger.Warn(e, $"Unable to access files in: '{directoryPath}'");
+                logger.Error(e, $"Unable to access files in: '{directoryPath}'");
             }
 
             if (criteria.IncludeSubfolders)
@@ -115,7 +115,7 @@ namespace DicomGrep.Services
                 }
                 catch (Exception e)
                 {
-                    logger.Warn(e, $"Unable to access directory: '{directoryPath}'");
+                    logger.Error(e, $"Unable to access directory: '{directoryPath}'");
                 }
             }
         }
@@ -170,11 +170,11 @@ namespace DicomGrep.Services
 
                 if (ex is DicomDataException) // normally caused by incorrect Dicom file format
                 {
-                    logger.Warn(ex, $"'{filePath}' is not a valid DICOM file.");
+                    logger.Error(ex, $"'{filePath}' is not a valid DICOM file.");
                 }
                 else
                 {
-                    logger.Info(ex);
+                    logger.Warn(ex);
                 }
             }
             finally

@@ -10,6 +10,7 @@ namespace DicomGrep.Services
 {
     public class ConfigurationService
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static Configuration CurrentConfiguration { get; set; }
         public const string CONFIG_FILE = "config.json";
 
@@ -25,13 +26,16 @@ namespace DicomGrep.Services
 
         public bool Save()
         {
+            logger.Info("Saving the configuration to file");
+
             JsonSerializerOptions option = new JsonSerializerOptions { WriteIndented = true };
             try
             {
                 File.WriteAllText(CONFIG_FILE, JsonSerializer.Serialize(CurrentConfiguration, option));
             }
-            catch
+            catch(Exception ex)
             {
+                logger.Error(ex, "Failed to save the configuration to file.");
                 return false;
             }
             return true;
@@ -39,6 +43,7 @@ namespace DicomGrep.Services
 
         public bool Load()
         {
+            logger.Info("Loading the configuration from file");
             try
             {
                 if (File.Exists(CONFIG_FILE))
@@ -47,7 +52,10 @@ namespace DicomGrep.Services
                     return true;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Failed to load the configuration from file.");
+            }
             CurrentConfiguration = DefaultConfiguration();
             return false;
         }
@@ -59,6 +67,8 @@ namespace DicomGrep.Services
 
         private static Configuration DefaultConfiguration()
         {
+            logger.Info("Load default configuration");
+
             SearchCriteria criteria = new SearchCriteria
             {
                 SearchPath = "C:\\Users\\Public",
