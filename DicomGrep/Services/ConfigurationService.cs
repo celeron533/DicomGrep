@@ -71,7 +71,7 @@ namespace DicomGrep.Services
 
             SearchCriteria criteria = new SearchCriteria
             {
-                SearchPath = "C:\\Users\\Public",
+                SearchPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory),
                 FileTypes = "*.dcm",
                 SearchSopClassUid = "",
                 SearchTag = "",
