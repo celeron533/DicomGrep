@@ -38,17 +38,17 @@
             <Label Content="Acknowledgments" FontWeight="Bold" />
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,5,5,5">
-            <TextBlock>fo-dicom
+            <TextBlock TextWrapping="Wrap">fo-dicom
                 <Hyperlink NavigateUri="https://github.com/fo-dicom/fo-dicom" RequestNavigate="Hyperlink_RequestNavigate">
                     https://github.com/fo-dicom/fo-dicom
                 </Hyperlink>
             </TextBlock>
-            <TextBlock>Microsoft.Xaml.Behaviors.Wpf
+            <TextBlock TextWrapping="Wrap">Microsoft.Xaml.Behaviors.Wpf
                 <Hyperlink NavigateUri="https://github.com/Microsoft/XamlBehaviorsWpf" RequestNavigate="Hyperlink_RequestNavigate">
                     https://github.com/Microsoft/XamlBehaviorsWpf
                 </Hyperlink>
             </TextBlock>
-            <TextBlock>WinCopies.WindowsAPICodePack.Shell
+            <TextBlock TextWrapping="Wrap">WinCopies.WindowsAPICodePack.Shell
                 <Hyperlink NavigateUri="https://wincopies.com/windows-api-codepack" RequestNavigate="Hyperlink_RequestNavigate">
                     https://wincopies.com/windows-api-codepack
                 </Hyperlink>
