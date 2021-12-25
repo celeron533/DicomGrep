@@ -173,7 +173,16 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(), _ => CanSearch));
+                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(false), _ => CanSearch));
+            }
+        }
+
+        private ICommand _searchInResultsCommand;
+        public ICommand SearchInResultsCommand
+        {
+            get
+            {
+                return _searchInResultsCommand ?? (_searchInResultsCommand = new RelayCommand<object>(_ => DoSearch(true), _ => CanSearch));
             }
         }
 
@@ -258,6 +267,7 @@ namespace DicomGrep.ViewModels
             CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
+            //SearchInResults = CurrentConfiguration.SearchCriteria.SearchInResults;
             SearchThreads = Math.Min(CurrentConfiguration.SearchCriteria.SearchThreads, Environment.ProcessorCount);
 
             CPULogicCores = new ObservableCollection<int>(GetCPULogicCoresList());
@@ -312,7 +322,7 @@ namespace DicomGrep.ViewModels
             this.CanCancel = false;
         }
 
-        private void DoSearch()
+        private void DoSearch(bool searchInResults = false)
         {
             SearchCriteria criteria = new SearchCriteria
             {
@@ -324,6 +334,7 @@ namespace DicomGrep.ViewModels
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
                 IncludeSubfolders = IncludeSubfolders,
+                SearchInResults = searchInResults,  // from parameter
                 SearchThreads = SearchThreads
             };
 

@@ -41,6 +41,9 @@ namespace DicomGrep.Models
         public bool WholeWord { get; set; }
         public bool IncludeSubfolders { get; set; }
 
+        [JsonIgnore]
+        public bool SearchInResults { get; set; }
+
         public int SearchThreads { get; set; }
 
         public override string ToString()
@@ -54,6 +57,7 @@ namespace DicomGrep.Models
                 $"CaseSensitive = {CaseSensitive}, " +
                 $"WholeWord= {WholeWord}, " +
                 $"IncludeSubfolders = {IncludeSubfolders}, " +
+                $"SearchInResults = {SearchInResults}, " +
                 $"SearchThreads = {SearchThreads}";
         }
     }

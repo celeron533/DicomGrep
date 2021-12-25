@@ -29,7 +29,8 @@ namespace DicomGrep.Services
         public event OnSearchCompleteDelegate OnSearchComplete;
 
         private SearchCriteria criteria;
-        private IList<string> filenameList = new List<string>();
+        private List<string> filenameList = new List<string>();
+        private List<string> matchedFilenameList = new List<string>();
         private CancellationToken token;
 
         private int searchedFileCount = 0;
@@ -44,9 +45,22 @@ namespace DicomGrep.Services
             this.token = tokenSource.Token;
 
             searchedFileCount = 0;
-            matchedFileCount = 0;
+            
 
-            CreateFilenameList();
+            if (criteria.SearchInResults)
+            {
+                // use the filename list from previous search result
+                filenameList.Clear();
+                filenameList.AddRange(matchedFilenameList);
+            }
+            else
+            {
+                // construct new filename list
+                CreateFilenameList();
+            }
+
+            matchedFilenameList.Clear();
+            matchedFileCount = 0;
 
             ParallelOptions options = new ParallelOptions 
             {
@@ -158,6 +172,7 @@ namespace DicomGrep.Services
                 isMatched = resultDicomItems?.Count > 0;
                 if (isMatched)
                 {
+                    matchedFilenameList.Add(filePath);
                     Interlocked.Increment(ref matchedFileCount);
                 }
 

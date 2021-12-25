@@ -77,6 +77,7 @@ namespace DicomGrep.Services
                 SearchTag = "",
                 SearchText = "TREATMENT",
                 IncludeSubfolders = true,
+                SearchInResults = false,
                 SearchThreads = 1
             };
 
