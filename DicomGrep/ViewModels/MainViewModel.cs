@@ -24,6 +24,7 @@ namespace DicomGrep.ViewModels
         private readonly SopClassLookupService sopClassLookupService = new SopClassLookupService();
         private readonly DicomTagLookupService dicomTagLookupService = new DicomTagLookupService();
         private readonly DialogService dialogService = new DialogService();
+        private readonly ExportService exportService = new ExportService();
 
         Configuration CurrentConfiguration;
 
@@ -157,6 +158,13 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _canCancel, value); }
         }
 
+        private bool _canExport = false;
+        public bool CanExport
+        {
+            get { return _canExport; }
+            set { SetProperty(ref _canExport, value); }
+        }
+
         #region Command
 
         private ICommand _folderPickupCommand;
@@ -228,6 +236,15 @@ namespace DicomGrep.ViewModels
             get
             {
                 return _exitCommand ?? (_exitCommand = new RelayCommand<object>(_ => App.Current.Shutdown()));
+            }
+        }
+
+        private ICommand _exportCommand;
+        public ICommand ExportCommand
+        {
+            get
+            {
+                return _exportCommand ?? (_exportCommand = new RelayCommand<object>(_=> DoExport()));
             }
         }
 
@@ -320,6 +337,7 @@ namespace DicomGrep.ViewModels
         {
             this.CanSearch = true;
             this.CanCancel = false;
+            this.CanExport = true;
         }
 
         private void DoSearch(bool searchInResults = false)
@@ -362,6 +380,7 @@ namespace DicomGrep.ViewModels
 
             this.CanCancel = true;
             this.CanSearch = false;
+            this.CanExport = false;
 
             tokenSource = new CancellationTokenSource();
 
@@ -403,6 +422,11 @@ namespace DicomGrep.ViewModels
             {
                 Tag = tag;
             }
+        }
+
+        private void DoExport()
+        {
+            exportService.Export(new List<ResultDicomFile>(MatchedFileList));
         }
 
         private void DoFileOperation(FileOperationsEnum foe)
