@@ -20,6 +20,8 @@
         </Grid.RowDefinitions>
         <Menu MinHeight="20">
             <MenuItem Header="File">
+                <MenuItem Header="Export search result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}"/>
+                <Separator/>
                 <MenuItem Header="About" Click="About_OnClick"/>
                 <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
@@ -67,6 +69,9 @@
                                 <MenuItem.CommandParameter>
                                     <enums:FileOperationsEnum>CopyFullNamePath</enums:FileOperationsEnum>
                                 </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Export Search Result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}">
                             </MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
