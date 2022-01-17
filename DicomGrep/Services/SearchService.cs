@@ -59,6 +59,8 @@ namespace DicomGrep.Services
                 CreateFilenameList();
             }
 
+            FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(filenameList));
+
             matchedFilenameList.Clear();
             matchedFileCount = 0;
 
@@ -97,8 +99,6 @@ namespace DicomGrep.Services
             {
                 LookupDirectory(criteria.SearchPath);
             }
-
-            FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(filenameList));
         }
 
         private void LookupDirectory(string directoryPath)
