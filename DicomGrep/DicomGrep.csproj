@@ -37,7 +37,7 @@
     <PackageReference Include="fo-dicom" Version="5.0.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="NLog" Version="4.7.15" />
-    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.10.2" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.11.0" />
   </ItemGroup>
 
   <ItemGroup>
