@@ -32,59 +32,6 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="3*" MinWidth="30"/>
             </Grid.ColumnDefinitions>
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" MinHeight="30"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" MinHeight="30"/>
-                </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}" SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
-                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Located in" Binding="{Binding DirectoryName, Mode=OneWay}"/>
-                    </DataGrid.Columns>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Open Directory" Command="{Binding FileOperationCommand}">
-                                <MenuItem.CommandParameter>
-                                    <enums:FileOperationsEnum>OpenDirectory</enums:FileOperationsEnum>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="Open File" Command="{Binding FileOperationCommand}">
-                                <MenuItem.CommandParameter>
-                                    <enums:FileOperationsEnum>OpenFile</enums:FileOperationsEnum>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="Copy Name" Command="{Binding FileOperationCommand}">
-                                <MenuItem.CommandParameter>
-                                    <enums:FileOperationsEnum>CopyName</enums:FileOperationsEnum>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <MenuItem Header="Copy Full Name Path" Command="{Binding FileOperationCommand}">
-                                <MenuItem.CommandParameter>
-                                    <enums:FileOperationsEnum>CopyFullNamePath</enums:FileOperationsEnum>
-                                </MenuItem.CommandParameter>
-                            </MenuItem>
-                            <Separator/>
-                            <MenuItem Header="Export Search Result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}">
-                            </MenuItem>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                </DataGrid>
-                <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
-                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" SelectionMode="Single" >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
-                        <DataGridTextColumn Header="Value" Binding="{Binding ValueString, Mode=OneWay}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Margin="0,0,0,16">
@@ -156,6 +103,59 @@
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" MinHeight="30"/>
+                </Grid.RowDefinitions>
+                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="SOP Class" Binding="{Binding SOPClassName, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Matches" Binding="{Binding ResultDicomItems.Count}"/>
+                        <DataGridTextColumn Header="SOP Class UID" Binding="{Binding SOPClassUID, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Located in" Binding="{Binding DirectoryName, Mode=OneWay}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Open Directory" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>OpenDirectory</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Open File" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>OpenFile</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Copy Name" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>CopyName</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <MenuItem Header="Copy Full Name Path" Command="{Binding FileOperationCommand}">
+                                <MenuItem.CommandParameter>
+                                    <enums:FileOperationsEnum>CopyFullNamePath</enums:FileOperationsEnum>
+                                </MenuItem.CommandParameter>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Export Search Result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}">
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+                <DataGrid Grid.Row="2" AutoGenerateColumns="False" ItemsSource="{Binding SelectedMatchedFile.ResultDicomItems}" SelectionMode="Single" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
+                        <DataGridTextColumn Header="Value" Binding="{Binding ValueString, Mode=OneWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Grid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
