@@ -2,17 +2,23 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>logo.ico</ApplicationIcon>
     <StartupObject>DicomGrep.App</StartupObject>
-    <AssemblyVersion>0.10.1.0</AssemblyVersion>
-    <FileVersion>0.10.1.0</FileVersion>
-    <Version>0.10.1</Version>
+    <AssemblyVersion></AssemblyVersion>
+    <FileVersion></FileVersion>
+    <Version>0.10.2</Version>
     <Authors>celeron533</Authors>
     <PackageProjectUrl>https://github.com/celeron533/DicomGrep</PackageProjectUrl>
     <Description>A tool for searching Dicom file by contents</Description>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>DICOM; search; grep</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/celeron533/DicomGrep</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,6 +37,13 @@
     <None Remove="Views\Images\logo_48.png" />
     <None Remove="Views\Images\logo_64.png" />
     <None Remove="Views\Images\logo_96.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
