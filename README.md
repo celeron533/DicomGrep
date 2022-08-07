@@ -6,7 +6,7 @@ In "Just could use" state. No warranty.
 
 Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
-Compiled with .NET5. You may need additional runtime for this program.
+Compiled with .NET6. You may need additional runtime for this program.
 
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
 

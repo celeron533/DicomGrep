@@ -1,4 +1,4 @@
-name: dotnet package
+name: build DicomGrep
 
 on: 
   push:
@@ -25,11 +25,14 @@ jobs:
           #- Release
         dotnet-version:
           - '6.0.x'
+    # for create new releases
+    permissions:
+      contents: write
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1.7.2
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: Install dependencies
@@ -38,8 +41,9 @@ jobs:
       run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --output bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+
     - name: Upload articraft
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: DicomGrep-${{ matrix.configuration }}-${{ github.sha }}
+        name: DicomGrep-${{ matrix.configuration }}
         path: bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
