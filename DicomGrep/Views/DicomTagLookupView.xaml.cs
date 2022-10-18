@@ -43,6 +43,10 @@ namespace DicomGrep.Views
 
                 };
             }
+            else
+            {
+                cv.Filter = null;
+            }
         }
 
         private void pick_Click(object sender, RoutedEventArgs e)

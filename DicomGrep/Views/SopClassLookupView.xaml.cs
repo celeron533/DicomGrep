@@ -41,6 +41,10 @@ namespace DicomGrep.Views
                     uid.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
                 };
             }
+            else
+            {
+                cv.Filter = null;
+            }
         }
 
         private void pick_Click(object sender, RoutedEventArgs e)
