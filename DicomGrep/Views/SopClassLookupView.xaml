@@ -33,7 +33,7 @@
         </Grid>
         <DataGrid Name="dataGridUid" ItemsSource="{Binding SOPClassUIDs, Mode=OneWay}"  AutoGenerateColumns="True"
                   SelectedItem="{Binding SelectedUID, Mode=OneWayToSource}" SelectionMode="Single"
-                  Grid.Row="1"/>
+                  Grid.Row="1" MouseDoubleClick="dataGridUid_MouseDoubleClick"/>
 
     </Grid>
 </Window>

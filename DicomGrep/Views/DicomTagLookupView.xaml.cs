@@ -54,5 +54,11 @@ namespace DicomGrep.Views
             this.DialogResult = true;
             this.Close();
         }
+
+        private void dataGridUid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
     }
 }

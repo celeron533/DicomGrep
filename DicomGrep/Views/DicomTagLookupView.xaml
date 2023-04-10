@@ -33,7 +33,7 @@
         </Grid>
         <DataGrid Name="dataGridUid" ItemsSource="{Binding DicomTags, Mode=OneWay}"  AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedTag, Mode=OneWayToSource}" SelectionMode="Single"
-                  Grid.Row="1">
+                  Grid.Row="1" MouseDoubleClick="dataGridUid_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tag" Binding="{Binding .,Mode=OneWay}"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding DictionaryEntry.Name,Mode=OneWay}"/>
