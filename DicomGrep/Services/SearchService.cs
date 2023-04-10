@@ -232,7 +232,17 @@ namespace DicomGrep.Services
                             // dicomItem
                             if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
-                                var valueString = element.Get<string>();
+                                string valueString = element.Get<string>();
+
+                                if (dicomItem.ValueRepresentation == DicomVR.UN)
+                                {
+                                    byte[] bytes = element.Get<byte[]>();
+                                    if (bytes != null && bytes.Length > 1)
+                                    {
+                                        valueString = Encoding.ASCII.GetString(bytes);
+                                    }
+                                }
+                                
                                 if ( string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
                                 {
                                     //handle match
