@@ -1,0 +1,16 @@
+﻿<Window x:Class="DicomGrep.Views.TagValueDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DicomGrep.Views"
+        xmlns:vm="clr-namespace:DicomGrep.ViewModels"
+        mc:Ignorable="d"
+        Title="Tag Details" Height="450" Width="500" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:TagValueDetailViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <TextBox Text="{Binding Summary, Mode=OneWay}" Margin="10,10,10,10" VerticalContentAlignment="Top" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontFamily="Courier New" FontSize="16"/>
+    </Grid>
+</Window>

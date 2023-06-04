@@ -28,6 +28,7 @@ namespace DicomGrep.ViewModels
         private readonly DicomTagLookupService dicomTagLookupService = new DicomTagLookupService();
         private readonly DialogService dialogService = new DialogService();
         private readonly ExportService exportService = new ExportService();
+        private readonly TagValueDetailService tagValueDetailService = new TagValueDetailService();
 
         Configuration CurrentConfiguration;
 
@@ -251,6 +252,15 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        private ICommand _detailsCommand;
+        public ICommand DetailsCommand
+        {
+            get
+            {
+                return _detailsCommand ?? (_detailsCommand = new RelayCommand<ResultDicomItem>(item => DoDetails(item)));
+            }
+        }
+
         #endregion Command END
 
 
@@ -271,8 +281,8 @@ namespace DicomGrep.ViewModels
             {
                 for (int i=1; i<=5; i++)
                 {
-                    ResultDicomItem resultDicomItem1 = new ResultDicomItem(new DicomTag(0x0010, 0x0020), "John Doe");
-                    ResultDicomItem resultDicomItem2 = new ResultDicomItem(new DicomTag(0x0123, 0x99, "DicomGrep Creator"), "C533");
+                    ResultDicomItem resultDicomItem1 = new ResultDicomItem(new DicomTag(0x0010, 0x0020), "John Doe", new byte[0]);
+                    ResultDicomItem resultDicomItem2 = new ResultDicomItem(new DicomTag(0x0123, 0x99, "DicomGrep Creator"), "C533", new byte[0]);
                     List<ResultDicomItem> items = new List<ResultDicomItem>
                     {
                         resultDicomItem1,
@@ -449,6 +459,11 @@ namespace DicomGrep.ViewModels
         private void DoExport()
         {
             exportService.Export(new List<ResultDicomFile>(MatchedFileList));
+        }
+
+        private void DoDetails(ResultDicomItem item)
+        {
+            tagValueDetailService.InspectTagValue(item);
         }
 
         private void DoFileOperation(FileOperationsEnum foe)

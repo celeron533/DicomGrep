@@ -233,6 +233,8 @@ namespace DicomGrep.Services
                             if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
                                 string valueString = element.Get<string>();
+                                byte[] rawValue = new byte[element.Buffer.Size];
+                                Array.Copy(element.Buffer.Data, rawValue, element.Buffer.Size);
 
                                 if (dicomItem.ValueRepresentation == DicomVR.UN)
                                 {
@@ -251,7 +253,7 @@ namespace DicomGrep.Services
                                         resultDicomItems = new List<ResultDicomItem>();
                                     }
 
-                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, rawValue));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
                                     

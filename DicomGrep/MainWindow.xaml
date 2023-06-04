@@ -153,6 +153,14 @@
                         <DataGridTextColumn Header="Tag" Binding="{Binding Tag, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Name" Binding="{Binding Tag.DictionaryEntry.Name, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding ValueString, Mode=OneWay}"/>
+                        <DataGridTemplateColumn Header="Details">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="..." Command="{Binding DataContext.DetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Margin="8,0,8,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
