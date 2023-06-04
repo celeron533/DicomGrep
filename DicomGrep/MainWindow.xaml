@@ -110,7 +110,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=OneWayToSource}" SelectionMode="Single">
+                <DataGrid ItemsSource="{Binding MatchedFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchedFile, Mode=Default}" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>

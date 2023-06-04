@@ -7,9 +7,12 @@ using FellowOakDicom;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DicomGrep.ViewModels
@@ -263,6 +266,25 @@ namespace DicomGrep.ViewModels
 
         public MainViewModel()
         {
+            // dummy data for designer preview
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                for (int i=1; i<=5; i++)
+                {
+                    ResultDicomItem resultDicomItem1 = new ResultDicomItem(new DicomTag(0x0010, 0x0020), "John Doe");
+                    ResultDicomItem resultDicomItem2 = new ResultDicomItem(new DicomTag(0x0123, 0x99, "DicomGrep Creator"), "C533");
+                    List<ResultDicomItem> items = new List<ResultDicomItem>
+                    {
+                        resultDicomItem1,
+                        resultDicomItem2
+                    };
+
+                    ResultDicomFile resultDicomFile = new ResultDicomFile($"C:\\DICOM\\preview\\sampleFile{i}.dcm", "RT Plan Storage", "1.2.840.10008.5.1.4.1.1.481.5", $"Patient{i}", items);
+                    MatchedFileList.Add(resultDicomFile);
+                }
+                SelectedMatchedFile = MatchedFileList.First();
+            }
+
             // todo: choose a better place to initialize the fo-dicom?
             DicomDictionary.EnsureDefaultDictionariesLoaded(true);
 
