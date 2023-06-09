@@ -6,7 +6,7 @@ In "Just could use" state. No warranty.
 
 Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
-Compiled with .NET6. You may need additional runtime for this program.
+Compiled with .NET 6. You may need additional runtime for this program.
 
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
 
@@ -17,7 +17,11 @@ Compiled with .NET6. You may need additional runtime for this program.
 4. Simple file operations 📄 (open directory, open file, etc.)
 5. Some unexpected bugs 🐛.
 
-## Screenshot
+Supported platforms:\
+win-x64, win-x86, win-arm64, win-arm32\
+For Linux and MacOS, you can use Virtual machine, or QEMU, or WINE.
+
+## Screenshots
 (v0.9.5-alpha)
 
 ![Main Window](./screenshots/01.png)
