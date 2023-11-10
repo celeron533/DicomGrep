@@ -9,17 +9,17 @@ namespace DicomGrep.Services.EventArgs
     {
         public string Filename { get; private set; }
         public ResultDicomFile ResultDicomFile { get; private set; }
-        public bool IsMatched { get; private set; }
+        public bool IsMatch { get; private set; }
         public int SearchedFileCount { get; private set; }
-        public int MatchedFileCount { get; private set; }
+        public int MatchFileCount { get; private set; }
 
-        public OnCompleteDicomFileEventArgs(string filename, ResultDicomFile resultDicomFile, bool isMatched, int searchedFileCount, int matchedFileCount)
+        public OnCompleteDicomFileEventArgs(string filename, ResultDicomFile resultDicomFile, bool isMatch, int searchedFileCount, int matchFileCount)
         {
             this.Filename = filename;
             this.ResultDicomFile = resultDicomFile;
-            this.IsMatched = isMatched;
+            this.IsMatch = isMatch;
             this.SearchedFileCount = searchedFileCount;
-            this.MatchedFileCount = matchedFileCount;
+            this.MatchFileCount = matchFileCount;
         }
     }
 }

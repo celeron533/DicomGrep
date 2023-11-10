@@ -31,7 +31,7 @@ namespace DicomGrep.Services
 
             using (StreamWriter sw = new StreamWriter(exportTo, false))
             {
-                sw.WriteLine($"{resultFiles.Count} matched files on {DateTime.Now.ToString("s")}");
+                sw.WriteLine($"{resultFiles.Count} match files on {DateTime.Now.ToString("s")}");
                 foreach (ResultDicomFile dicomFile in resultFiles)
                 {
                     sw.WriteLine($"{dicomFile.FullFilename} | {dicomFile.SOPClassUID} | {dicomFile.SOPClassName} | {dicomFile.PatientName} | matches:{dicomFile.ResultDicomItems.Count}");

@@ -133,11 +133,11 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _searchedFileCount, value); }
         }
 
-        private int _matchedFileCount;
-        public int MatchedFileCount
+        private int _matchFileCount;
+        public int MatchFileCount
         {
-            get { return _matchedFileCount; }
-            set { SetProperty(ref _matchedFileCount, value); }
+            get { return _matchFileCount; }
+            set { SetProperty(ref _matchFileCount, value); }
         }
 
         private string _currentFile;
@@ -212,7 +212,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _fileOperationCommand ?? (_fileOperationCommand = new RelayCommand<FileOperationsEnum>(foe => DoFileOperation(foe), _ => SelectedMatchedFile != null));
+                return _fileOperationCommand ?? (_fileOperationCommand = new RelayCommand<FileOperationsEnum>(foe => DoFileOperation(foe), _ => SelectedMatchFile != null));
             }
         }
 
@@ -264,13 +264,13 @@ namespace DicomGrep.ViewModels
         #endregion Command END
 
 
-        public ObservableCollection<ResultDicomFile> MatchedFileList { set; get; } = new ObservableCollection<ResultDicomFile>();
+        public ObservableCollection<ResultDicomFile> MatchFileList { set; get; } = new ObservableCollection<ResultDicomFile>();
 
-        private ResultDicomFile _selectedMatchedFile;
-        public ResultDicomFile SelectedMatchedFile
+        private ResultDicomFile _selectedMatchFile;
+        public ResultDicomFile SelectedMatchFile
         {
-            get { return _selectedMatchedFile; }
-            set { SetProperty(ref _selectedMatchedFile, value); }
+            get { return _selectedMatchFile; }
+            set { SetProperty(ref _selectedMatchFile, value); }
         }
 
 
@@ -290,9 +290,9 @@ namespace DicomGrep.ViewModels
                     };
 
                     ResultDicomFile resultDicomFile = new ResultDicomFile($"C:\\DICOM\\preview\\sampleFile{i}.dcm", "RT Plan Storage", "1.2.840.10008.5.1.4.1.1.481.5", $"Patient{i}", items);
-                    MatchedFileList.Add(resultDicomFile);
+                    MatchFileList.Add(resultDicomFile);
                 }
-                SelectedMatchedFile = MatchedFileList.First();
+                SelectedMatchFile = MatchFileList.First();
             }
 
             // todo: choose a better place to initialize the fo-dicom?
@@ -356,10 +356,10 @@ namespace DicomGrep.ViewModels
         {
             lock (obj2)
             {
-                if (e.IsMatched)
+                if (e.IsMatch)
                 {
-                    App.Current.Dispatcher.Invoke(() => MatchedFileList.Add(e.ResultDicomFile));
-                    MatchedFileCount = e.MatchedFileCount;
+                    App.Current.Dispatcher.Invoke(() => MatchFileList.Add(e.ResultDicomFile));
+                    MatchFileCount = e.MatchFileCount;
                 }
                 SearchedFileCount = e.SearchedFileCount;
             }
@@ -403,12 +403,12 @@ namespace DicomGrep.ViewModels
 
             configurationService.Save();
 
-            MatchedFileList.Clear();
-            SelectedMatchedFile = null;
+            MatchFileList.Clear();
+            SelectedMatchFile = null;
 
             this.TotalFileCount = 0;
             this.SearchedFileCount = 0;
-            this.MatchedFileCount = 0;
+            this.MatchFileCount = 0;
 
             this.CanCancel = true;
             this.CanSearch = false;
@@ -458,7 +458,7 @@ namespace DicomGrep.ViewModels
 
         private void DoExport()
         {
-            exportService.Export(new List<ResultDicomFile>(MatchedFileList));
+            exportService.Export(new List<ResultDicomFile>(MatchFileList));
         }
 
         private void DoDetails(ResultDicomItem item)
@@ -468,23 +468,23 @@ namespace DicomGrep.ViewModels
 
         private void DoFileOperation(FileOperationsEnum foe)
         {
-            if (SelectedMatchedFile == null)
+            if (SelectedMatchFile == null)
             {
                 return;
             }
             switch (foe)
             {
                 case FileOperationsEnum.OpenDirectory:
-                    fileOperationService.OpenDirectory(SelectedMatchedFile.FullFilename);
+                    fileOperationService.OpenDirectory(SelectedMatchFile.FullFilename);
                     break;
                 case FileOperationsEnum.OpenFile:
-                    fileOperationService.OpenFile(SelectedMatchedFile.FullFilename);
+                    fileOperationService.OpenFile(SelectedMatchFile.FullFilename);
                     break;
                 case FileOperationsEnum.CopyFullNamePath:
-                    fileOperationService.CopyFullNamePath(SelectedMatchedFile.FullFilename);
+                    fileOperationService.CopyFullNamePath(SelectedMatchFile.FullFilename);
                     break;
                 case FileOperationsEnum.CopyName:
-                    fileOperationService.CopyName(SelectedMatchedFile.FullFilename);
+                    fileOperationService.CopyName(SelectedMatchFile.FullFilename);
                     break;
                 default:
                     throw new NotSupportedException();

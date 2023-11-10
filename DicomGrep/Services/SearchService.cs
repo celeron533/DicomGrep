@@ -30,11 +30,11 @@ namespace DicomGrep.Services
 
         private SearchCriteria criteria;
         private List<string> filenameList = new List<string>();
-        private List<string> matchedFilenameList = new List<string>();
+        private List<string> matchFilenameList = new List<string>();
         private CancellationToken token;
 
         private int searchedFileCount = 0;
-        private int matchedFileCount = 0;
+        private int matchFileCount = 0;
 
 
         public void Search(SearchCriteria criteria, CancellationTokenSource tokenSource)
@@ -51,7 +51,7 @@ namespace DicomGrep.Services
             {
                 // use the filename list from previous search result
                 filenameList.Clear();
-                filenameList.AddRange(matchedFilenameList);
+                filenameList.AddRange(matchFilenameList);
             }
             else
             {
@@ -61,8 +61,8 @@ namespace DicomGrep.Services
 
             FileListCompleted?.Invoke(this, new ListFileCompletedEventArgs(filenameList));
 
-            matchedFilenameList.Clear();
-            matchedFileCount = 0;
+            matchFilenameList.Clear();
+            matchFileCount = 0;
 
             ParallelOptions options = new ParallelOptions 
             {
@@ -138,7 +138,7 @@ namespace DicomGrep.Services
         private void SearchInDicomFile(string filePath)
         {
             ResultDicomFile resultDicomFile = null;
-            bool isMatched = false;
+            bool isMatch = false;
             try
             {
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
@@ -169,11 +169,11 @@ namespace DicomGrep.Services
 
                 resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName,
                     resultDicomItems);
-                isMatched = resultDicomItems?.Count > 0;
-                if (isMatched)
+                isMatch = resultDicomItems?.Count > 0;
+                if (isMatch)
                 {
-                    matchedFilenameList.Add(filePath);
-                    Interlocked.Increment(ref matchedFileCount);
+                    matchFilenameList.Add(filePath);
+                    Interlocked.Increment(ref matchFileCount);
                 }
 
 
@@ -196,8 +196,8 @@ namespace DicomGrep.Services
             {
                 Interlocked.Increment(ref searchedFileCount);
                 OnCompletDicomFile?.Invoke(this,
-                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatched, searchedFileCount,
-                        matchedFileCount));
+                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatch, searchedFileCount,
+                        matchFileCount));
             }
         }
 
