@@ -21,7 +21,7 @@ namespace DicomGrep.Services
             }
             if (window.ShowDialog() == true)
             {
-                dicomTagString = vm.SelectedTag.ToString();
+                dicomTagString = vm.SelectedTag?.ToString();
                 return true;
             }
             return false;

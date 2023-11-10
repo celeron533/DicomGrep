@@ -21,7 +21,7 @@ namespace DicomGrep.Services
             }
             if (window.ShowDialog() == true)
             {
-                sopClassUidString = vm.SelectedUID.UID;
+                sopClassUidString = vm.SelectedUID?.UID;
                 return true;
             }
             return false;
