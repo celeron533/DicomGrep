@@ -138,7 +138,7 @@ namespace DicomGrep.Services
         private void SearchInDicomFile(string filePath)
         {
             ResultDicomFile resultDicomFile = null;
-            bool isMatch = false;
+            bool anyMatch = false;
             try
             {
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
@@ -169,8 +169,8 @@ namespace DicomGrep.Services
 
                 resultDicomFile = new ResultDicomFile(filePath, sopClassName, sopClassUID?.UID, patientName,
                     resultDicomItems);
-                isMatch = resultDicomItems?.Count > 0;
-                if (isMatch)
+                anyMatch = resultDicomItems?.Count > 0;
+                if (anyMatch)
                 {
                     matchFilenameList.Add(filePath);
                     Interlocked.Increment(ref matchFileCount);
@@ -180,9 +180,6 @@ namespace DicomGrep.Services
             }
             catch (Exception ex)
             {
-                //event for error logging
-                //throw;
-
                 if (ex is DicomDataException) // normally caused by incorrect Dicom file format
                 {
                     logger.Error(ex, $"'{filePath}' is not a valid DICOM file.");
@@ -196,7 +193,7 @@ namespace DicomGrep.Services
             {
                 Interlocked.Increment(ref searchedFileCount);
                 OnCompletDicomFile?.Invoke(this,
-                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, isMatch, searchedFileCount,
+                    new OnCompleteDicomFileEventArgs(filePath, resultDicomFile, anyMatch, searchedFileCount,
                         matchFileCount));
             }
         }
@@ -205,7 +202,7 @@ namespace DicomGrep.Services
         {
             foreach (DicomItem dicomItem in dataset)
             {
-                // contains sub sequence
+                // dig into sub sequence
                 if (dicomItem.ValueRepresentation == DicomVR.SQ)
                 {
                     foreach (DicomDataset innerDataset in ((DicomSequence)dicomItem).Items)
@@ -236,6 +233,7 @@ namespace DicomGrep.Services
                                 byte[] rawValue = new byte[element.Buffer.Size];
                                 Array.Copy(element.Buffer.Data, rawValue, element.Buffer.Size);
 
+                                // best guess for VR=UN
                                 if (dicomItem.ValueRepresentation == DicomVR.UN)
                                 {
                                     byte[] bytes = element.Get<byte[]>();
