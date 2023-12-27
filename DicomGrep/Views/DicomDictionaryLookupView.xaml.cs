@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace DicomGrep.Views
 {
     /// <summary>
-    /// Interaction logic for DicomTagLookupView.xaml
+    /// Interaction logic for DicomDictionaryLookupView.xaml
     /// </summary>
-    public partial class DicomTagLookupView : Window
+    public partial class DicomDictionaryLookupView : Window
     {
-        public DicomTagLookupView()
+        public DicomDictionaryLookupView()
         {
             InitializeComponent();
         }
@@ -36,10 +36,10 @@ namespace DicomGrep.Views
             {
                 cv.Filter = obj =>
                 {
-                    DicomTag tag = obj as DicomTag;
-                    return tag.ToString().Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    tag.DictionaryEntry.Keyword.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    tag.DictionaryEntry.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
+                    DicomDictionaryEntry dictionary = obj as DicomDictionaryEntry;
+                    return dictionary.ToString().Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    //dictionary.Keyword.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    dictionary.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
 
                 };
             }

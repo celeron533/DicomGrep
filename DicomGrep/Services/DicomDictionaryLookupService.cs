@@ -9,19 +9,20 @@ using System.Threading.Tasks;
 
 namespace DicomGrep.Services
 {
-    public class DicomTagLookupService
+    public class DicomDictionaryLookupService
     {
-        public bool SelectDicomTag(ref string dicomTagString)
+        public bool SelectDicomDictionaryEntry(ref string dicomTagString)
         {
-            DicomTagLookupView window = new DicomTagLookupView();
-            DicomTagLookupViewModel vm = window.DataContext as DicomTagLookupViewModel;
+            DicomDictionaryLookupView window = new DicomDictionaryLookupView();
+            DicomDictionaryLookupViewModel vm = window.DataContext as DicomDictionaryLookupViewModel;
             if (!string.IsNullOrWhiteSpace(dicomTagString))
             {
-                vm.SelectedTag = DicomTag.Parse(dicomTagString);
+                //build pass
+                //vm.SelectedEntry = DicomTag.Parse(dicomTagString);
             }
             if (window.ShowDialog() == true)
             {
-                dicomTagString = vm.SelectedTag?.ToString();
+                dicomTagString = vm.SelectedEntry?.Tag.ToString("X", null);
                 return true;
             }
             return false;

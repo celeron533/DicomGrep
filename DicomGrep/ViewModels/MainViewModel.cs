@@ -21,11 +21,12 @@ namespace DicomGrep.ViewModels
     {
         // todo: using DI
         private readonly SearchService searchService = new SearchService();
+        private readonly DictionaryService dictionaryService = new DictionaryService();
         private readonly FolderPickupService folderPickupService = new FolderPickupService();
         private readonly ConfigurationService configurationService = new ConfigurationService();
         private readonly FileOperationService fileOperationService = new FileOperationService();
         private readonly SopClassLookupService sopClassLookupService = new SopClassLookupService();
-        private readonly DicomTagLookupService dicomTagLookupService = new DicomTagLookupService();
+        private readonly DicomDictionaryLookupService dicomDictionaryLookupService = new DicomDictionaryLookupService();
         private readonly DialogService dialogService = new DialogService();
         private readonly ExportService exportService = new ExportService();
         private readonly TagValueDetailService tagValueDetailService = new TagValueDetailService();
@@ -225,12 +226,12 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private ICommand _dicomtagLookupCommand;
-        public ICommand DicomTagLookupCommand
+        private ICommand _dicomDictionaryLookupCommand;
+        public ICommand DicomDictionaryLookupCommand
         {
             get
             {
-                return _dicomtagLookupCommand ?? (_dicomtagLookupCommand = new RelayCommand<object>(_=> DoDicomTagLookup()));
+                return _dicomDictionaryLookupCommand ?? (_dicomDictionaryLookupCommand = new RelayCommand<object>(_=> DoDicomDictionaryLookup()));
             }
         }
 
@@ -295,8 +296,7 @@ namespace DicomGrep.ViewModels
                 SelectedMatchFile = MatchFileList.First();
             }
 
-            // todo: choose a better place to initialize the fo-dicom?
-            DicomDictionary.EnsureDefaultDictionariesLoaded(true);
+            dictionaryService.ReadAndAppendCustomDictionaries();
 
             configurationService.Load();
 
@@ -447,10 +447,10 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private void DoDicomTagLookup()
+        private void DoDicomDictionaryLookup()
         {
             string tag = Tag;
-            if (dicomTagLookupService.SelectDicomTag(ref tag))
+            if (dicomDictionaryLookupService.SelectDicomDictionaryEntry(ref tag))
             {
                 Tag = tag;
             }
