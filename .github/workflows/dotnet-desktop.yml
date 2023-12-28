@@ -47,4 +47,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: DicomGrep-${{ matrix.configuration }}
-        path: bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
+        path: |
+          bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
+          !bin/**/DICOM Dictionary.xml
+          !bin/**/Private Dictionary.xml
