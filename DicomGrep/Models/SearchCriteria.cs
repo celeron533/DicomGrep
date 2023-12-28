@@ -25,10 +25,15 @@ namespace DicomGrep.Models
                     .Replace(",", "")
                     .Replace(".", "")
                     .Replace(" ", "")
+                    .Replace("x", "0") //private tag
+                    .Replace("X", "0") //private tag
                     .ToUpper();
             }
         }
 
+        /// <summary>
+        /// Only Group & Element, not considering the private creator
+        /// </summary>
         private string _searchTagFlattened;
         [JsonIgnore]
         public string SearchTagFlattened => _searchTagFlattened;
