@@ -39,7 +39,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --configuration ${{ matrix.configuration }} --output bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
+      run: dotnet build DicomGrep/DicomGrep.csproj --no-restore --configuration ${{ matrix.configuration }} --output bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
     - name: Test
       run: dotnet test --no-restore --verbosity normal
 
