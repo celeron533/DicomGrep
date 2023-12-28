@@ -38,7 +38,10 @@ namespace DicomGrep.Views
                 {
                     DicomDictionaryEntry dictionary = obj as DicomDictionaryEntry;
                     return dictionary.ToString().Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    //dictionary.Keyword.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    (
+                        dictionary.Tag.PrivateCreator != null && 
+                        dictionary.Tag.PrivateCreator.Creator.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase)
+                    ) ||
                     dictionary.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
 
                 };
