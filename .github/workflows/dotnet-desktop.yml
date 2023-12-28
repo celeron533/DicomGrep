@@ -31,9 +31,9 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     - name: Install dependencies
@@ -44,7 +44,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Upload articraft
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: DicomGrep-${{ matrix.configuration }}
         path: bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
