@@ -213,8 +213,8 @@ namespace DicomGrep.Services
                 else
                 {
                     // check the tag first
-                    if ( string.IsNullOrEmpty(criteria.SearchTagFlattened) ||
-                         dicomItem.Tag.ToString("J",null) == criteria.SearchTagFlattened) // both of the string are in UPPER case
+                    if ( string.IsNullOrWhiteSpace(criteria.SearchTag) ||
+                         CompareDicomTag(dicomItem.Tag, criteria.DicomSearchTag))
                     {
                         // skip binary VRs
                         if (dicomItem.ValueRepresentation == DicomVR.OB ||
@@ -276,6 +276,11 @@ namespace DicomGrep.Services
                 }
             }
             return resultDicomItems;
+        }
+
+        private bool CompareDicomTag(DicomTag dicomTag, DicomTag criteriaDicomTag)
+        {
+            return criteriaDicomTag.Equals(dicomTag);
         }
 
         private bool CompareString(string refString, SearchCriteria criteria, bool isDicomTag)

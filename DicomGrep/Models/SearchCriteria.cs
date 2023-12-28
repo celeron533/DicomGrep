@@ -19,19 +19,20 @@ namespace DicomGrep.Models
             set
             {
                 _searchTag = value;
-                _searchTagFlattened = value?.Substring(0, value.IndexOf(':') > 0 ? value.IndexOf(':') : value.Length)
-                    .Replace("(", "")
-                    .Replace(")", "")
-                    .Replace(",", "")
-                    .Replace(".", "")
-                    .Replace(" ", "")
-                    .ToUpper();
+                try
+                {
+                    _dicomSearchTag = ParseDicomTag(value);
+                }
+                catch 
+                {
+                    // unable to parse the string
+                }
             }
         }
 
-        private string _searchTagFlattened;
+        private DicomTag _dicomSearchTag;
         [JsonIgnore]
-        public string SearchTagFlattened => _searchTagFlattened;
+        public DicomTag DicomSearchTag => _dicomSearchTag;
 
         public string FileTypes { get; set; }
 
@@ -59,6 +60,13 @@ namespace DicomGrep.Models
                 $"IncludeSubfolders = {IncludeSubfolders}, " +
                 $"SearchInResults = {SearchInResults}, " +
                 $"SearchThreads = {SearchThreads}";
+        }
+
+        private DicomTag ParseDicomTag(string value)
+        {
+            // escape the "xx" in private tag string. No worries, it will apply the 0xFF mask again during the search.
+            value = value.Replace(",xx", ",00").Replace(",XX", ",00").Replace(",Xx", ",00").Replace(",xX", ",00");
+            return DicomTag.Parse(value);
         }
     }
 }

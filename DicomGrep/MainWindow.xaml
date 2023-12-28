@@ -76,7 +76,7 @@
                             </Grid.ColumnDefinitions>
                             <ComboBox IsEditable="True" ItemsSource="{Binding DicomTagHistory}" Text="{Binding Tag}">
                             </ComboBox>
-                            <Button Content="..." MinWidth="20" Grid.Column="1" Command="{Binding DicomTagLookupCommand}"></Button>
+                            <Button Content="..." MinWidth="20" Grid.Column="1" Command="{Binding DicomDictionaryLookupCommand}"></Button>
                         </Grid>
                         <Label Content="Dicom Tag Value"></Label>
                         <ComboBox IsEditable="True" ItemsSource="{Binding SearchTextHistory}" Text="{Binding SearchText}">

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -19,6 +19,7 @@
     <RepositoryUrl>https://github.com/celeron533/DicomGrep</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +31,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DICOM Dictionary.sample.xml" />
+    <None Remove="DICOM Dictionary.xml" />
+    <None Remove="Private Dictionary.sample.xml" />
+    <None Remove="Private Dictionary.xml" />
     <None Remove="Views\Images\logo_128.png" />
     <None Remove="Views\Images\logo_16.png" />
     <None Remove="Views\Images\logo_256.png" />
@@ -40,6 +45,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="DICOM Dictionary.sample.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DICOM Dictionary.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Private Dictionary.sample.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Private Dictionary.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -47,9 +67,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.1.1" />
+    <PackageReference Include="fo-dicom" Version="5.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
-    <PackageReference Include="NLog" Version="5.2.5" />
+    <PackageReference Include="NLog" Version="5.2.7" />
     <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.12.0.2" />
   </ItemGroup>
 
