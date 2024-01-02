@@ -1,8 +1,8 @@
 # DicomGrep
 
-An open source tool for searching Dicom files contents.
+An open source tool for searching DICOM files contents.
 
-In "Just could use" state. No warranty.
+In "Just can use" state. No warranty.
 
 Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
@@ -11,7 +11,7 @@ Compiled with .NET 6. You may need additional runtime for this program.
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
 
 ## Features
-1. 🔎 Search DICOM by SOP Class, Dicom Tag and Tag value (of course!).
+1. 🔎 Search DICOM by SOP Class, DICOM Tag and Tag value (of course!).
 2. Remember 10 search criteria histories. 📚
 3. Multi thread search (no more than logic CPU counts)
 4. Simple file operations 📄 (open directory, open file, etc.)
@@ -22,13 +22,13 @@ win-x64, win-x86, win-arm64, win-arm32\
 For Linux and MacOS, you can use Virtual machine, or QEMU, or WINE.
 
 ## Screenshots
-(v0.9.5-alpha)
+(v1.2.0)
 
 ![Main Window](./screenshots/01.png)
 
-![Look for SOP Class UID](./screenshots/02.png)
+![Look for SOP Class UID Dictionary](./screenshots/02.png)
 
-![Look for DICOM Tag](./screenshots/03.png)
+![Look for DICOM Tag Dictionary](./screenshots/03.png)
 
 
 ## License
