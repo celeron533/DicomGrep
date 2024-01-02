@@ -6,7 +6,7 @@ In "Just can use" state. No warranty.
 
 Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
-Compiled with .NET 6. You may need additional runtime for this program.
+Compiled with .NET 6. You may need install additional runtime for this program.
 
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
 
@@ -17,9 +17,20 @@ Compiled with .NET 6. You may need additional runtime for this program.
 4. Simple file operations 📄 (open directory, open file, etc.)
 5. Some unexpected bugs 🐛.
 
-Supported platforms:\
-win-x64, win-x86, win-arm64, win-arm32\
-For Linux and MacOS, you can use Virtual machine, or QEMU, or WINE.
+### Supported Platforms:
+
+win-x64, win-x86, win-arm64, win-arm32
+
+For Linux and MacOS, you can use WINE, or Virtual machine such as QEMU.
+
+### Use Custom Tag Dictionary
+(v1.2.0+) Rename the following files by remove the `.sample` in the middle
+```
+Private Dictionary.sample.xml --> Private Dictionary.xml
+DICOM Dictionary.sample.xml --> DICOM Dictionary.xml
+```
+
+And add you own public & private tags in these files. DicomGrep will apply the changes when startup. Then you can see these tags via lookup Window.
 
 ## Screenshots
 (v1.2.0)
