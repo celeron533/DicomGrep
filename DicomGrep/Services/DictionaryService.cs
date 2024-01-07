@@ -11,6 +11,8 @@ namespace DicomGrep.Services
 {
     public class DictionaryService
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public const string DICOM_DIC_FILE = "DICOM Dictionary.xml";
         public const string PRIVA_DIC_FILE = "Private Dictionary.xml";
 
@@ -25,13 +27,18 @@ namespace DicomGrep.Services
             if (File.Exists(privateDictionaryFilePath))
             {
                 DicomDictionary.Default.Load(privateDictionaryFilePath, DicomDictionaryFormat.XML);
+                logger.Info($"Loaded user defined private tags from: {privateDictionaryFilePath}");
             }
 
             // append common tags
-            ReadDictionary(out DicomDictionary dicomDictionary, dicomDictionaryFilePath);
-            foreach (var entry in dicomDictionary)
+            if (File.Exists(dicomDictionaryFilePath))
             {
-                DicomDictionary.Default.Add(entry);
+                ReadDictionary(out DicomDictionary dicomDictionary, dicomDictionaryFilePath);
+                foreach (var entry in dicomDictionary)
+                {
+                    DicomDictionary.Default.Add(entry);
+                }
+                logger.Info($"Loaded user defined DICOM tags from: {dicomDictionaryFilePath}");
             }
         }
 
