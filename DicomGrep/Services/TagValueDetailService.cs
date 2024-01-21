@@ -1,6 +1,7 @@
 ﻿using DicomGrep.Models;
 using DicomGrep.ViewModels;
 using DicomGrep.Views;
+using DicomGrepCore.Entities;
 using FellowOakDicom;
 using System;
 using System.Collections.Generic;

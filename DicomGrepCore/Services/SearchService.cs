@@ -1,6 +1,6 @@
-﻿using DicomGrep.Extensions;
-using DicomGrep.Models;
-using DicomGrep.Services.EventArgs;
+﻿using DicomGrepCore.Extensions;
+using DicomGrepCore.Entities;
+using DicomGrepCore.Services.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FellowOakDicom;
 
-namespace DicomGrep.Services
+namespace DicomGrepCore.Services
 {
     /// <summary>
     /// The core logic of the search function

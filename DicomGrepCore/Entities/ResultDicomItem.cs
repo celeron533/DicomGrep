@@ -1,10 +1,10 @@
-﻿using DicomGrep.Enums;
+﻿using DicomGrepCore.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using FellowOakDicom;
 
-namespace DicomGrep.Models
+namespace DicomGrepCore.Entities
 {
     public class ResultDicomItem
     {

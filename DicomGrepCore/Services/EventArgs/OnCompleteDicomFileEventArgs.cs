@@ -1,9 +1,9 @@
-﻿using DicomGrep.Models;
+﻿using DicomGrepCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DicomGrep.Services.EventArgs
+namespace DicomGrepCore.Services.EventArgs
 {
     public class OnCompleteDicomFileEventArgs : System.EventArgs
     {

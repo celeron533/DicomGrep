@@ -1,4 +1,5 @@
 ﻿using DicomGrep.Models;
+using DicomGrepCore.Entities;
 using FellowOakDicom;
 using System;
 using System.Collections.Generic;

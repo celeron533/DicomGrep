@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DicomGrep.Enums
+namespace DicomGrepCore.Enums
 {
     public enum CompleteReasonEnum
     {

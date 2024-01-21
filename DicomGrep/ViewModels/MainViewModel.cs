@@ -3,6 +3,8 @@ using DicomGrep.Models;
 using DicomGrep.Services;
 using DicomGrep.Utils;
 using DicomGrep.Views;
+using DicomGrepCore.Entities;
+using DicomGrepCore.Services;
 using FellowOakDicom;
 using System;
 using System.Collections.Generic;
@@ -339,12 +341,12 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private void SearchService_FileListCompleted(object sender, Services.EventArgs.ListFileCompletedEventArgs e)
+        private void SearchService_FileListCompleted(object sender, DicomGrepCore.Services.EventArgs.ListFileCompletedEventArgs e)
         {
             this.TotalFileCount = e.Count;
         }
 
-        private void SearchService_OnLoadDicomFile(object sender, Services.EventArgs.OnLoadDicomFileEventArgs e)
+        private void SearchService_OnLoadDicomFile(object sender, DicomGrepCore.Services.EventArgs.OnLoadDicomFileEventArgs e)
         {
             lock (obj)
             {
@@ -352,7 +354,7 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private void SearchService_OnCompletDicomFile(object sender, Services.EventArgs.OnCompleteDicomFileEventArgs e)
+        private void SearchService_OnCompletDicomFile(object sender, DicomGrepCore.Services.EventArgs.OnCompleteDicomFileEventArgs e)
         {
             lock (obj2)
             {
@@ -365,7 +367,7 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private void SearchService_OnSearchComplete(object sender, Services.EventArgs.OnSearchCompleteEventArgs e)
+        private void SearchService_OnSearchComplete(object sender, DicomGrepCore.Services.EventArgs.OnSearchCompleteEventArgs e)
         {
             this.CanSearch = true;
             this.CanCancel = false;

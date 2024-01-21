@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DicomGrep.Services.EventArgs
+namespace DicomGrepCore.Services.EventArgs
 {
     public class OnLoadDicomFileEventArgs : System.EventArgs
     {

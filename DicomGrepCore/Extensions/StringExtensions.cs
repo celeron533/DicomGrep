@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DicomGrep.Extensions
+namespace DicomGrepCore.Extensions
 {
     public static class StringExtensions
     {

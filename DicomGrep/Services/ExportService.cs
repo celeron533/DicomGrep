@@ -1,4 +1,5 @@
 ﻿using DicomGrep.Models;
+using DicomGrepCore.Entities;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
