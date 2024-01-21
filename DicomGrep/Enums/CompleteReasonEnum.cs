@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DicomGrep.Enums
 {
-    public enum ReasonEnum
+    public enum CompleteReasonEnum
     {
         Normal,
         UserCancelled,

@@ -7,6 +7,6 @@ namespace DicomGrep.Services.EventArgs
 {
     public class OnSearchCompleteEventArgs : System.EventArgs
     {
-        public ReasonEnum Reason { get; set; }
+        public CompleteReasonEnum Reason { get; set; }
     }
 }
