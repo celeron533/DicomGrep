@@ -8,6 +8,9 @@ using System.Text.Json;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// Configuration Service
+    /// </summary>
     public class ConfigurationService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
@@ -64,7 +67,10 @@ namespace DicomGrep.Services
 
 
 
-
+        /// <summary>
+        /// The default configuration
+        /// </summary>
+        /// <returns></returns>
         private static Configuration DefaultConfiguration()
         {
             logger.Info("Load default configuration");

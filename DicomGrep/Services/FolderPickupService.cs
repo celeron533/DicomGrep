@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// Display a folder selector UI.
+    /// </summary>
     public class FolderPickupService
     {
         public bool SelectFolder(ref string folderPath)

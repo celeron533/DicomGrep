@@ -12,6 +12,9 @@ using FellowOakDicom;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// The core logic of the search function
+    /// </summary>
     public class SearchService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();

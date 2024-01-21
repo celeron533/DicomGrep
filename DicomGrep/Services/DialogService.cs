@@ -5,6 +5,9 @@ using System.Windows;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// Dialog Service. For the WPF MVVM pattern.
+    /// </summary>
     public class DialogService
     {
         public MessageBoxResult ShowMessageBox(string messageBoxText, 

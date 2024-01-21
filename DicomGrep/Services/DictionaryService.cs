@@ -9,6 +9,9 @@ using System.Xml.Linq;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// DICOM Dictionary related function. Mostly are about append custome dictionary items.
+    /// </summary>
     public class DictionaryService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
