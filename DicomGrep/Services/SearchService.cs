@@ -12,6 +12,9 @@ using FellowOakDicom;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// The core logic of the search function
+    /// </summary>
     public class SearchService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
@@ -76,11 +79,11 @@ namespace DicomGrep.Services
                      options.CancellationToken.ThrowIfCancellationRequested();
                      SearchInDicomFile(filename);
                  });
-                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.Normal });
+                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.Normal });
             }
             catch (OperationCanceledException)
             {
-                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.ReasonEnum.UserCancelled });
+                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.UserCancelled });
                 logger.Info("User cancelled the search.");
             }
             finally

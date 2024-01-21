@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// Export the search result to file.
+    /// </summary>
     public class ExportService
     {
         public void Export(List<ResultDicomFile> resultFiles, string exportTo = "")

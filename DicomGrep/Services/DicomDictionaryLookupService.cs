@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// DICOM Dictionary lookup Service. In WPF to call View and VievModel.
+    /// </summary>
     public class DicomDictionaryLookupService
     {
         public bool SelectDicomDictionaryEntry(ref string dicomTagString)

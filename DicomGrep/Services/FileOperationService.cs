@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// File system and Windows explorer related
+    /// </summary>
     public class FileOperationService
     {
         public bool OpenDirectory(string filePath)

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DicomGrep.Services
 {
+    /// <summary>
+    /// SOP Class lookup Service. In WPF to call View and VievModel.
+    /// </summary>
     public class SopClassLookupService
     {
         public bool SelectSopClass(ref string sopClassUidString)
