@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace DicomGrep.Views
 {
@@ -21,14 +22,22 @@ namespace DicomGrep.Views
     /// </summary>
     public partial class DicomDictionaryLookupView : Window
     {
+        // delayed search for better performance
+        private DispatcherTimer timer = new DispatcherTimer();
+
         public DicomDictionaryLookupView()
         {
             InitializeComponent();
+
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
         }
 
-        private void Filter_TextChanged(object sender, TextChangedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            TextBox filterTextBox = (TextBox)sender;
+            timer.Stop();
+
+            TextBox filterTextBox = filter;
             string filterText = filterTextBox.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(dataGridUid.ItemsSource);
 
@@ -39,7 +48,7 @@ namespace DicomGrep.Views
                     DicomDictionaryEntry dictionary = obj as DicomDictionaryEntry;
                     return dictionary.ToString().Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     (
-                        dictionary.Tag.PrivateCreator != null && 
+                        dictionary.Tag.PrivateCreator != null &&
                         dictionary.Tag.PrivateCreator.Creator.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase)
                     ) ||
                     dictionary.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
@@ -50,6 +59,13 @@ namespace DicomGrep.Views
             {
                 cv.Filter = null;
             }
+        }
+
+        private void Filter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // reset the timer
+            timer.Stop();
+            timer.Start();
         }
 
         private void pick_Click(object sender, RoutedEventArgs e)

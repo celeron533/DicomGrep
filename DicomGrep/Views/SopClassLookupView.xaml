@@ -12,10 +12,11 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="20"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Name="header" MinHeight="40">
+        <Grid Name="header" MinHeight="40" Margin="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -34,6 +35,10 @@
         <DataGrid Name="dataGridUid" ItemsSource="{Binding SOPClassUIDs, Mode=OneWay}"  AutoGenerateColumns="True"
                   SelectedItem="{Binding SelectedUID, Mode=OneWayToSource}" SelectionMode="Single"
                   Grid.Row="1" MouseDoubleClick="dataGridUid_MouseDoubleClick"/>
-
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <Label Content="{Binding ElementName=dataGridUid, Path=Items.Count}" ContentStringFormat="UIDs: {0}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
