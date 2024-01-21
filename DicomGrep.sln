@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrep", "DicomGrep\DicomGrep.csproj", "{70E8E894-278C-4A40-9CC8-56573A5F96DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomGrepTests", "DicomGrepTests\DicomGrepTests.csproj", "{C26AA249-3A83-4B9A-9672-633AFE3081E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrepTests", "DicomGrepTests\DicomGrepTests.csproj", "{C26AA249-3A83-4B9A-9672-633AFE3081E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomGrepCore", "DicomGrepCore\DicomGrepCore.csproj", "{572F835B-6298-4075-A1E3-50675927CCF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C26AA249-3A83-4B9A-9672-633AFE3081E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26AA249-3A83-4B9A-9672-633AFE3081E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26AA249-3A83-4B9A-9672-633AFE3081E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{572F835B-6298-4075-A1E3-50675927CCF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{572F835B-6298-4075-A1E3-50675927CCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{572F835B-6298-4075-A1E3-50675927CCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{572F835B-6298-4075-A1E3-50675927CCF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
