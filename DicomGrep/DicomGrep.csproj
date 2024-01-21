@@ -74,6 +74,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DicomGrepCore\DicomGrepCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Views\Images\logo_128.png" />
     <Resource Include="Views\Images\logo_16.png" />
     <Resource Include="Views\Images\logo_256.png" />

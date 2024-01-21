@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using DicomGrepCore.Entities;
 
 namespace DicomGrep.Services
 {
