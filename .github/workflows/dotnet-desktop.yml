@@ -51,3 +51,4 @@ jobs:
           bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
           !bin/**/DICOM Dictionary.xml
           !bin/**/Private Dictionary.xml
+          !bin/**/*.pdb
