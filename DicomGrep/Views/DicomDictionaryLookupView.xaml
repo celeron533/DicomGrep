@@ -15,8 +15,9 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="20"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Name="header" MinHeight="40">
             <Grid.ColumnDefinitions>
@@ -47,6 +48,10 @@
                 <DataGridTextColumn Header="Private Creator" Binding="{Binding Tag.PrivateCreator, Mode=OneWay}"/>
             </DataGrid.Columns>
         </DataGrid>
-
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <Label Content="{Binding ElementName=dataGridUid, Path=Items.Count}" ContentStringFormat="Tags: {0}"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
