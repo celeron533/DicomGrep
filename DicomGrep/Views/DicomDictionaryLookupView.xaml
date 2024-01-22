@@ -35,7 +35,7 @@
             <TextBox Name="filter" TextChanged="Filter_TextChanged" Grid.Row="1" Grid.Column="1"/>
             <Button Name="pick" Content="Pick" Grid.Column="2" Grid.RowSpan="2" IsDefault="True" Click="pick_Click" Margin="8"/>
         </Grid>
-        <DataGrid Name="dataGridUid" ItemsSource="{Binding DicomDictionaryEntries, Mode=OneWay}"  AutoGenerateColumns="False"
+        <DataGrid Name="dataGridTags" ItemsSource="{Binding DicomDictionaryEntries, Mode=OneWay}"  AutoGenerateColumns="False"
                   SelectedItem="{Binding SelectedEntry, Mode=OneWayToSource}" SelectionMode="Single"
                   Grid.Row="1" MouseDoubleClick="dataGridUid_MouseDoubleClick">
             <DataGrid.Columns>
@@ -50,7 +50,7 @@
         </DataGrid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
-                <Label Content="{Binding ElementName=dataGridUid, Path=Items.Count}" ContentStringFormat="Tags: {0}"/>
+                <Label Content="{Binding ElementName=dataGridTags, Path=Items.Count}" ContentStringFormat="Tags: {0}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

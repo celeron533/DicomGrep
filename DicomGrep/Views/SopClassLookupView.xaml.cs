@@ -39,7 +39,7 @@ namespace DicomGrep.Views
 
             TextBox filterTextBox = filter;
             string filterText = filterTextBox.Text;
-            ICollectionView cv = CollectionViewSource.GetDefaultView(dataGridUid.ItemsSource);
+            ICollectionView cv = CollectionViewSource.GetDefaultView(dataGridUids.ItemsSource);
 
             if (!string.IsNullOrEmpty(filterText))
             {
