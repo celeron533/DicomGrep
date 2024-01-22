@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace DicomGrep.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
         // todo: using DI
         private readonly SearchService searchService = new SearchService();
         private readonly DictionaryService dictionaryService = new DictionaryService();
