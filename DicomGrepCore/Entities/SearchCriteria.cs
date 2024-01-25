@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using DicomGrepCore.Enums;
 
 namespace DicomGrepCore.Entities
 {
@@ -41,6 +42,7 @@ namespace DicomGrepCore.Entities
         public bool CaseSensitive { get; set; }
         public bool WholeWord { get; set; }
         public bool IncludeSubfolders { get; set; }
+        public MatchPatternEnum MatchPattern { get; set; }
 
         [JsonIgnore]
         public bool SearchInResults { get; set; }

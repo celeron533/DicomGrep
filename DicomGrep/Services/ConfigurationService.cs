@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using DicomGrepCore.Entities;
+using DicomGrepCore.Enums;
 
 namespace DicomGrep.Services
 {
@@ -84,6 +85,7 @@ namespace DicomGrep.Services
                 SearchTag = "",
                 SearchText = "TREATMENT",
                 IncludeSubfolders = true,
+                MatchPattern = MatchPatternEnum.Normal,
                 SearchInResults = false,
                 SearchThreads = 1
             };

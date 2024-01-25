@@ -7,11 +7,21 @@
         xmlns:vm="clr-namespace:DicomGrep.ViewModels"
         xmlns:enums="clr-namespace:DicomGrep.Enums"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:coreEnum="clr-namespace:DicomGrepCore.Enums;assembly=DicomGrepCore"
         mc:Ignorable="d"
         Title="Dicom Grep" Height="640" Width="960" MinWidth="300" MinHeight="200">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="MatchPatternEnumSource"
+                            ObjectType="{x:Type coreEnum:MatchPatternEnum}"
+                            MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="coreEnum:MatchPatternEnum" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="16"/>
@@ -95,6 +105,7 @@
                     <StackPanel Margin="8,0,0,0">
                         <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}"/>
                         <CheckBox Content="Whole word" IsChecked="{Binding WholeWord}"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource MatchPatternEnumSource}}" SelectedItem="{Binding MatchPattern}"/>
                         <CheckBox Content="Include subfolders" IsChecked="{Binding IncludeSubfolders}"/>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Treads: "/>

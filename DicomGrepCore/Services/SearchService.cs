@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using DicomGrepCore.Enums;
 using FellowOakDicom;
 
 namespace DicomGrepCore.Services
@@ -48,7 +50,7 @@ namespace DicomGrepCore.Services
             this.token = tokenSource.Token;
 
             searchedFileCount = 0;
-            
+
 
             if (criteria.SearchInResults)
             {
@@ -67,7 +69,7 @@ namespace DicomGrepCore.Services
             matchFilenameList.Clear();
             matchFileCount = 0;
 
-            ParallelOptions options = new ParallelOptions 
+            ParallelOptions options = new ParallelOptions
             {
                 MaxDegreeOfParallelism = criteria.SearchThreads,
                 CancellationToken = this.token
@@ -147,7 +149,7 @@ namespace DicomGrepCore.Services
                 OnLoadDicomFile?.Invoke(this, new OnLoadDicomFileEventArgs(filePath));
 
                 DicomFile dicomFile = DicomFile.Open(filePath, FileReadOption.ReadLargeOnDemand, 16 * 1024);
-                
+
                 IList<ResultDicomItem> resultDicomItems = null;
                 //new DicomDatasetWalker(dicomFile.Dataset).Walk(new DatasetWalker());
 
@@ -216,7 +218,7 @@ namespace DicomGrepCore.Services
                 else
                 {
                     // check the tag first
-                    if ( string.IsNullOrWhiteSpace(criteria.SearchTag) ||
+                    if (string.IsNullOrWhiteSpace(criteria.SearchTag) ||
                          CompareDicomTag(dicomItem.Tag, criteria.DicomSearchTag))
                     {
                         // skip binary VRs
@@ -245,8 +247,8 @@ namespace DicomGrepCore.Services
                                         valueString = Encoding.ASCII.GetString(bytes);
                                     }
                                 }
-                                
-                                if ( string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
+
+                                if (string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
                                 {
                                     //handle match
                                     if (resultDicomItems == null)
@@ -257,7 +259,7 @@ namespace DicomGrepCore.Services
                                     resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, rawValue));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
-                                    
+
                                 }
                             }
 
@@ -286,35 +288,45 @@ namespace DicomGrepCore.Services
             return criteriaDicomTag.Equals(dicomTag);
         }
 
-        private bool CompareString(string refString, SearchCriteria criteria, bool isDicomTag)
+        private bool CompareString(string refString, SearchCriteria _criteria, bool isDicomTag)
         {
             if (string.IsNullOrEmpty(refString))
             {
                 return false;
             }
 
-            return CompareString(refString, criteria.SearchText, criteria.CaseSensitive, criteria.WholeWord);
+            return CompareString(refString, _criteria.SearchText, _criteria.CaseSensitive, _criteria.WholeWord);
 
         }
 
         private bool CompareString(string refString, string testString, bool caseSensitive, bool wholeWord)
         {
-            if (wholeWord)
+            bool result = false;
+            switch (criteria.MatchPattern)
             {
-                if (caseSensitive)
-                    return refString.Equals(testString, StringComparison.InvariantCulture);
-                else
-                    return refString.Equals(testString, StringComparison.InvariantCultureIgnoreCase);
-            }
-            else
-            {
-                if (caseSensitive)
-                    return refString.CaseInsensitiveContains(testString, StringComparison.InvariantCulture);
-                else
-                    return refString.CaseInsensitiveContains(testString, StringComparison.InvariantCultureIgnoreCase);
-            }
-        }
+                default:
+                case MatchPatternEnum.Normal:
+                    if (wholeWord)
+                    {
+                        result = refString.Equals(testString, caseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else
+                    {
+                        result = refString.CaseInsensitiveContains(testString, caseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    break;
+                case MatchPatternEnum.Regex:
+                    RegexOptions options = RegexOptions.Compiled;
+                    if (!caseSensitive)
+                    {
+                        options |= RegexOptions.IgnoreCase;
+                    }
 
+                    result = Regex.IsMatch(refString, testString, options);
+                    break;
+            }
+            return result;
+        }
 
     }
 }
