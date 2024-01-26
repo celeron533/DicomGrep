@@ -326,6 +326,7 @@ namespace DicomGrep.ViewModels
             SearchText = CurrentConfiguration.SearchCriteria.SearchText;
             CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
+            MatchPattern = CurrentConfiguration.SearchCriteria.MatchPattern;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
             //SearchInResults = CurrentConfiguration.SearchCriteria.SearchInResults;
             SearchThreads = Math.Min(CurrentConfiguration.SearchCriteria.SearchThreads, Environment.ProcessorCount);
