@@ -1,5 +1,4 @@
-﻿using DicomGrepCore.Extensions;
-using DicomGrepCore.Entities;
+﻿using DicomGrepCore.Entities;
 using DicomGrepCore.Services.EventArgs;
 using System;
 using System.Collections.Generic;
@@ -295,52 +294,44 @@ namespace DicomGrepCore.Services
                 return false;
             }
 
-            return CompareString(refString, _criteria.SearchText, _criteria.CaseSensitive, _criteria.WholeWord);
+            string testString = _criteria.SearchText;
 
-        }
-
-        private bool CompareString(string refString, string testString, bool caseSensitive, bool wholeWord)
-        {
-            bool result = false;
             switch (criteria.MatchPattern)
             {
                 default:
                 case MatchPatternEnum.Normal:
-                    if (wholeWord)
-                    {
-                        result = refString.Equals(testString, caseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
-                    }
-                    else
-                    {
-                        result = refString.CaseInsensitiveContains(testString, caseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
-                    }
+                    testString = Regex.Escape(testString);
+                    break;
+                case MatchPatternEnum.Wildcard:
+                    testString = Regex.Escape(testString);
+                    testString = testString.Replace(@"\*", ".*").Replace(@"\?", ".{1}");
                     break;
                 case MatchPatternEnum.Regex:
-                    RegexOptions options = RegexOptions.Compiled;
-                    if (!caseSensitive)
-                    {
-                        options |= RegexOptions.IgnoreCase;
-                    }
-
-                    if (wholeWord)
-                    {
-                        // regex match start
-                        if (!testString.StartsWith('^'))
-                        {
-                            testString = "^" + testString;
-                        }
-
-                        // regex match end
-                        if (!testString.EndsWith('$'))
-                        {
-                            testString += "$";
-                        }
-                    }
-
-                    result = Regex.IsMatch(refString, testString, options);
                     break;
             }
-            return result;
+
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.Singleline;
+            if (!_criteria.CaseSensitive)
+            {
+                options |= RegexOptions.IgnoreCase;
+            }
+
+            if (_criteria.WholeWord)
+            {
+                // regex match start
+                if (!testString.StartsWith('^'))
+                {
+                    testString = "^" + testString;
+                }
+
+                // regex match end
+                if (!testString.EndsWith('$'))
+                {
+                    testString += "$";
+                }
+            }
+
+            return Regex.IsMatch(refString, testString, options);
         }
 
     }

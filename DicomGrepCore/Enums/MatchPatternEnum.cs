@@ -9,6 +9,7 @@ namespace DicomGrepCore.Enums
     public enum MatchPatternEnum
     {
         Normal,
+        Wildcard,
         Regex
     }
 }
