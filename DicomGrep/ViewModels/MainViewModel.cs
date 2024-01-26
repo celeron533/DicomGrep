@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DicomGrepCore.Enums;
 
 namespace DicomGrep.ViewModels
 {
@@ -105,6 +106,14 @@ namespace DicomGrep.ViewModels
         {
             get { return _wholeWord; }
             set { SetProperty(ref _wholeWord, value); }
+        }
+
+        private MatchPatternEnum _matchPattern;
+
+        public MatchPatternEnum MatchPattern
+        {
+            get { return _matchPattern; }
+            set { SetProperty(ref _matchPattern, value); }
         }
 
         private bool _includeSubfolders;
@@ -227,7 +236,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _sopClassLookupCommand ?? (_sopClassLookupCommand = new RelayCommand<object>(_=> DoSopClassLookup()));
+                return _sopClassLookupCommand ?? (_sopClassLookupCommand = new RelayCommand<object>(_ => DoSopClassLookup()));
             }
         }
 
@@ -236,7 +245,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _dicomDictionaryLookupCommand ?? (_dicomDictionaryLookupCommand = new RelayCommand<object>(_=> DoDicomDictionaryLookup()));
+                return _dicomDictionaryLookupCommand ?? (_dicomDictionaryLookupCommand = new RelayCommand<object>(_ => DoDicomDictionaryLookup()));
             }
         }
 
@@ -254,7 +263,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _exportCommand ?? (_exportCommand = new RelayCommand<object>(_=> DoExport()));
+                return _exportCommand ?? (_exportCommand = new RelayCommand<object>(_ => DoExport()));
             }
         }
 
@@ -285,7 +294,7 @@ namespace DicomGrep.ViewModels
             // dummy data for designer preview
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                for (int i=1; i<=5; i++)
+                for (int i = 1; i <= 5; i++)
                 {
                     ResultDicomItem resultDicomItem1 = new ResultDicomItem(new DicomTag(0x0010, 0x0020), "John Doe", new byte[0]);
                     ResultDicomItem resultDicomItem2 = new ResultDicomItem(new DicomTag(0x0123, 0x99, "DicomGrep Creator"), "C533", new byte[0]);
@@ -320,6 +329,7 @@ namespace DicomGrep.ViewModels
             SearchText = CurrentConfiguration.SearchCriteria.SearchText;
             CaseSensitive = CurrentConfiguration.SearchCriteria.CaseSensitive;
             WholeWord = CurrentConfiguration.SearchCriteria.WholeWord;
+            MatchPattern = CurrentConfiguration.SearchCriteria.MatchPattern;
             IncludeSubfolders = CurrentConfiguration.SearchCriteria.IncludeSubfolders;
             //SearchInResults = CurrentConfiguration.SearchCriteria.SearchInResults;
             SearchThreads = Math.Min(CurrentConfiguration.SearchCriteria.SearchThreads, Environment.ProcessorCount);
@@ -388,6 +398,7 @@ namespace DicomGrep.ViewModels
                 SearchText = SearchText,
                 CaseSensitive = CaseSensitive,
                 WholeWord = WholeWord,
+                MatchPattern = MatchPattern,
                 IncludeSubfolders = IncludeSubfolders,
                 SearchInResults = searchInResults,  // from parameter
                 SearchThreads = SearchThreads
