@@ -322,6 +322,21 @@ namespace DicomGrepCore.Services
                         options |= RegexOptions.IgnoreCase;
                     }
 
+                    if (wholeWord)
+                    {
+                        // regex match start
+                        if (!testString.StartsWith('^'))
+                        {
+                            testString = "^" + testString;
+                        }
+
+                        // regex match end
+                        if (!testString.EndsWith('$'))
+                        {
+                            testString += "$";
+                        }
+                    }
+
                     result = Regex.IsMatch(refString, testString, options);
                     break;
             }
