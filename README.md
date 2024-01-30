@@ -8,7 +8,7 @@ Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developer
 
 Compiled with .NET 6. You may need install additional runtime for this program.
 
-[![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)]()
+[![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)](https://github.com/celeron533/DicomGrep/releases)
 
 ## Features
 1. 🔎 Search DICOM by SOP Class, DICOM Tag and Tag value (of course!).
