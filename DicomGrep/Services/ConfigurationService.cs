@@ -87,7 +87,7 @@ namespace DicomGrep.Services
                 IncludeSubfolders = true,
                 MatchPattern = MatchPatternEnum.Normal,
                 SearchInResults = false,
-                SearchThreads = 1
+                SearchThreads = 0
             };
 
             return new Configuration

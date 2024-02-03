@@ -110,6 +110,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Treads: "/>
                             <ComboBox ItemsSource="{Binding CPULogicCores}" SelectedValue="{Binding SearchThreads}" MinWidth="70"/>
+                            <Label Content="0=auto"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
