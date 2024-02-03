@@ -70,7 +70,7 @@ namespace DicomGrepCore.Services
 
             ParallelOptions options = new ParallelOptions
             {
-                MaxDegreeOfParallelism = criteria.SearchThreads,
+                MaxDegreeOfParallelism = criteria.SearchThreads <= 0 ? Environment.ProcessorCount : criteria.SearchThreads ,
                 CancellationToken = this.token
             };
             try

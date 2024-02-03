@@ -130,9 +130,9 @@ namespace DicomGrep.ViewModels
             set { SetProperty(ref _searchThreads, value); }
         }
 
-        public ObservableCollection<int> CPULogicCores { set; get; } = new ObservableCollection<int>();
-
         #endregion Search Criteria END
+
+        public ObservableCollection<int> CPULogicCores { set; get; } = new ObservableCollection<int>();
 
         private int _totalFileCount;
         public int TotalFileCount
@@ -348,7 +348,8 @@ namespace DicomGrep.ViewModels
 
         private IEnumerable<int> GetCPULogicCoresList()
         {
-            for (int i = 1; i <= Environment.ProcessorCount; i++)
+            // 0 means auto
+            for (int i = 0; i <= Environment.ProcessorCount; i++)
             {
                 yield return i;
             }
