@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicomGrep"
+        xmlns:localConverters="clr-namespace:DicomGrep.Converters"
         xmlns:vm="clr-namespace:DicomGrep.ViewModels"
         xmlns:enums="clr-namespace:DicomGrep.Enums"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -21,6 +22,7 @@
                 <x:Type TypeName="coreEnum:MatchPatternEnum" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <localConverters:CanExportConventer x:Key="CanExportConventer"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -30,7 +32,7 @@
         </Grid.RowDefinitions>
         <Menu MinHeight="20">
             <MenuItem Header="File">
-                <MenuItem Header="Export search result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}"/>
+                <MenuItem Header="Export search result" Command="{Binding ExportCommand}" IsEnabled="{Binding MainStatus, Converter={StaticResource CanExportConventer}}"/>
                 <Separator/>
                 <MenuItem Header="About" Click="About_OnClick"/>
                 <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
@@ -154,7 +156,7 @@
                                 </MenuItem.CommandParameter>
                             </MenuItem>
                             <Separator/>
-                            <MenuItem Header="Export Search Result" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}">
+                            <MenuItem Header="Export Search Result" Command="{Binding ExportCommand}" IsEnabled="{Binding MainStatus, Converter={StaticResource CanExportConventer}}">
                             </MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
@@ -178,6 +180,10 @@
             </Grid>
         </Grid>
         <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="{Binding MainStatus}"/>
+            </StatusBarItem>
+            <Separator/>
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal" ToolTip="match / searched / total">
                     <TextBlock Text="{Binding MatchFileCount}"/>

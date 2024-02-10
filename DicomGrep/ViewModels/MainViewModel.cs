@@ -163,25 +163,11 @@ namespace DicomGrep.ViewModels
         }
 
 
-        private bool _canSearch = true;
-        public bool CanSearch
+        private MainStatusEnum _mainStatus;
+        public MainStatusEnum MainStatus
         {
-            get { return _canSearch; }
-            set { SetProperty(ref _canSearch, value); }
-        }
-
-        private bool _canCancel = false;
-        public bool CanCancel
-        {
-            get { return _canCancel; }
-            set { SetProperty(ref _canCancel, value); }
-        }
-
-        private bool _canExport = false;
-        public bool CanExport
-        {
-            get { return _canExport; }
-            set { SetProperty(ref _canExport, value); }
+            get { return _mainStatus; }
+            set { SetProperty(ref _mainStatus, value); }
         }
 
         #region Command
@@ -200,7 +186,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(false), _ => CanSearch));
+                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(false), _ => this.MainStatus != MainStatusEnum.Working));
             }
         }
 
@@ -209,7 +195,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchInResultsCommand ?? (_searchInResultsCommand = new RelayCommand<object>(_ => DoSearch(true), _ => CanSearch));
+                return _searchInResultsCommand ?? (_searchInResultsCommand = new RelayCommand<object>(_ => DoSearch(true), _ => this.MainStatus != MainStatusEnum.Working));
             }
         }
 
@@ -218,7 +204,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), _ => CanCancel));
+                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), _ => this.MainStatus == MainStatusEnum.Working));
             }
         }
 
@@ -383,13 +369,12 @@ namespace DicomGrep.ViewModels
 
         private void SearchService_OnSearchComplete(object sender, DicomGrepCore.Services.EventArgs.OnSearchCompleteEventArgs e)
         {
-            this.CanSearch = true;
-            this.CanCancel = false;
-            this.CanExport = true;
+            this.MainStatus = MainStatusEnum.Complete;
         }
 
         private void DoSearch(bool searchInResults = false)
         {
+            this.MainStatus = MainStatusEnum.Working;
             SearchCriteria criteria = new SearchCriteria
             {
                 SearchPath = SearchPath,
@@ -426,10 +411,6 @@ namespace DicomGrep.ViewModels
             this.TotalFileCount = 0;
             this.SearchedFileCount = 0;
             this.MatchFileCount = 0;
-
-            this.CanCancel = true;
-            this.CanSearch = false;
-            this.CanExport = false;
 
             tokenSource = new CancellationTokenSource();
 
