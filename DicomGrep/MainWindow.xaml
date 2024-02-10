@@ -179,6 +179,10 @@
         </Grid>
         <StatusBar Grid.Row="2">
             <StatusBarItem>
+                <TextBlock Text="{Binding MainStatus}"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
                 <StackPanel Orientation="Horizontal" ToolTip="match / searched / total">
                     <TextBlock Text="{Binding MatchFileCount}"/>
                     <TextBlock Text="/"/>

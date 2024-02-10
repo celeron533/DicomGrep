@@ -163,6 +163,13 @@ namespace DicomGrep.ViewModels
         }
 
 
+        private MainStatusEnum _mainStatus;
+        public MainStatusEnum MainStatus
+        {
+            get { return _mainStatus; }
+            set { SetProperty(ref _mainStatus, value); }
+        }
+
         private bool _canSearch = true;
         public bool CanSearch
         {
