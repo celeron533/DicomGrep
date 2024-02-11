@@ -15,40 +15,79 @@ on:
       - 'LICENSE'
   workflow_dispatch:
 
-jobs:
-  build:
+env:
+  dotnet_version: '6.0.x'
 
+
+jobs:
+  build_and_test:
+    name: 'Build and Test'
     runs-on: windows-latest
-    strategy:
-      matrix:
-        configuration: 
-          - Debug
-          #- Release
-        dotnet-version:
-          - '6.0.x'
-    # for create new releases
-    permissions:
-      contents: write
+    env:
+      configuration: 'Debug'
 
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet_version: ${{ env.dotnet_version }}
+        # cache: true
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build DicomGrep/DicomGrep.csproj --no-restore --configuration ${{ matrix.configuration }} --output bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
+      run: dotnet build DicomGrep/DicomGrep.csproj --no-restore --configuration $env:configuration --output bin/net$env:dotnet_version/$env:configuration
     - name: Test
       run: dotnet test --no-restore --verbosity normal
 
     - name: Upload articraft
       uses: actions/upload-artifact@v4
       with:
-        name: DicomGrep-${{ matrix.configuration }}
+        name: DicomGrep-${{ env.configuration }}-bare
         path: |
-          bin/net${{ matrix.dotnet-version }}/${{ matrix.configuration }}
+          bin/net${{ env.dotnet_version }}/${{ env.configuration }}
+          !bin/**/DICOM Dictionary.xml
+          !bin/**/Private Dictionary.xml
+          !bin/**/*.pdb
+
+
+  publish_windows:
+    runs-on: windows-latest
+    needs: build_and_test
+    env:
+      configuration: 'Release'
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet_version: ${{ env.dotnet_version }}
+        # cache: true
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish DicomGrep/DicomGrep.csproj -c $env:configuration --output bin/publish/net$env:dotnet_version/$env:configuration
+
+    - name: Upload articraft
+      uses: actions/upload-artifact@v4
+      with:
+        name: DicomGrep-${{ env.configuration }}-publish
+        path: |
+          bin/publish/net${{ env.dotnet_version }}/${{ env.configuration }}
+          !bin/**/DICOM Dictionary.xml
+          !bin/**/Private Dictionary.xml
+          !bin/**/*.pdb
+
+    - name: Publish With NET
+      run: dotnet publish DicomGrep/DicomGrep.csproj -c $env:configuration -p:PublishSingleFile=true --output bin/publish2/net$env:dotnet_version/$env:configuration
+
+    - name: Upload articraft
+      uses: actions/upload-artifact@v4
+      with:
+        name: DicomGrep-${{ env.configuration }}-publishWithNet
+        path: |
+          bin/publish2/net${{ env.dotnet_version }}/${{ env.configuration }}
           !bin/**/DICOM Dictionary.xml
           !bin/**/Private Dictionary.xml
           !bin/**/*.pdb
