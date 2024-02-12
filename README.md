@@ -2,22 +2,25 @@
 
 An open source tool for searching DICOM files contents.
 
-In "Just can use" state. No warranty.
+Inspired by daily work which need to find DICOM files with specific criterias.
 
-Hope this tool can help some researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
+Hope this tool can help researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
-Compiled with .NET 6. You may need install additional runtime for this program.
+Compiled with .NET 6. You may need install the runtime for this program.
 
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)](https://github.com/celeron533/DicomGrep/releases)
 
 ## Features
-1. 🔎 Search DICOM by SOP Class, DICOM Tag and Tag value (of course!).
-2. Remember 10 search criteria histories. 📚
-3. Multi thread search (no more than logic CPU counts)
-4. Simple file operations 📄 (open directory, open file, etc.)
-5. Some unexpected bugs 🐛.
+1. 🔎 Search DICOM by specific SOP Class, DICOM Tag and/or Tag value.
+2. When searching the Tag value, you can use also use Wildcard or Regex.
+3. Retain 10 search criterias. 📚
+4. Multi-thread search (depend on logic CPU counts)
+5. Simple file operations 📄 (open directory, open file, etc.)
+6. Unexpected bugs 🐛.
 
 ### Supported Platforms:
+
+The generic build should support the Windows platform by default:
 
 win-x64, win-x86, win-arm64, win-arm32
 
@@ -33,14 +36,15 @@ DICOM Dictionary.sample.xml --> DICOM Dictionary.xml
 And add you own public & private tags in these files. DicomGrep will apply the changes when startup. Then you can see these tags via lookup Window.
 
 ## Screenshots
-(v1.2.0)
+(v1.5.0)
 
 ![Main Window](./screenshots/01.png)
 
-![Look for SOP Class UID Dictionary](./screenshots/02.png)
+![Lookup SOP Class UID Dictionary](./screenshots/02.png)
 
-![Look for DICOM Tag Dictionary](./screenshots/03.png)
+![Lookup DICOM Tag Dictionary](./screenshots/03.png)
 
+![Right click menu](./screenshots/04.png)
 
 ## License
 [Microsoft Public License (MS-PL)](License.txt)
