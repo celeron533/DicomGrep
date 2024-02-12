@@ -57,8 +57,9 @@ namespace DicomGrepCore.Entities
                 $"SearchTag = '{SearchTag}', " +
                 $"FileTypes = '{FileTypes}', " +
                 $"SearchText = '{SearchText}', " +
+                $"MatchPattern = {MatchPattern}, " +
                 $"CaseSensitive = {CaseSensitive}, " +
-                $"WholeWord= {WholeWord}, " +
+                $"WholeWord = {WholeWord}, " +
                 $"IncludeSubfolders = {IncludeSubfolders}, " +
                 $"SearchInResults = {SearchInResults}, " +
                 $"SearchThreads = {SearchThreads}";
