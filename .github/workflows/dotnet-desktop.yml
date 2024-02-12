@@ -85,7 +85,7 @@ jobs:
     - name: Upload articraft
       uses: actions/upload-artifact@v4
       with:
-        name: DicomGrep-${{ env.configuration }}-publishWithNet
+        name: DicomGrep-${{ env.configuration }}-publishWithNet${{ env.dotnet_version }}-Windows
         path: |
           bin/publish2/net${{ env.dotnet_version }}/${{ env.configuration }}
           !bin/**/DICOM Dictionary.xml
