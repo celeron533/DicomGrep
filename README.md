@@ -36,7 +36,7 @@ DICOM Dictionary.sample.xml --> DICOM Dictionary.xml
 And add you own public & private tags in these files. DicomGrep will apply the changes when startup. Then you can see these tags via lookup Window.
 
 ## Screenshots
-(v1.2.0)
+(v1.5.0)
 
 ![Main Window](./screenshots/01.png)
 
@@ -44,6 +44,7 @@ And add you own public & private tags in these files. DicomGrep will apply the c
 
 ![Lookup DICOM Tag Dictionary](./screenshots/03.png)
 
+![Right click menu](./screenshots/04.png)
 
 ## License
 [Microsoft Public License (MS-PL)](License.txt)
