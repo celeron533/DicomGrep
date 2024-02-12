@@ -186,8 +186,13 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(false), _ => this.MainStatus != MainStatusEnum.Working));
+                return _searchCommand ?? (_searchCommand = new RelayCommand<object>(_ => DoSearch(false), CanExecuteSearchCommand));
             }
+        }
+
+        public bool CanExecuteSearchCommand(object obj)
+        {
+            return this.MainStatus != MainStatusEnum.Working;
         }
 
         private ICommand _searchInResultsCommand;
@@ -195,7 +200,7 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _searchInResultsCommand ?? (_searchInResultsCommand = new RelayCommand<object>(_ => DoSearch(true), _ => this.MainStatus != MainStatusEnum.Working));
+                return _searchInResultsCommand ?? (_searchInResultsCommand = new RelayCommand<object>(_ => DoSearch(true), CanExecuteSearchCommand));
             }
         }
 
@@ -204,8 +209,13 @@ namespace DicomGrep.ViewModels
         {
             get
             {
-                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), _ => this.MainStatus == MainStatusEnum.Working));
+                return _cancelCommand ?? (_cancelCommand = new RelayCommand<object>(_ => DoCancel(), CanExecuteCancelCommand));
             }
+        }
+
+        public bool CanExecuteCancelCommand(object obj)
+        {
+            return this.MainStatus == MainStatusEnum.Working;
         }
 
         private ICommand _fileOperationCommand;
@@ -370,6 +380,7 @@ namespace DicomGrep.ViewModels
         private void SearchService_OnSearchComplete(object sender, DicomGrepCore.Services.EventArgs.OnSearchCompleteEventArgs e)
         {
             this.MainStatus = MainStatusEnum.Complete;
+            InvalidateRequerySuggested();
         }
 
         private void DoSearch(bool searchInResults = false)
