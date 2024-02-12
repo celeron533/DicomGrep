@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Input;
 
 namespace DicomGrep.ViewModels
 {
@@ -24,6 +26,11 @@ namespace DicomGrep.ViewModels
             storage = value;
             this.OnPropertyChanged(propertyName);
             return true;
+        }
+
+        protected virtual void InvalidateRequerySuggested()
+        {
+            Application.Current?.Dispatcher.BeginInvoke((Action)CommandManager.InvalidateRequerySuggested);
         }
     }
 }
