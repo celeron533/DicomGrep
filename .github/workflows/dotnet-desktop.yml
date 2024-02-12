@@ -31,7 +31,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet_version: ${{ env.dotnet_version }}
+        dotnet-version: ${{ env.dotnet_version }}
         # cache: true
     - name: Install dependencies
       run: dotnet restore
@@ -62,7 +62,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet_version: ${{ env.dotnet_version }}
+        dotnet-version: ${{ env.dotnet_version }}
         # cache: true
     - name: Install dependencies
       run: dotnet restore
