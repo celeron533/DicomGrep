@@ -8,7 +8,7 @@
     <StartupObject>DicomGrep.App</StartupObject>
     <AssemblyVersion></AssemblyVersion>
     <FileVersion></FileVersion>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Authors>celeron533</Authors>
     <PackageProjectUrl>https://github.com/celeron533/DicomGrep</PackageProjectUrl>
     <Description>A tool for searching Dicom file by contents</Description>
