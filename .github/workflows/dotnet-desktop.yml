@@ -14,6 +14,11 @@ on:
       - 'README.md'
       - 'LICENSE'
   workflow_dispatch:
+    inputs:
+      PublishSingleFile_Windows:
+        description: 'Publish single file for Windows'
+        required: false
+        type: boolean
 
 env:
   dotnet_version: '6.0.x'
@@ -31,7 +36,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet_version: ${{ env.dotnet_version }}
+        dotnet-version: ${{ env.dotnet_version }}
         # cache: true
     - name: Install dependencies
       run: dotnet restore
@@ -62,7 +67,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet_version: ${{ env.dotnet_version }}
+        dotnet-version: ${{ env.dotnet_version }}
         # cache: true
     - name: Install dependencies
       run: dotnet restore
@@ -80,12 +85,14 @@ jobs:
           !bin/**/*.pdb
 
     - name: Publish With NET
+      if: ${{ inputs.PublishSingleFile_Windows }}
       run: dotnet publish DicomGrep/DicomGrep.csproj -c $env:configuration -p:PublishSingleFile=true --output bin/publish2/net$env:dotnet_version/$env:configuration
 
     - name: Upload articraft
+      if: ${{ inputs.PublishSingleFile_Windows }}
       uses: actions/upload-artifact@v4
       with:
-        name: DicomGrep-${{ env.configuration }}-publishWithNet
+        name: DicomGrep-${{ env.configuration }}-publishWithNet${{ env.dotnet_version }}-Windows
         path: |
           bin/publish2/net${{ env.dotnet_version }}/${{ env.configuration }}
           !bin/**/DICOM Dictionary.xml
