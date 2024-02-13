@@ -20,8 +20,13 @@ namespace DicomGrep.Services
             DicomDictionaryLookupViewModel vm = window.DataContext as DicomDictionaryLookupViewModel;
             if (!string.IsNullOrWhiteSpace(dicomTagString))
             {
-                //build pass
-                //vm.SelectedEntry = DicomTag.Parse(dicomTagString);
+                DicomTag tag = null;
+                try
+                {
+                    tag = DicomTag.Parse(dicomTagString);
+                }
+                catch { }
+                vm.SelectedEntry = DicomDictionary.Default.FirstOrDefault(x => x.Tag == tag);
             }
             if (window.ShowDialog() == true)
             {
