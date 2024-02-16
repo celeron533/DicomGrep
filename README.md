@@ -2,7 +2,7 @@
 
 An open source tool for searching DICOM files contents.
 
-Inspired by daily work which need to find DICOM files with specific criterias.
+Inspired by daily work which need to find DICOM files with specific criteria.
 
 Hope this tool can help researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
@@ -13,7 +13,7 @@ Compiled with .NET 6. You may need install the runtime for this program.
 ## Features
 1. 🔎 Search DICOM by specific SOP Class, DICOM Tag and/or Tag value.
 2. When searching the Tag value, you can use also use Wildcard or Regex.
-3. Retain 10 search criterias. 📚
+3. Retain 10 search criteria. 📚
 4. Multi-thread search (depend on logic CPU counts)
 5. Simple file operations 📄 (open directory, open file, etc.)
 6. Unexpected bugs 🐛.
