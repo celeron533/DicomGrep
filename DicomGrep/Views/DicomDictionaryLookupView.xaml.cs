@@ -36,7 +36,11 @@ namespace DicomGrep.Views
         private void Timer_Tick(object sender, EventArgs e)
         {
             timer.Stop();
+            ApplyFilter();
+        }
 
+        private void ApplyFilter()
+        {
             TextBox filterTextBox = filter;
             string filterText = filterTextBox.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(dataGridTags.ItemsSource);
@@ -51,7 +55,8 @@ namespace DicomGrep.Views
                         dictionary.Tag.PrivateCreator != null &&
                         dictionary.Tag.PrivateCreator.Creator.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase)
                     ) ||
-                    dictionary.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
+                    dictionary.Name.Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    dictionary.Tag.ToString().Contains(filterText.Trim(), StringComparison.OrdinalIgnoreCase);
 
                 };
             }
