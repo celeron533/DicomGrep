@@ -16,7 +16,7 @@ namespace DicomGrep.ViewModels
         private DicomUID _selectedUID;
         public DicomUID SelectedUID
         {
-            get { return _selectedUID; }
+            get => _selectedUID;
             set
             {
                 if (_selectedUID == null && value != null && string.IsNullOrEmpty(DefaultFilterString)) // only triggerred when set the initial value
@@ -24,7 +24,7 @@ namespace DicomGrep.ViewModels
                     DefaultFilterString = value.UID.ToString();
                 }
                 SetProperty(ref _selectedUID, value);
-            } 
+            }
         }
 
         private string _defaultFilterString;

@@ -48,8 +48,8 @@ namespace DicomGrep.ViewModels
         private string _searchPath;
         public string SearchPath
         {
-            get { return _searchPath; }
-            set { SetProperty(ref _searchPath, value); }
+            get => _searchPath;
+            set => SetProperty(ref _searchPath, value);
         }
 
         public ObservableCollection<string> SearchPathHistory { set; get; }
@@ -58,8 +58,8 @@ namespace DicomGrep.ViewModels
         private string _fileTypes;
         public string FileTypes
         {
-            get { return _fileTypes; }
-            set { SetProperty(ref _fileTypes, value); }
+            get => _fileTypes;
+            set => SetProperty(ref _fileTypes, value);
         }
 
         public ObservableCollection<string> FileTypesHistory { set; get; }
@@ -67,8 +67,8 @@ namespace DicomGrep.ViewModels
         private string _sopClassUid;
         public string SopClassUid
         {
-            get { return _sopClassUid; }
-            set { SetProperty(ref _sopClassUid, value); }
+            get => _sopClassUid;
+            set => SetProperty(ref _sopClassUid, value);
         }
 
         public ObservableCollection<string> SopClassUidHistory { set; get; }
@@ -76,8 +76,8 @@ namespace DicomGrep.ViewModels
         private string _tag;
         public string Tag
         {
-            get { return _tag; }
-            set { SetProperty(ref _tag, value); }
+            get => _tag;
+            set => SetProperty(ref _tag, value);
         }
 
         public ObservableCollection<string> DicomTagHistory { set; get; }
@@ -86,8 +86,8 @@ namespace DicomGrep.ViewModels
         private string _searchText;
         public string SearchText
         {
-            get { return _searchText; }
-            set { SetProperty(ref _searchText, value); }
+            get => _searchText;
+            set => SetProperty(ref _searchText, value);
         }
 
         public ObservableCollection<string> SearchTextHistory { set; get; }
@@ -97,37 +97,37 @@ namespace DicomGrep.ViewModels
         private bool _caseSensitive;
         public bool CaseSensitive
         {
-            get { return _caseSensitive; }
-            set { SetProperty(ref _caseSensitive, value); }
+            get => _caseSensitive;
+            set => SetProperty(ref _caseSensitive, value);
         }
 
         private bool _wholeWord;
         public bool WholeWord
         {
-            get { return _wholeWord; }
-            set { SetProperty(ref _wholeWord, value); }
+            get => _wholeWord;
+            set => SetProperty(ref _wholeWord, value);
         }
 
         private MatchPatternEnum _matchPattern;
 
         public MatchPatternEnum MatchPattern
         {
-            get { return _matchPattern; }
-            set { SetProperty(ref _matchPattern, value); }
+            get => _matchPattern;
+            set => SetProperty(ref _matchPattern, value);
         }
 
         private bool _includeSubfolders;
         public bool IncludeSubfolders
         {
-            get { return _includeSubfolders; }
-            set { SetProperty(ref _includeSubfolders, value); }
+            get => _includeSubfolders;
+            set => SetProperty(ref _includeSubfolders, value);
         }
 
         private int _searchThreads;
         public int SearchThreads
         {
-            get { return _searchThreads; }
-            set { SetProperty(ref _searchThreads, value); }
+            get => _searchThreads;
+            set => SetProperty(ref _searchThreads, value);
         }
 
         #endregion Search Criteria END
@@ -137,37 +137,37 @@ namespace DicomGrep.ViewModels
         private int _totalFileCount;
         public int TotalFileCount
         {
-            get { return _totalFileCount; }
-            set { SetProperty(ref _totalFileCount, value); }
+            get => _totalFileCount;
+            set => SetProperty(ref _totalFileCount, value);
         }
 
         private int _searchedFileCount;
         public int SearchedFileCount
         {
-            get { return _searchedFileCount; }
-            set { SetProperty(ref _searchedFileCount, value); }
+            get => _searchedFileCount;
+            set => SetProperty(ref _searchedFileCount, value);
         }
 
         private int _matchFileCount;
         public int MatchFileCount
         {
-            get { return _matchFileCount; }
-            set { SetProperty(ref _matchFileCount, value); }
+            get => _matchFileCount;
+            set => SetProperty(ref _matchFileCount, value);
         }
 
         private string _currentFile;
         public string CurrentFile
         {
-            get { return _currentFile; }
-            set { SetProperty(ref _currentFile, value); }
+            get => _currentFile;
+            set => SetProperty(ref _currentFile, value);
         }
 
 
         private MainStatusEnum _mainStatus;
         public MainStatusEnum MainStatus
         {
-            get { return _mainStatus; }
-            set { SetProperty(ref _mainStatus, value); }
+            get => _mainStatus;
+            set => SetProperty(ref _mainStatus, value);
         }
 
         #region Command
@@ -280,8 +280,8 @@ namespace DicomGrep.ViewModels
         private ResultDicomFile _selectedMatchFile;
         public ResultDicomFile SelectedMatchFile
         {
-            get { return _selectedMatchFile; }
-            set { SetProperty(ref _selectedMatchFile, value); }
+            get => _selectedMatchFile;
+            set => SetProperty(ref _selectedMatchFile, value);
         }
 
 

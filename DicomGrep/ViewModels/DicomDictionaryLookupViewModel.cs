@@ -17,7 +17,7 @@ namespace DicomGrep.ViewModels
         private DicomDictionaryEntry _selectedEntry;
         public DicomDictionaryEntry SelectedEntry
         {
-            get { return _selectedEntry; }
+            get => _selectedEntry;
             set
             {
                 if (_selectedEntry == null && value != null && string.IsNullOrEmpty(DefaultFilterString)) // only triggerred when set the initial value

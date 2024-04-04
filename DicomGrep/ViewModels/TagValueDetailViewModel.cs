@@ -14,7 +14,7 @@ namespace DicomGrep.ViewModels
         private ResultDicomItem _dicomItem;
         public ResultDicomItem DicomItem
         {
-            get { return _dicomItem; }
+            get => _dicomItem;
             set
             {
                 SetProperty(ref _dicomItem, value);
@@ -25,11 +25,8 @@ namespace DicomGrep.ViewModels
         private string _summary;
         public string Summary
         {
-            get { return _summary; }
-            private set
-            {
-                SetProperty(ref _summary, value);
-            }
+            get => _summary;
+            private set => SetProperty(ref _summary, value);
         }
 
         string GenerateSummaryDisplayString()
