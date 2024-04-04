@@ -53,6 +53,11 @@
                     https://wincopies.com/windows-api-codepack
                 </Hyperlink>
             </TextBlock>
+            <TextBlock TextWrapping="Wrap">NLog
+                <Hyperlink NavigateUri="https://nlog-project.org/" RequestNavigate="Hyperlink_RequestNavigate">
+                    https://nlog-project.org/
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
 
     </Grid>

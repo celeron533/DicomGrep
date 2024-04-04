@@ -27,9 +27,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Selected:" Grid.Row="0" Grid.Column="0"/>
-            <TextBox Name="selected" Text="{Binding SelectedUID.UID, Mode=OneWay}" Grid.Row="0" Grid.Column="1"/>
+            <TextBox Name="selected" Text="{Binding SelectedUID.UID, Mode=OneWay}" Grid.Row="0" Grid.Column="1" Background="LightGray"/>
             <Label Content="Filter:" Grid.Row="1" Grid.Column="0"/>
-            <TextBox Name="filter" TextChanged="Filter_TextChanged" Grid.Row="1" Grid.Column="1"/>
+            <TextBox Name="filter" TextChanged="Filter_TextChanged" Text="{Binding DefaultFilterString, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
             <Button Name="pick" Content="Pick" Grid.Column="2" Grid.RowSpan="2" IsDefault="True" Click="pick_Click" Margin="8"/>
         </Grid>
         <DataGrid Name="dataGridUids" ItemsSource="{Binding SOPClassUIDs, Mode=OneWay}"  AutoGenerateColumns="True"

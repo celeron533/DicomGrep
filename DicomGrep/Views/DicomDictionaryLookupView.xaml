@@ -30,9 +30,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Selected:" Grid.Row="0" Grid.Column="0"/>
-            <TextBox Name="selected" Text="{Binding Path=SelectedEntry.Tag, Mode=OneWay, Converter={StaticResource TagValueConverter}, ConverterParameter='X'}" Grid.Row="0" Grid.Column="1"/>
+            <TextBox Name="selected" Text="{Binding Path=SelectedEntry.Tag, Mode=OneWay, Converter={StaticResource TagValueConverter}, ConverterParameter='X'}" Grid.Row="0" Grid.Column="1" Background="LightGray"/>
             <Label Content="Filter:" Grid.Row="1" Grid.Column="0"/>
-            <TextBox Name="filter" TextChanged="Filter_TextChanged" Grid.Row="1" Grid.Column="1"/>
+            <TextBox Name="filter" TextChanged="Filter_TextChanged" Text="{Binding Path=DefaultFilterString, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
             <Button Name="pick" Content="Pick" Grid.Column="2" Grid.RowSpan="2" IsDefault="True" Click="pick_Click" Margin="8"/>
         </Grid>
         <DataGrid Name="dataGridTags" ItemsSource="{Binding DicomDictionaryEntries, Mode=OneWay}"  AutoGenerateColumns="False"

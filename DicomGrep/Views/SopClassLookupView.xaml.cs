@@ -36,7 +36,11 @@ namespace DicomGrep.Views
         private void Timer_Tick(object sender, EventArgs e)
         {
             timer.Stop();
+            ApplyFilter();
+        }
 
+        private void ApplyFilter()
+        {
             TextBox filterTextBox = filter;
             string filterText = filterTextBox.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(dataGridUids.ItemsSource);

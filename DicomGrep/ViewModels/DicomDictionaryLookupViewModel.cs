@@ -17,8 +17,22 @@ namespace DicomGrep.ViewModels
         private DicomDictionaryEntry _selectedEntry;
         public DicomDictionaryEntry SelectedEntry
         {
-            get { return _selectedEntry; }
-            set { SetProperty(ref _selectedEntry, value); }
+            get => _selectedEntry;
+            set
+            {
+                if (_selectedEntry == null && value != null && string.IsNullOrEmpty(DefaultFilterString)) // only triggerred when set the initial value
+                {
+                    DefaultFilterString = value.Name;
+                }
+                SetProperty(ref _selectedEntry, value);
+            }
+        }
+
+        private string _defaultFilterString;
+        public string DefaultFilterString
+        {
+            get => _defaultFilterString;
+            set => SetProperty(ref _defaultFilterString, value);
         }
 
         public DicomDictionaryLookupViewModel() : base()
@@ -26,8 +40,8 @@ namespace DicomGrep.ViewModels
             if (DicomDictionaryEntries == null || DicomDictionaryEntries.Count == 0)
             {
                 DicomDictionaryEntries = new ObservableCollection<DicomDictionaryEntry>(
-                    GetAllDicomTagDefs().OrderBy(entry=>entry.Tag.Group).ThenBy(entry=>entry.Tag.Element)
-                    .Concat(GetAllPrivateTagDefs()).OrderBy(entry=>entry.Tag.PrivateCreator).ThenBy(entry => entry.Tag.Group).ThenBy(entry => entry.Tag.Element)
+                    GetAllDicomTagDefs().OrderBy(entry => entry.Tag.Group).ThenBy(entry => entry.Tag.Element)
+                    .Concat(GetAllPrivateTagDefs()).OrderBy(entry => entry.Tag.PrivateCreator).ThenBy(entry => entry.Tag.Group).ThenBy(entry => entry.Tag.Element)
                     );
             }
         }
@@ -54,9 +68,9 @@ namespace DicomGrep.ViewModels
 
             // each vendor (private tag creator) can own multiple entries (tags)
             IEnumerable<DicomDictionary> vendorsDictionary = _private.Select(item => item.Value);
-            foreach (var dictionary in vendorsDictionary) 
+            foreach (var dictionary in vendorsDictionary)
             {
-                foreach( var entry in dictionary)
+                foreach (var entry in dictionary)
                 {
                     yield return entry;
                 }
