@@ -6,7 +6,7 @@ Inspired by daily work which need to find DICOM files with specific criteria.
 
 Hope this tool can help researchers 👩‍🔬👨‍🔬🔬 or developers 👨‍💻👩‍💻💻 :)
 
-Compiled with .NET 6. You may need install the runtime for this program.
+Compiled with .NET 8.0 . You may need install the runtime for this program.
 
 [![Github All Releases](https://img.shields.io/github/downloads/celeron533/DicomGrep/total.svg)](https://github.com/celeron533/DicomGrep/releases)
 
