@@ -21,12 +21,12 @@ on:
         type: boolean
 
 env:
-  dotnet_version: '6.0.x'
+  dotnet_version: '8.0.x'
 
 
 jobs:
-  build_and_test:
-    name: 'Build and Test'
+  build_and_test_debug:
+    name: 'Build and Test (debug)'
     runs-on: windows-latest
     env:
       configuration: 'Debug'
@@ -56,9 +56,10 @@ jobs:
           !bin/**/*.pdb
 
 
-  publish_windows:
+  publish_windows_release:
+    name: 'publish Windows (release)'
     runs-on: windows-latest
-    needs: build_and_test
+    needs: build_and_test_debug
     env:
       configuration: 'Release'
 
