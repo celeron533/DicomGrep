@@ -1,7 +1,7 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Win32;
 
 namespace DicomGrep.Services
 {
@@ -12,16 +12,14 @@ namespace DicomGrep.Services
     {
         public bool SelectFolder(ref string folderPath)
         {
-            CommonOpenFileDialog openFileDialog = new CommonOpenFileDialog
+            var openFileDialog = new OpenFolderDialog
             {
-                IsFolderPicker = true,
-                DefaultDirectory = folderPath
+                DefaultDirectory = folderPath,
             };
 
-            // note: may slow to stop debugging when running from Visual Studio
-            if (CommonFileDialogResult.Ok == openFileDialog.ShowDialog())
+            if (true == openFileDialog.ShowDialog())
             {
-                folderPath = openFileDialog.FileName;
+                folderPath = openFileDialog.FolderName;
                 return true;
             }
             else
