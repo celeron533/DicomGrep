@@ -10,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DicomGrepCore.Enums;
 using FellowOakDicom;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace DicomGrepCore.Services
 {
@@ -70,7 +72,7 @@ namespace DicomGrepCore.Services
 
             ParallelOptions options = new ParallelOptions
             {
-                MaxDegreeOfParallelism = criteria.SearchThreads <= 0 ? Environment.ProcessorCount : criteria.SearchThreads ,
+                MaxDegreeOfParallelism = criteria.SearchThreads <= 0 ? Environment.ProcessorCount : criteria.SearchThreads,
                 CancellationToken = this.token
             };
             try
@@ -209,7 +211,15 @@ namespace DicomGrepCore.Services
                 // dig into sub sequence
                 if (dicomItem.ValueRepresentation == DicomVR.SQ)
                 {
-                    foreach (DicomDataset innerDataset in ((DicomSequence)dicomItem).Items)
+                    DicomSequence sequenceItem = (DicomSequence)dicomItem;
+
+                    if (string.IsNullOrWhiteSpace(criteria.SearchTag) ||
+                         CompareDicomTag(dicomItem.Tag, criteria.DicomSearchTag))
+                    {
+                        resultDicomItems ??= new List<ResultDicomItem>();
+                        resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, $"Count = {sequenceItem.Items.Count}", []));
+                    }
+                    foreach (DicomDataset innerDataset in sequenceItem.Items)
                     {
                         CompareDicomTagAndValue(innerDataset, ref resultDicomItems);
                     }
@@ -250,10 +260,7 @@ namespace DicomGrepCore.Services
                                 if (string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
                                 {
                                     //handle match
-                                    if (resultDicomItems == null)
-                                    {
-                                        resultDicomItems = new List<ResultDicomItem>();
-                                    }
+                                    resultDicomItems ??= new List<ResultDicomItem>();
 
                                     resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, rawValue));
 
