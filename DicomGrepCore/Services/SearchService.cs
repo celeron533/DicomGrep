@@ -213,12 +213,14 @@ namespace DicomGrepCore.Services
                 {
                     DicomSequence sequenceItem = (DicomSequence)dicomItem;
 
-                    if (string.IsNullOrWhiteSpace(criteria.SearchTag) ||
-                         CompareDicomTag(dicomItem.Tag, criteria.DicomSearchTag))
+                    if (string.IsNullOrEmpty(criteria.SearchText) &&
+                        (string.IsNullOrWhiteSpace(criteria.SearchTag) ||
+                         CompareDicomTag(dicomItem.Tag, criteria.DicomSearchTag)))
                     {
                         resultDicomItems ??= new List<ResultDicomItem>();
                         resultDicomItems.Add(new ResultDicomItem(dicomItem.Tag, $"Count = {sequenceItem.Items.Count}", []));
                     }
+
                     foreach (DicomDataset innerDataset in sequenceItem.Items)
                     {
                         CompareDicomTagAndValue(innerDataset, ref resultDicomItems);

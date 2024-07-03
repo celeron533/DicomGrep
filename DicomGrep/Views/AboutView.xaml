@@ -48,11 +48,6 @@
                     https://github.com/Microsoft/XamlBehaviorsWpf
                 </Hyperlink>
             </TextBlock>
-            <TextBlock TextWrapping="Wrap">WinCopies.WindowsAPICodePack.Shell
-                <Hyperlink NavigateUri="https://wincopies.com/windows-api-codepack" RequestNavigate="Hyperlink_RequestNavigate">
-                    https://wincopies.com/windows-api-codepack
-                </Hyperlink>
-            </TextBlock>
             <TextBlock TextWrapping="Wrap">NLog
                 <Hyperlink NavigateUri="https://nlog-project.org/" RequestNavigate="Hyperlink_RequestNavigate">
                     https://nlog-project.org/
