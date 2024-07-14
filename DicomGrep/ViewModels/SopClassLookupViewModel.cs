@@ -42,6 +42,10 @@ namespace DicomGrep.ViewModels
             }
         }
 
+        /// <summary>
+        /// Get all dicom UID definitions.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<DicomUID> GetAllDicomUIDDefs()
         {
             return typeof(DicomUID).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
