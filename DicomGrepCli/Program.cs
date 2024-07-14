@@ -10,12 +10,6 @@ namespace DicomGrepCli
         {
             var rootCommand = new RootCommand("DicomGrep Command Line Interface");
 
-            var versionOption = new Option<bool>(
-                name: "--version",
-                description: "Show version information"
-                );
-            versionOption.AddAlias("-V");
-            rootCommand.AddOption(versionOption);
 
             #region lookup options
             // once see the lookup options, do not execute any search
