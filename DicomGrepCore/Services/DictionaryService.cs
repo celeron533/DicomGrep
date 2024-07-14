@@ -1,13 +1,11 @@
 ﻿using FellowOakDicom;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace DicomGrep.Services
+namespace DicomGrepCore.Services
 {
     /// <summary>
     /// DICOM Dictionary related function. Mostly are about append custome dictionary items.

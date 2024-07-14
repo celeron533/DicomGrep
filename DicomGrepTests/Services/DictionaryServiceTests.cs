@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FellowOakDicom;
+using DicomGrepCore.Services;
 
 namespace DicomGrep.Services.Tests
 {
