@@ -1,6 +1,5 @@
 ﻿using DicomGrep.Enums;
 using DicomGrep.Models;
-using DicomGrep.Services;
 using DicomGrep.Utils;
 using DicomGrep.Views;
 using DicomGrepCore.Entities;
@@ -18,6 +17,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DicomGrepCore.Enums;
+using DicomGrep.Services;
+using DicomGrep.Services.Interfaces;
+using DicomGrepCore.Services.Interfaces;
 
 namespace DicomGrep.ViewModels
 {
@@ -25,17 +27,16 @@ namespace DicomGrep.ViewModels
     {
         public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-        // todo: using DI
-        private readonly SearchService searchService = new SearchService();
-        private readonly DictionaryService dictionaryService = new DictionaryService();
-        private readonly FolderPickupService folderPickupService = new FolderPickupService();
-        private readonly ConfigurationService configurationService = new ConfigurationService();
-        private readonly FileOperationService fileOperationService = new FileOperationService();
-        private readonly SopClassLookupService sopClassLookupService = new SopClassLookupService();
-        private readonly DicomDictionaryLookupService dicomDictionaryLookupService = new DicomDictionaryLookupService();
-        private readonly DialogService dialogService = new DialogService();
-        private readonly ExportService exportService = new ExportService();
-        private readonly TagValueDetailService tagValueDetailService = new TagValueDetailService();
+        ISearchService searchService;
+        IDictionaryService dictionaryService;
+
+        IConfigurationService configurationService;
+        IFolderPickupService folderPickupService;
+        ISopClassLookupService sopClassLookupService;
+        IDicomDictionaryLookupService dicomDictionaryLookupService;
+        IExportService exportService;
+        ITagValueDetailService tagValueDetailService;
+        IFileOperationService fileOperationService;
 
         Configuration CurrentConfiguration;
 
@@ -285,8 +286,21 @@ namespace DicomGrep.ViewModels
         }
 
 
-        public MainViewModel()
+        public MainViewModel(IConfigurationService _configurationService, IFolderPickupService _folderPickupService,
+            ISopClassLookupService _sopClassLookupService, IDicomDictionaryLookupService _dicomDictionaryLookupService,
+            IExportService _exportService, ITagValueDetailService _tagValueDetailService,
+            IFileOperationService _fileOperationService, ISearchService _searchService, IDictionaryService _dictionaryService)
         {
+            configurationService = _configurationService;
+            folderPickupService = _folderPickupService;
+            sopClassLookupService = _sopClassLookupService;
+            dicomDictionaryLookupService = _dicomDictionaryLookupService;
+            exportService = _exportService;
+            tagValueDetailService = _tagValueDetailService;
+            fileOperationService = _fileOperationService;
+            searchService = _searchService;
+            dictionaryService = _dictionaryService; ;
+
             // dummy data for designer preview
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {

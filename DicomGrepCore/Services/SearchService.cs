@@ -12,13 +12,14 @@ using DicomGrepCore.Enums;
 using FellowOakDicom;
 using System.Xml.Linq;
 using System.Diagnostics;
+using DicomGrepCore.Services.Interfaces;
 
 namespace DicomGrepCore.Services
 {
     /// <summary>
     /// The core logic of the search function
     /// </summary>
-    public class SearchService
+    public class SearchService : ISearchService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 

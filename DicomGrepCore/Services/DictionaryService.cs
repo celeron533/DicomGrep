@@ -1,4 +1,5 @@
-﻿using FellowOakDicom;
+﻿using DicomGrepCore.Services.Interfaces;
+using FellowOakDicom;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace DicomGrepCore.Services
     /// <summary>
     /// DICOM Dictionary related function. Mostly are about append custome dictionary items.
     /// </summary>
-    public class DictionaryService
+    public class DictionaryService : IDictionaryService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 

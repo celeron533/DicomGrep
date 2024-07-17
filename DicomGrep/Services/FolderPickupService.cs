@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DicomGrep.Services.Interfaces;
 using Microsoft.Win32;
 
 namespace DicomGrep.Services
@@ -8,7 +9,7 @@ namespace DicomGrep.Services
     /// <summary>
     /// Display a folder selector UI.
     /// </summary>
-    public class FolderPickupService
+    public class FolderPickupService : IFolderPickupService
     {
         public bool SelectFolder(ref string folderPath)
         {
