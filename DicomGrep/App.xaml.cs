@@ -20,20 +20,17 @@ namespace DicomGrep
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            
-            var services = new ServiceCollection();
-            ConfigServices(services);
-            ServiceProvider = services.BuildServiceProvider();
-
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            Services = ConfigureServices();
 
             base.OnStartup(e);
         }
 
-        private void ConfigServices(IServiceCollection services)
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        private static IServiceProvider ConfigureServices()
         {
-
+            var services = new ServiceCollection();
             services.AddSingleton<IConfigurationService, ConfigurationService>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IDicomDictionaryLookupService, DicomDictionaryLookupService>();
@@ -45,9 +42,17 @@ namespace DicomGrep
             services.AddSingleton<ISearchService, SearchService>();
             services.AddSingleton<IDictionaryService, DictionaryService>();
 
-            services.AddTransient<MainWindow>();
+            return services.BuildServiceProvider();
         }
 
-        public IServiceProvider ServiceProvider { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
+        /// </summary>
+        public IServiceProvider Services { get; private set; }
+
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
     }
 }

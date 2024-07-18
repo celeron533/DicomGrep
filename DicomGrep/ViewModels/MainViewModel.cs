@@ -285,21 +285,18 @@ namespace DicomGrep.ViewModels
             set => SetProperty(ref _selectedMatchFile, value);
         }
 
-
-        public MainViewModel(IConfigurationService _configurationService, IFolderPickupService _folderPickupService,
-            ISopClassLookupService _sopClassLookupService, IDicomDictionaryLookupService _dicomDictionaryLookupService,
-            IExportService _exportService, ITagValueDetailService _tagValueDetailService,
-            IFileOperationService _fileOperationService, ISearchService _searchService, IDictionaryService _dictionaryService)
+        public MainViewModel()
         {
-            configurationService = _configurationService;
-            folderPickupService = _folderPickupService;
-            sopClassLookupService = _sopClassLookupService;
-            dicomDictionaryLookupService = _dicomDictionaryLookupService;
-            exportService = _exportService;
-            tagValueDetailService = _tagValueDetailService;
-            fileOperationService = _fileOperationService;
-            searchService = _searchService;
-            dictionaryService = _dictionaryService; ;
+            // viewModel here cannot inject the dependencies as the constructor parameters
+            configurationService = GetService<IConfigurationService>();
+            folderPickupService = GetService<IFolderPickupService>();
+            sopClassLookupService = GetService<ISopClassLookupService>();
+            dicomDictionaryLookupService = GetService<IDicomDictionaryLookupService>();
+            exportService = GetService<IExportService>();
+            tagValueDetailService = GetService<ITagValueDetailService>();
+            fileOperationService = GetService<IFileOperationService>();
+            searchService = GetService<ISearchService>();
+            dictionaryService = GetService<IDictionaryService>();
 
             // dummy data for designer preview
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))

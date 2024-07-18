@@ -35,8 +35,9 @@ namespace DicomGrep.ViewModels
             set => SetProperty(ref _defaultFilterString, value);
         }
 
-        public SopClassLookupViewModel(IDictionaryService dictionaryService) : base()
+        public SopClassLookupViewModel() : base()
         {
+            var dictionaryService = GetService<IDictionaryService>();
             if (SOPClassUIDs == null || SOPClassUIDs.Count == 0)
             {
                 SOPClassUIDs = new ObservableCollection<DicomUID>(dictionaryService.GetAllDicomUIDDefs().Where(u => u.Type == DicomUidType.SOPClass || u.Type == DicomUidType.MetaSOPClass));

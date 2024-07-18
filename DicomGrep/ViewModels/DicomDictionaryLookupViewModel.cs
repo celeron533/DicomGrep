@@ -36,8 +36,9 @@ namespace DicomGrep.ViewModels
             set => SetProperty(ref _defaultFilterString, value);
         }
 
-        public DicomDictionaryLookupViewModel(IDictionaryService dictionaryService) : base()
+        public DicomDictionaryLookupViewModel() : base()
         {
+            var dictionaryService = GetService<IDictionaryService>();
             if (DicomDictionaryEntries == null || DicomDictionaryEntries.Count == 0)
             {
                 DicomDictionaryEntries = new ObservableCollection<DicomDictionaryEntry>(
