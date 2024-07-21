@@ -1,4 +1,5 @@
-﻿using DicomGrepCore.Services;
+﻿using DicomGrepCore.Enums;
+using DicomGrepCore.Services;
 using FellowOakDicom;
 using System.CommandLine;
 using System.CommandLine.Invocation;
@@ -15,9 +16,9 @@ namespace DicomGrepCli
 
             #region lookup options
             // once see the lookup options, do not execute any search
-            var lookupOption = new Option<LookupIn?>(
+            var lookupOption = new Option<LookupType?>(
                 name: "--lookup",
-                description: "lookup the DICOM Dictionary or UID"
+                description: "[Lookup] lookup the DICOM Dictionary or UID"
                 );
             lookupOption.AddAlias("-l");
             rootCommand.AddOption(lookupOption);
@@ -26,9 +27,18 @@ namespace DicomGrepCli
             #region search options
             var folderOption = new Option<string>(
                 name: "--dir",
-                description: "search in this directory"
+                description: "search in directory"
                 );
+            folderOption.AddAlias("-d");
             rootCommand.AddOption(folderOption);
+
+            var fileTypeOption = new Option<string>(
+                name: "--file-type",
+                description: "search in file types"
+                );
+            fileTypeOption.SetDefaultValue("*.dcm");
+            fileTypeOption.AddAlias("-f");
+            rootCommand.AddOption(fileTypeOption);
 
             //-r, --recursive. As well as GREP
             var recursiveOption = new Option<bool>(
@@ -38,23 +48,16 @@ namespace DicomGrepCli
             recursiveOption.AddAlias("-r");
             rootCommand.AddOption(recursiveOption);
 
-            //-i, --ignore-case. As well as GREP
-            var ignoreCaseOption = new Option<bool>(
-                name: "--ignore-case",
-                description: "ignore case"
+            var sopClassOption = new Option<string>(
+                name: "--sop",
+                description: "search by SOP Class UID"
                 );
-            ignoreCaseOption.SetDefaultValue(true);
-            ignoreCaseOption.AddAlias("-i");
-            rootCommand.AddOption(ignoreCaseOption);
-
-            //-F, --fixed-strings. As well as GREP
-            //-e PATTERNS, --regexp = PATTERNS. As well as GREP
-            //-c, --count. As well as GREP
+            rootCommand.AddOption(sopClassOption);
 
             //-t, --tag. DICOM Tag
             var tagOption = new Option<string>(
                 name: "--tag",
-                description: "DICOM Tag"
+                description: "search by DICOM Tag"
                 );
             tagOption.AddAlias("-t");
             rootCommand.AddOption(tagOption);
@@ -62,10 +65,38 @@ namespace DicomGrepCli
             //-v, --value. DICOM Tag Value
             var valueOption = new Option<string>(
                 name: "--value",
-                description: "DICOM Tag Value"
+                description: "search by DICOM Tag Value"
                 );
             valueOption.AddAlias("-v");
             rootCommand.AddOption(valueOption);
+
+            var caseSensitiveOption = new Option<bool>(
+                name: "--case-sensitive",
+                description: "case sensitive (DICOM Tag)"
+                );
+            caseSensitiveOption.AddAlias("-c");
+            rootCommand.AddOption(caseSensitiveOption);
+
+            var wholdWordOption = new Option<bool>(
+                name: "--whole-word",
+                description: "whole word (DICOM Tag)"
+                );
+            wholdWordOption.AddAlias("-w");
+            rootCommand.AddOption(wholdWordOption);
+
+            var threadsOption = new Option<int>(
+                name: "--threads",
+                description: "number of threads"
+                );
+            threadsOption.SetDefaultValue(0);
+            rootCommand.AddOption(threadsOption);
+
+            var patternOption = new Option<MatchPatternEnum>(
+                name: "--pattern",
+                description: "plain text or regular expression pattern (DICOM Tag)"
+                );
+            patternOption.SetDefaultValue(MatchPatternEnum.Normal);
+            rootCommand.AddOption(patternOption);
 
 
             #endregion search options
@@ -79,20 +110,20 @@ namespace DicomGrepCli
                         PrintLookup(lookupOptionValue.Value);
                     }
                 },
-                lookupOption, folderOption, recursiveOption, ignoreCaseOption, tagOption, valueOption
+                lookupOption, folderOption, recursiveOption, caseSensitiveOption, tagOption, valueOption
                 );
 
 
             return await rootCommand.InvokeAsync(args);
         }
 
-        private static void PrintLookup(LookupIn lookupIn)
+        private static void PrintLookup(LookupType lookupType)
         {
             DictionaryService dictionaryService = new DictionaryService();
             dictionaryService.ReadAndAppendCustomDictionaries();
-            switch (lookupIn)
+            switch (lookupType)
             {
-                case LookupIn.DICT:
+                case LookupType.DICT:
                     //dictionaryService.GetAllDicomTagDefs();
                     //dictionaryService.GetAllPrivateTagDefs();
                     var publicTags = dictionaryService.GetAllDicomTagDefs().OrderBy(entry => entry.Tag.Group).ThenBy(entry => entry.Tag.Element).ToList();
@@ -104,7 +135,7 @@ namespace DicomGrepCli
                     }
                     Console.WriteLine($"Total {publicTags.Count + privateTags.Count} tags. Public: {publicTags.Count}, Private: {privateTags.Count}");
                     break;
-                case LookupIn.UID:
+                case LookupType.UID:
                     var allUids = dictionaryService.GetAllDicomUIDDefs().ToList();
                     Console.WriteLine("UID|Name|Type|IsRetired|IsImageStorage|IsVolumeStorage|StorageCategory");
                     foreach (var uid in allUids)
@@ -119,7 +150,7 @@ namespace DicomGrepCli
         }
     }
 
-    enum LookupIn
+    enum LookupType
     {
         DICT = 0,
         UID
