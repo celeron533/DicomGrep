@@ -1,4 +1,5 @@
-﻿using DicomGrepCore.Enums;
+﻿using DicomGrepCore.Entities;
+using DicomGrepCore.Enums;
 using DicomGrepCore.Services;
 using FellowOakDicom;
 using System.CommandLine;
@@ -103,18 +104,32 @@ namespace DicomGrepCli
 
 
             rootCommand.SetHandler(
-                (lookupOptionValue, folderOptionValue, recursiveOptionValue, ignoreCaseOptionValue, tagOptionValue, valueOptionValue) =>
-                {
-                    if (lookupOptionValue.HasValue)
-                    {
-                        PrintLookup(lookupOptionValue.Value);
-                    }
-                },
-                lookupOption, folderOption, recursiveOption, caseSensitiveOption, tagOption, valueOption
+                DoRootCommand,
+                lookupOption, new SearchCriteriaBinder(folderOption, fileTypeOption, recursiveOption, sopClassOption, tagOption, valueOption, caseSensitiveOption, wholdWordOption, threadsOption, patternOption)
                 );
 
 
             return await rootCommand.InvokeAsync(args);
+        }
+
+        private static void DoRootCommand(LookupType? lookupOptionValue, SearchCriteria criteria)
+        {
+            if (lookupOptionValue.HasValue)
+            {
+                PrintLookup(lookupOptionValue.Value);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(criteria.SearchPath))
+                {
+                    Console.WriteLine("Please specify the directory.");
+                    return;
+                }
+
+                var tokenSource = new CancellationTokenSource();//dummy
+                SearchService searchService = new SearchService();
+                searchService.Search(criteria, tokenSource);
+            }
         }
 
         private static void PrintLookup(LookupType lookupType)
