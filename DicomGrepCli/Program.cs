@@ -120,15 +120,8 @@ namespace DicomGrepCli
             }
             else
             {
-                if (string.IsNullOrEmpty(criteria.SearchPath))
-                {
-                    Console.WriteLine("Please specify the directory.");
-                    return;
-                }
-
-                var tokenSource = new CancellationTokenSource();//dummy
-                SearchService searchService = new SearchService();
-                searchService.Search(criteria, tokenSource);
+                Console.WriteLine(criteria.ToString("n1"));
+                DoSearch(criteria);
             }
         }
 
@@ -162,6 +155,36 @@ namespace DicomGrepCli
                 default:
                     break;
             }
+        }
+
+        private static void DoSearch(SearchCriteria criteria)
+        {
+            if (string.IsNullOrEmpty(criteria.SearchPath))
+            {
+                Console.WriteLine("Please specify the directory.");
+                return;
+            }
+
+            var tokenSource = new CancellationTokenSource();//dummy
+            SearchService searchService = new SearchService();
+            searchService.FileListCompleted += (sender, e) =>
+            {
+                Console.WriteLine($"> Search in {e.Count} files...");
+            };
+            searchService.OnCompletDicomFile += (sender, e) =>
+            {
+                if (e.IsMatch)
+                {
+                    Console.WriteLine(e.Filename);
+                }
+            };
+            searchService.OnSearchComplete += (sender, e) =>
+            {
+                Console.WriteLine($"> Search completed.");
+            };
+
+
+            searchService.Search(criteria, tokenSource);
         }
     }
 
