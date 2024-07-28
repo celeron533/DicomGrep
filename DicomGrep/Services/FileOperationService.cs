@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
+using DicomGrep.Services.Interfaces;
 
 namespace DicomGrep.Services
 {
     /// <summary>
     /// File system and Windows explorer related
     /// </summary>
-    public class FileOperationService
+    public class FileOperationService : IFileOperationService
     {
         public bool OpenDirectory(string filePath)
         {

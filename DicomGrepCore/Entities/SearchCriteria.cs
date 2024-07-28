@@ -24,7 +24,7 @@ namespace DicomGrepCore.Entities
                 {
                     _dicomSearchTag = ParseDicomTag(value);
                 }
-                catch 
+                catch
                 {
                     // unable to parse the string
                 }
@@ -51,19 +51,47 @@ namespace DicomGrepCore.Entities
 
         public override string ToString()
         {
-            return
-                $"SearchPath = '{SearchPath}', " +
-                $"SearchSopClassUid = '{SearchSopClassUid}', " +
-                $"SearchTag = '{SearchTag}', " +
-                $"FileTypes = '{FileTypes}', " +
-                $"SearchText = '{SearchText}', " +
-                $"MatchPattern = {MatchPattern}, " +
-                $"CaseSensitive = {CaseSensitive}, " +
-                $"WholeWord = {WholeWord}, " +
-                $"IncludeSubfolders = {IncludeSubfolders}, " +
-                $"SearchInResults = {SearchInResults}, " +
-                $"SearchThreads = {SearchThreads}";
+            return ToString("c");
         }
+
+        /// <summary>
+        /// Format the search criteria.
+        /// </summary>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public string ToString(string format)
+        {
+            switch (format)
+            {
+                case "c":
+                default:
+                    return string.Join(", ", CriteriaSummary().Select(x => $"{x.Key}={x.Value}"));
+                case "n":
+                    return string.Join(Environment.NewLine, CriteriaSummary().Select(x => $"{x.Key}={x.Value}"));
+                case "n1":
+                    return string.Join(Environment.NewLine, CriteriaSummary().Select(x => $"> {x.Key}={x.Value}"));
+
+            }
+        }
+
+        private List<KeyValuePair<string,string>> CriteriaSummary()
+        {
+            List<KeyValuePair<string, string>> summary= new List<KeyValuePair<string, string>>();
+            summary.Add(new KeyValuePair<string, string>("SearchPath", Quote(SearchPath)));
+            summary.Add(new KeyValuePair<string, string>("FileTypes", Quote(FileTypes)));
+            summary.Add(new KeyValuePair<string, string>("IncludeSubfolders", IncludeSubfolders.ToString()));
+            summary.Add(new KeyValuePair<string, string>("SearchSopClassUid", Quote(SearchSopClassUid)));
+            summary.Add(new KeyValuePair<string, string>("SearchTag", Quote(SearchTag)));
+            summary.Add(new KeyValuePair<string, string>("SearchText", Quote(SearchText)));
+            summary.Add(new KeyValuePair<string, string>("MatchPattern", MatchPattern.ToString()));
+            summary.Add(new KeyValuePair<string, string>("CaseSensitive", CaseSensitive.ToString()));
+            summary.Add(new KeyValuePair<string, string>("WholeWord", WholeWord.ToString()));
+            summary.Add(new KeyValuePair<string, string>("SearchInResults", SearchInResults.ToString()));
+            summary.Add(new KeyValuePair<string, string>("SearchThreads", SearchThreads.ToString()));
+            return summary;
+        }
+
+        private string Quote(string value) => $"\"{value}\"";
 
         private DicomTag ParseDicomTag(string value)
         {

@@ -1,4 +1,5 @@
 ﻿using DicomGrep.Models;
+using DicomGrep.Services.Interfaces;
 using DicomGrepCore.Entities;
 using Microsoft.Win32;
 using System;
@@ -13,7 +14,7 @@ namespace DicomGrep.Services
     /// <summary>
     /// Export the search result to file.
     /// </summary>
-    public class ExportService
+    public class ExportService : IExportService
     {
         public void Export(List<ResultDicomFile> resultFiles, string exportTo = "")
         {
@@ -47,7 +48,7 @@ namespace DicomGrep.Services
 
                 DialogService ds = new DialogService();
                 ds.ShowMessageBox($"Search result has been exported to:\n{exportTo}",
-                    "Export",System.Windows.MessageBoxButton.OK,System.Windows.MessageBoxImage.Information);
+                    "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }
         }
     }

@@ -7,13 +7,14 @@ using System.Text;
 using System.Text.Json;
 using DicomGrepCore.Entities;
 using DicomGrepCore.Enums;
+using DicomGrep.Services.Interfaces;
 
 namespace DicomGrep.Services
 {
     /// <summary>
     /// Configuration Service
     /// </summary>
-    public class ConfigurationService
+    public class ConfigurationService : IConfigurationService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static Configuration CurrentConfiguration { get; set; }
@@ -38,7 +39,7 @@ namespace DicomGrep.Services
             {
                 File.WriteAllText(CONFIG_FILE, JsonSerializer.Serialize(CurrentConfiguration, option));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Error(ex, "Failed to save the configuration to file.");
                 return false;

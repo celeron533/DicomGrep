@@ -32,5 +32,11 @@ namespace DicomGrep.ViewModels
         {
             Application.Current?.Dispatcher.BeginInvoke((Action)CommandManager.InvalidateRequerySuggested);
         }
+
+        // service helper
+        protected static T GetService<T>() where T : class
+        {
+            return (T)App.Current.Services.GetService(typeof(T));
+        }
     }
 }

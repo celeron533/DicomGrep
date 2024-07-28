@@ -1,4 +1,5 @@
 ﻿using DicomGrep.Models;
+using DicomGrep.Services.Interfaces;
 using DicomGrep.ViewModels;
 using DicomGrep.Views;
 using DicomGrepCore.Entities;
@@ -14,7 +15,7 @@ namespace DicomGrep.Services
     /// <summary>
     /// DICOM tag value details lookup Service. In WPF to call View and VievModel.
     /// </summary>
-    public class TagValueDetailService
+    public class TagValueDetailService : ITagValueDetailService
     {
         public void InspectTagValue(ResultDicomItem item)
         {

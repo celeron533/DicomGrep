@@ -1,18 +1,19 @@
-﻿using FellowOakDicom;
+﻿using DicomGrepCore.Services.Interfaces;
+using FellowOakDicom;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace DicomGrep.Services
+namespace DicomGrepCore.Services
 {
     /// <summary>
     /// DICOM Dictionary related function. Mostly are about append custome dictionary items.
     /// </summary>
-    public class DictionaryService
+    public class DictionaryService : IDictionaryService
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -61,6 +62,47 @@ namespace DicomGrep.Services
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Get all dicom UID definitions.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DicomUID> GetAllDicomUIDDefs()
+        {
+            return typeof(DicomUID).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+                .Select(f => f.GetValue(null)).Where(v => v is DicomUID).Cast<DicomUID>();
+        }
+
+        /// <summary>
+        /// Get all public DICOM tag definitions. Private tags are not included.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DicomDictionaryEntry> GetAllDicomTagDefs()
+        {
+            return DicomDictionary.Default;
+        }
+
+        /// <summary>
+        /// Get all private DICOM tag definitions.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DicomDictionaryEntry> GetAllPrivateTagDefs()
+        {
+            ConcurrentDictionary<string, DicomDictionary> _private = typeof(DicomDictionary)
+                .GetField("_private", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .GetValue(DicomDictionary.Default)
+                as ConcurrentDictionary<string, DicomDictionary>;
+
+            // each vendor (private tag creator) can own multiple entries (tags)
+            IEnumerable<DicomDictionary> vendorsDictionary = _private.Select(item => item.Value);
+            foreach (var dictionary in vendorsDictionary)
+            {
+                foreach (var entry in dictionary)
+                {
+                    yield return entry;
+                }
             }
         }
     }

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrep", "DicomGrep\Dico
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrepTests", "DicomGrepTests\DicomGrepTests.csproj", "{C26AA249-3A83-4B9A-9672-633AFE3081E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomGrepCore", "DicomGrepCore\DicomGrepCore.csproj", "{572F835B-6298-4075-A1E3-50675927CCF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DicomGrepCore", "DicomGrepCore\DicomGrepCore.csproj", "{572F835B-6298-4075-A1E3-50675927CCF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicomGrepCli", "DicomGrepCli\DicomGrepCli.csproj", "{2404C580-7A56-4918-AB08-D9AF9E48ED15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{572F835B-6298-4075-A1E3-50675927CCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{572F835B-6298-4075-A1E3-50675927CCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{572F835B-6298-4075-A1E3-50675927CCF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2404C580-7A56-4918-AB08-D9AF9E48ED15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2404C580-7A56-4918-AB08-D9AF9E48ED15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2404C580-7A56-4918-AB08-D9AF9E48ED15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2404C580-7A56-4918-AB08-D9AF9E48ED15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using DicomGrep.ViewModels;
+﻿using DicomGrep.Services.Interfaces;
+using DicomGrep.ViewModels;
 using DicomGrep.Views;
 using FellowOakDicom;
 using System;
@@ -12,7 +13,7 @@ namespace DicomGrep.Services
     /// <summary>
     /// DICOM Dictionary lookup Service. In WPF to call View and VievModel.
     /// </summary>
-    public class DicomDictionaryLookupService
+    public class DicomDictionaryLookupService : IDicomDictionaryLookupService
     {
         public bool SelectDicomDictionaryEntry(ref string dicomTagString)
         {

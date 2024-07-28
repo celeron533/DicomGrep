@@ -1,4 +1,5 @@
-﻿using FellowOakDicom;
+﻿using DicomGrepCore.Services.Interfaces;
+using FellowOakDicom;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,16 +37,11 @@ namespace DicomGrep.ViewModels
 
         public SopClassLookupViewModel() : base()
         {
+            var dictionaryService = GetService<IDictionaryService>();
             if (SOPClassUIDs == null || SOPClassUIDs.Count == 0)
             {
-                SOPClassUIDs = new ObservableCollection<DicomUID>(GetAllDicomUIDDefs().Where(u => u.Type == DicomUidType.SOPClass || u.Type == DicomUidType.MetaSOPClass));
+                SOPClassUIDs = new ObservableCollection<DicomUID>(dictionaryService.GetAllDicomUIDDefs().Where(u => u.Type == DicomUidType.SOPClass || u.Type == DicomUidType.MetaSOPClass));
             }
-        }
-
-        private IEnumerable<DicomUID> GetAllDicomUIDDefs()
-        {
-            return typeof(DicomUID).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
-                .Select(f => f.GetValue(null)).Where(v => v is DicomUID).Cast<DicomUID>();
         }
     }
 }
