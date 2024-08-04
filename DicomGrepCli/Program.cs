@@ -178,7 +178,7 @@ namespace DicomGrepCli
                     Console.WriteLine(e.Filename);
                 }
             };
-            searchService.OnSearchComplete += (sender, e) =>
+            searchService.OnAllSearchComplete += (sender, e) =>
             {
                 Console.WriteLine($"> Search completed.");
             };

@@ -349,7 +349,7 @@ namespace DicomGrep.ViewModels
 
             this.searchService.OnCompletDicomFile += SearchService_OnCompletDicomFile;
 
-            this.searchService.OnSearchComplete += SearchService_OnSearchComplete;
+            this.searchService.OnAllSearchComplete += SearchService_OnSearchComplete;
 
         }
 
@@ -388,7 +388,7 @@ namespace DicomGrep.ViewModels
             }
         }
 
-        private void SearchService_OnSearchComplete(object sender, DicomGrepCore.Services.EventArgs.OnSearchCompleteEventArgs e)
+        private void SearchService_OnSearchComplete(object sender, DicomGrepCore.Services.EventArgs.OnAllSearchCompleteEventArgs e)
         {
             this.MainStatus = MainStatusEnum.Complete;
             InvalidateRequerySuggested();

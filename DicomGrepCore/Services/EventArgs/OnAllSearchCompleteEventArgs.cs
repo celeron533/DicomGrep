@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DicomGrepCore.Services.EventArgs
 {
-    public class OnSearchCompleteEventArgs : System.EventArgs
+    public class OnAllSearchCompleteEventArgs : System.EventArgs
     {
         public CompleteReasonEnum Reason { get; set; }
     }

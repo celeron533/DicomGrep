@@ -32,14 +32,15 @@ namespace DicomGrepCore.Services
         public delegate void OnCompletDicomFileDelegate(object sender, OnCompleteDicomFileEventArgs e);
         public event OnCompletDicomFileDelegate OnCompletDicomFile;
 
-        public delegate void OnSearchCompleteDelegate(object sender, OnSearchCompleteEventArgs e);
-        public event OnSearchCompleteDelegate OnSearchComplete;
+        public delegate void OnAllSearchCompleteDelegate(object sender, OnAllSearchCompleteEventArgs e);
+        public event OnAllSearchCompleteDelegate OnAllSearchComplete;
 
         private SearchCriteria criteria;
         private List<string> filenameList = new List<string>();
         private List<string> matchFilenameList = new List<string>();
         private CancellationToken token;
 
+        // the search service itself maintains a simple search result
         private int searchedFileCount = 0;
         private int matchFileCount = 0;
 
@@ -83,11 +84,11 @@ namespace DicomGrepCore.Services
                      options.CancellationToken.ThrowIfCancellationRequested();
                      SearchInDicomFile(filename);
                  });
-                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.Normal });
+                OnAllSearchComplete?.Invoke(this, new OnAllSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.Normal });
             }
             catch (OperationCanceledException)
             {
-                OnSearchComplete?.Invoke(this, new OnSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.UserCancelled });
+                OnAllSearchComplete?.Invoke(this, new OnAllSearchCompleteEventArgs { Reason = Enums.CompleteReasonEnum.UserCancelled });
                 logger.Info("User cancelled the search.");
             }
             finally
@@ -157,10 +158,9 @@ namespace DicomGrepCore.Services
 
                 string patientName = string.Empty;
                 string sopClassName = string.Empty;
-                DicomUID sopClassUID = null;
 
 
-                if (dicomFile.Dataset.TryGetSingleValue<DicomUID>(DicomTag.SOPClassUID, out sopClassUID))
+                if (dicomFile.Dataset.TryGetSingleValue<DicomUID>(DicomTag.SOPClassUID, out DicomUID sopClassUID))
                 {
                     // compare the sop class uid
                     if (!string.IsNullOrWhiteSpace(criteria.SearchSopClassUid) && sopClassUID.UID != criteria.SearchSopClassUid)
