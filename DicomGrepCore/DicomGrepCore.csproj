@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.1.4" />
+    <PackageReference Include="fo-dicom" Version="5.1.5" />
     <PackageReference Include="NLog" Version="5.3.4" />
   </ItemGroup>
 
