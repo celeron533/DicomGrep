@@ -40,10 +40,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.1.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="fo-dicom" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="NLog" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
