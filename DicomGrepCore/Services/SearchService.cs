@@ -246,7 +246,7 @@ namespace DicomGrepCore.Services
                             // dicomItem
                             if ((dicomItem is DicomElement { Count: > 0 } element))
                             {
-                                string valueString = element.Get<string>();
+                                string[] valueStrings = new string[1];
                                 byte[] rawValue = new byte[element.Buffer.Size];
                                 Array.Copy(element.Buffer.Data, rawValue, element.Buffer.Size);
 
@@ -256,18 +256,23 @@ namespace DicomGrepCore.Services
                                     byte[] bytes = element.Get<byte[]>();
                                     if (bytes != null && bytes.Length > 1)
                                     {
-                                        valueString = Encoding.ASCII.GetString(bytes);
+                                        valueStrings[0] = Encoding.ASCII.GetString(bytes);
                                     }
                                 }
+                                else
+                                {
+                                    valueStrings = element.Get<string[]>();
+                                }
+                                
 
-                                if (string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueString, criteria, false))
+                                if (string.IsNullOrWhiteSpace(criteria.SearchText) || CompareString(valueStrings, criteria, false))
                                 {
                                     //handle match
                                     resultDicomItems ??= new List<ResultDicomItem>();
 
-                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, valueString, rawValue));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, string.Join('|',valueStrings), rawValue));
 
-                                    //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueString}");
+                                    //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueStrings}");
 
                                 }
                             }
@@ -276,8 +281,8 @@ namespace DicomGrepCore.Services
                             /*
                             for (int i = 0; i < ((DicomElement)dicomItem).Count; i++)
                             {
-                                string valueString = ((DicomElement)dicomItem).Get<string>(i);
-                                if (CompareString(valueString, _criteria, false))
+                                string valueStrings = ((DicomElement)dicomItem).Get<string>(i);
+                                if (CompareString(valueStrings, _criteria, false))
                                 {
                                     ......
                                     break;
@@ -295,6 +300,11 @@ namespace DicomGrepCore.Services
         private bool CompareDicomTag(DicomTag dicomTag, DicomTag criteriaDicomTag)
         {
             return criteriaDicomTag.Equals(dicomTag);
+        }
+
+        private bool CompareString(IEnumerable<string> refStrings, SearchCriteria _criteria, bool isDicomTag)
+        {
+            return refStrings.Any(refString=> CompareString(refString, _criteria, isDicomTag));
         }
 
         private bool CompareString(string refString, SearchCriteria _criteria, bool isDicomTag)
