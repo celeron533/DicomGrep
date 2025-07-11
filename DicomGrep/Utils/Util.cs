@@ -19,7 +19,7 @@ namespace DicomGrep.Utils
 
             if (index < 0)
             {
-                list.Add(newItem);
+                list.Insert(0, newItem);
             }
             else if (index == 0)
             {
