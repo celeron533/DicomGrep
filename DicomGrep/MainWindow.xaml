@@ -124,7 +124,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding MatchFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchFile, Mode=Default}" SelectionMode="Single" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding MatchFileList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedMatchFile, Mode=Default}" SelectionMode="Single" IsReadOnly="True" MouseMove="DataGrid_MouseMove" MouseLeftButtonDown="DataGrid_MouseLeftButtonDown">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="File" Binding="{Binding Filename, Mode=OneWay}"/>
                         <DataGridTextColumn Header="Patient" Binding="{Binding PatientName, Mode=OneWay}"/>
