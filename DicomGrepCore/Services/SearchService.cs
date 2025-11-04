@@ -270,7 +270,7 @@ namespace DicomGrepCore.Services
                                     //handle match
                                     resultDicomItems ??= new List<ResultDicomItem>();
 
-                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, string.Join('|',valueStrings), rawValue));
+                                    resultDicomItems.Add(new ResultDicomItem(element.Tag, string.Join('\\',valueStrings), rawValue));
 
                                     //Console.WriteLine($"match value: {dicomItem.ToString()}, {valueStrings}");
 
