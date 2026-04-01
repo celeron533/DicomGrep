@@ -14,102 +14,115 @@ namespace DicomGrepCli
         {
             var rootCommand = new RootCommand("DicomGrep Command Line Interface");
 
-
             #region lookup options
             // once see the lookup options, do not execute any search
-            var lookupOption = new Option<LookupType?>(
-                name: "--lookup",
-                description: "[Lookup] lookup the DICOM Dictionary or UID"
-                );
-            lookupOption.AddAlias("-l");
-            rootCommand.AddOption(lookupOption);
+            Option<LookupType?> lookupOption = new("--lookup", "-l")
+            {
+                Description = "[Lookup] lookup the DICOM Dictionary or UID",
+            };
+
+            rootCommand.Options.Add(lookupOption);
             #endregion
 
             #region search options
-            var folderOption = new Option<string>(
-                name: "--dir",
-                description: "search in directory"
-                );
-            folderOption.AddAlias("-d");
-            rootCommand.AddOption(folderOption);
+            Option<string> folderOption = new Option<string>("--dir", "-d")
+            {
+                Description = "search in directory",
+                DefaultValueFactory = folder => Environment.CurrentDirectory
+            };
+            rootCommand.Options.Add(folderOption);
 
-            var fileTypeOption = new Option<string>(
-                name: "--file-type",
-                description: "search in file types"
-                );
-            fileTypeOption.SetDefaultValue("*.dcm");
-            fileTypeOption.AddAlias("-f");
-            rootCommand.AddOption(fileTypeOption);
+            Option<string> fileTypeOption = new Option<string>("--file-type", "-f")
+            {
+                Description = "search in file types",
+                DefaultValueFactory = fileType => "*.dcm"
+            };
+            rootCommand.Options.Add(fileTypeOption);
 
             //-r, --recursive. As well as GREP
-            var recursiveOption = new Option<bool>(
-                name: "--recursive",
-                description: "search in subdirectories"
-                );
-            recursiveOption.AddAlias("-r");
-            rootCommand.AddOption(recursiveOption);
+            Option<bool> recursiveOption = new Option<bool>("--recursive", "-r")
+            {
+                Description = "search in subdirectories"
+            };
+            rootCommand.Options.Add(recursiveOption);
 
-            var sopClassOption = new Option<string>(
-                name: "--sop",
-                description: "search by SOP Class UID"
-                );
-            rootCommand.AddOption(sopClassOption);
+            Option<string> sopClassOption = new Option<string>("--sop")
+            {
+                Description = "search by SOP Class UID",
+                DefaultValueFactory = sop => string.Empty
+            };
+            rootCommand.Options.Add(sopClassOption);
 
             //-t, --tag. DICOM Tag
-            var tagOption = new Option<string>(
-                name: "--tag",
-                description: "search by DICOM Tag"
-                );
-            tagOption.AddAlias("-t");
-            rootCommand.AddOption(tagOption);
+            Option<string> tagOption = new Option<string>("--tag", "-t")
+            {
+                Description = "search by DICOM Tag",
+                DefaultValueFactory = tag => string.Empty
+            };
+            rootCommand.Options.Add(tagOption);
 
             //-v, --value. DICOM Tag Value
-            var valueOption = new Option<string>(
-                name: "--value",
-                description: "search by DICOM Tag Value"
-                );
-            valueOption.AddAlias("-v");
-            rootCommand.AddOption(valueOption);
+            Option<string> valueOption = new Option<string>("--value", "-v")
+            {
+                Description = "search by DICOM Tag Value",
+                DefaultValueFactory = value => string.Empty
+            };
+            rootCommand.Options.Add(valueOption);
 
-            var caseSensitiveOption = new Option<bool>(
-                name: "--case-sensitive",
-                description: "case sensitive (DICOM Tag)"
-                );
-            caseSensitiveOption.AddAlias("-c");
-            rootCommand.AddOption(caseSensitiveOption);
+            Option<bool> caseSensitiveOption = new Option<bool>("--case-sensitive", "-c")
+            {
+                Description = "case sensitive (DICOM Tag)"
+            };
+            rootCommand.Options.Add(caseSensitiveOption);
 
-            var wholdWordOption = new Option<bool>(
-                name: "--whole-word",
-                description: "whole word (DICOM Tag)"
-                );
-            wholdWordOption.AddAlias("-w");
-            rootCommand.AddOption(wholdWordOption);
+            Option<bool> wholeWordOption = new Option<bool>("--whole-word", "-w")
+            {
+                Description = "whole word (DICOM Tag)"
+            };
+            rootCommand.Options.Add(wholeWordOption);
 
-            var threadsOption = new Option<int>(
-                name: "--threads",
-                description: "number of threads"
-                );
-            threadsOption.SetDefaultValue(0);
-            rootCommand.AddOption(threadsOption);
+            Option<int> threadsOption = new Option<int>("--threads", "-t")
+            {
+                Description = "number of threads",
+                DefaultValueFactory = threads => 0
+            };
+            rootCommand.Options.Add(threadsOption);
 
-            var patternOption = new Option<MatchPatternEnum>(
-                name: "--pattern",
-                description: "plain text or regular expression pattern (DICOM Tag)"
-                );
-            patternOption.SetDefaultValue(MatchPatternEnum.Normal);
-            rootCommand.AddOption(patternOption);
+            Option<MatchPatternEnum> patternOption = new("--pattern")
+            { 
+                Description = "plain text or regular expression pattern (DICOM Tag)",
+                DefaultValueFactory = pattern => MatchPatternEnum.Normal
+            };
+            rootCommand.Options.Add(patternOption);
 
 
             #endregion search options
 
+            rootCommand.SetAction(parseResult=>
+            {
+                Console.Out.WriteLine("DicomGrep CLI - DicomGrep Command Line Interface");
 
-            rootCommand.SetHandler(
-                DoRootCommand,
-                lookupOption, new SearchCriteriaBinder(folderOption, fileTypeOption, recursiveOption, sopClassOption, tagOption, valueOption, caseSensitiveOption, wholdWordOption, threadsOption, patternOption)
-                );
+                DoRootCommand(
+                    parseResult.GetValue(lookupOption),
+                    new SearchCriteria
+                    {
+                        SearchPath = parseResult.GetRequiredValue(folderOption),
+                        FileTypes = parseResult.GetRequiredValue(fileTypeOption),
+                        IncludeSubfolders = parseResult.GetValue(recursiveOption),
+                        SearchSopClassUid = parseResult.GetRequiredValue(sopClassOption),
+                        SearchTag = parseResult.GetRequiredValue(tagOption),
+                        SearchText = parseResult.GetRequiredValue(valueOption),
+                        CaseSensitive = parseResult.GetValue(caseSensitiveOption),
+                        WholeWord = parseResult.GetValue(wholeWordOption),
+                        SearchThreads = parseResult.GetValue(threadsOption),
+                        MatchPattern = parseResult.GetValue(patternOption)
+                    });
+            });
 
 
-            return await rootCommand.InvokeAsync(args);
+
+
+            return await rootCommand.Parse(args).InvokeAsync();
         }
 
         private static void DoRootCommand(LookupType? lookupOptionValue, SearchCriteria criteria)

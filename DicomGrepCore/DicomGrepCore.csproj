@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="fo-dicom" Version="5.2.5" />
-    <PackageReference Include="NLog" Version="6.0.6" />
+    <PackageReference Include="NLog" Version="6.1.1" />
   </ItemGroup>
 
 </Project>
